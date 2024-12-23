@@ -1,0 +1,32 @@
+<!-- templates/core/home.html -->
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <div class="container text-center mt-5">
+        {% if user.is_authenticated %}
+            <!-- Área para usuários autenticados -->
+            <div class="card shadow-lg p-4">
+                <h1 class="display-4">Bem-vindo de volta, {{ user.username }}!</h1>
+                <p class="lead text-muted">Estamos felizes em vê-lo novamente.</p>
+                
+                <!-- Informações adicionais sobre a conta -->
+                <div class="my-4">
+                    <p><strong>Status da conta:</strong> {{ user.is_active|yesno:"Ativo,Inativo" }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>Data de cadastro:</strong> {{ user.date_joined|date:"d/m/Y" }}</p>
+                </div>
+            </div>
+        {% else %}
+            <!-- Área para visitantes não autenticados -->
+            <div class="card shadow-lg p-4">
+                <h1 class="display-4">Bem-vindo ao Sistema</h1>
+                <p class="lead text-muted">Faça login para acessar todas as funcionalidades.</p>
+                
+                <!-- Botões para login ou cadastro -->
+                <div class="mt-4">
+                    <a href="{% url 'login' %}" class="btn btn-primary">Ir para Login</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

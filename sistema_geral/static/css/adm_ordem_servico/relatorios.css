@@ -1,0 +1,20 @@
+thead {
+    display: table-header-group;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+thead {
+    display: table-header-group; /* Repetir cabeçalho em cada página */
+    background-color: #f4f4f4;
+    font-weight: bold;
+}

@@ -1,0 +1,70 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="height: 80vh;">
+    <div class="col-lg-6 col-md-8 col-sm-12">
+
+        <!-- Mensagem de sucesso ou erro -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} mb-3" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" action="{% url 'alterar_grupo' grupo.id %}" class="shadow-sm p-4 rounded-3 bg-light">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="name" class="form-label">Nome do Grupo:</label>
+                <input type="text" id="name" name="name" class="form-control" value="{{ form.name.value|default_if_none:'' }}" required>
+                {% if form.name.errors %}
+                    <div class="alert alert-danger mt-2">
+                        {{ form.name.errors|join:", " }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Descrição:</label>
+                <input type="text" id="description" name="description" class="form-control" value="{{ form.description.value|default_if_none:'' }}" required>
+                {% if form.description.errors %}
+                    <div class="alert alert-danger mt-2">
+                        {{ form.description.errors|join:", " }}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3">
+                <label for="permissions" class="form-label">Permissões:</label>
+                <select multiple class="form-control" id="permissions" name="permissions" required>
+                    {% for permission in available_permissions %}
+                        <option value="{{ permission.id }}" {% if permission in grupo.permissions.all %}selected{% endif %}>
+                            {{ permission.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                {% if form.permissions.errors %}
+                    <div class="alert alert-danger mt-2">
+                        {{ form.permissions.errors|join:", " }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary w-100">Salvar Alterações</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<!-- CSS específico para esta página -->
+<link rel="stylesheet" href="{% static 'css/accounts/alterar_grupo.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<!-- JavaScript específico para esta página -->
+<script src="{% static 'js/accounts/alterar_grupo.js' %}"></script>
+{% endblock %}

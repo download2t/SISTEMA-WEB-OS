@@ -1,0 +1,152 @@
+/* Estilos gerais dos cards */
+.chamado-card {
+    border-radius: 12px; /* Bordas arredondadas para todos os cards */
+    border-width: 2px; /* Largura da borda */
+    transition: all 0.3s ease; /* Transição suave para mudanças de estado */
+    padding: 15px; /* Espaçamento interno para o conteúdo */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra sutil para destaque */
+}
+
+/* Cores dos status nos cards */
+.chamado-card[data-status="Aberto"] {
+    border-color: #5bc0de; /* Azul claro */
+    background-color: #e6f7fa; /* Fundo mais claro */
+}
+
+.chamado-card[data-status="Em andamento"] {
+    border-color: #ffc107; /* Amarelo */
+    background-color: #fff3cd; /* Fundo mais claro */
+}
+
+.chamado-card[data-status="Concluído"] {
+    border-color: #28a745; /* Verde */
+    background-color: #d4edda; /* Fundo mais claro */
+}
+
+.chamado-card[data-status="Encaminhado a TOTVS"] {
+    border-color: #17a2b8; /* Azul */
+    background-color: #d1ecf1; /* Fundo mais claro */
+}
+.chamado-card[data-status="Em análise"] {
+    border-color: #17a2b8; /* Azul */
+    background-color: #d1ecf1; /* Fundo mais claro */
+}
+.chamado-card[data-status="Aguardando aprovação"] {
+    border-color: #6c757d; /* Cinza */
+    background-color: #e2e3e5; /* Fundo mais claro */
+}
+
+/* Efeito de foco nos cards ao passar o mouse */
+.chamado-card:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15); /* Aumenta a sombra ao passar o mouse */
+    transform: translateY(-5px); /* Efeito de levitação */
+}
+
+/* Estilos dos Badges de Status */
+.chamado-status {
+    color: #fff; /* Cor do texto branco */
+    border-radius: 15px; /* Bordas arredondadas para as badges */
+    padding: 5px 10px; /* Padding interno das badges */
+    font-weight: bold; /* Texto em negrito */
+}
+
+.chamado-status[data-status="Aberto"] {
+    background-color: #5bc0de; /* Azul claro */
+}
+
+.chamado-status[data-status="Em andamento"] {
+    background-color: #ffc107; /* Amarelo */
+}
+
+.chamado-status[data-status="Concluído"] {
+    background-color: #28a745; /* Verde */
+}
+
+.chamado-status[data-status="Encaminhado a TOTVS"] {
+    background-color: #17a2b8; /* Azul */
+}
+.chamado-status[data-status="Em análise"] {
+    background-color: #17a2b8; /* Azul */
+}
+
+.chamado-status[data-status="Aguardando aprovação"] {
+    background-color: #6c757d; /* Cinza */
+}
+
+/* Estilos das Prioridades */
+.chamado-prioridade {
+    font-size: 15px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+}
+
+/* Cores das prioridades */
+.chamado-prioridade[data-prioridade="Urgente"] {
+    background-color: #343a40; /* Preto */
+}
+
+.chamado-prioridade[data-prioridade="Alta"] {
+    background-color: #dc3545; /* Vermelho */
+}
+
+.chamado-prioridade[data-prioridade="Média"] {
+    background-color: #fd7e14; /* Laranja queimado */
+}
+
+.chamado-prioridade[data-prioridade="Baixa"] {
+    background-color: #28a745; /* Verde claro */
+}
+
+/* Estilos do botão "Ver Ticket" */
+.chamado-btn {
+    color: white;
+    border-radius: 20px; /* Bordas arredondadas para o botão */
+    padding: 6px 20px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    display: inline-block;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Botão de Ver Ticket com cores baseadas no status */
+.chamado-btn[data-status="Aberto"] {
+    background-color: #5bc0de; /* Azul claro */
+    border-color: #5bc0de;
+}
+
+.chamado-btn[data-status="Em andamento"] {
+    background-color: #ffc107; /* Amarelo */
+    border-color: #ffc107;
+}
+
+.chamado-btn[data-status="Concluído"] {
+    background-color: #28a745; /* Verde */
+    border-color: #28a745;
+}
+
+.chamado-btn[data-status="Encaminhado a TOTVS"] {
+    background-color: #17a2b8; /* Azul */
+    border-color: #17a2b8;
+}
+
+.chamado-btn[data-status="Em análise"] {
+    background-color: #17a2b8; /* Cinza */
+    border-color: #17a2b8;
+}
+
+.chamado-btn[data-status="Aguardando aprovação"] {
+    background-color: #6c757d; /* Cinza */
+    border-color: #6c757d;
+}
+
+/* Ajuste do título e texto do card */
+.chamado-card .card-title, .chamado-card .card-text {
+    height: 70px; /* Define a altura fixa para ambos os campos */
+    overflow: hidden; /* Oculta o conteúdo que ultrapassar */
+    text-overflow: ellipsis; /* Adiciona "..." ao conteúdo truncado */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}

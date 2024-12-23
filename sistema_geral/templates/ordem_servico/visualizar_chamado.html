@@ -1,0 +1,164 @@
+{% extends 'core/base.html' %}
+{% load custom_filters %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/ordem_servico/listar_chamados.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <!-- Header do Chamado -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="display-6 text-primary">Chamado: {{ chamado.assunto }}</h1>
+            <div>
+                {% if chamado.status != 'Concluído' %}
+                <form id="encerrar-chamado-form" action="{% url 'encerrar_chamado' chamado.id %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirmarEncerramento()">Encerrar Chamado</button>
+                </form>
+                {% else %}
+                <form id="reabrir-chamado-form" action="{% url 'reabrir_chamado' chamado.id %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-warning btn-sm" onclick="return confirmarReabertura()">Reabrir Chamado</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Informações do Chamado -->
+        <div class="card mb-4 shadow">
+            <div class="card-body">
+                <p><strong>TICKET:</strong> {{ chamado.id }}</p>
+                <p><strong>Status:</strong> {{ chamado.status }}</p>
+                <p><strong>Prioridade:</strong> {{ chamado.prioridade }}</p>
+                <p><strong>Data de Abertura:</strong> {{ chamado.data_abertura|date:"d/m/Y H:i" }}</p>
+                <p><strong>Data de Conclusão:</strong> 
+                    {% if chamado.data_conclusao %}
+                        {{ chamado.data_conclusao|date:"d/m/Y H:i" }}
+                    {% else %}
+                        Não Concluído
+                    {% endif %}
+                </p>
+                <p><strong>Descrição:</strong> {{ chamado.descricao }}</p>      
+                <p><strong>prioridade do usuário:</strong> {{ chamado.prioridade_cliente }}</p>
+                <p><strong>Ticket TOTVS:</strong> {{ chamado.numero_ticket }}</p>
+                    
+                <div class="d-flex justify-content-between mt-3">
+                    <small>
+                        <strong>Criado por:</strong> 
+                        {% if chamado.criado_por %}
+                            {{ chamado.criado_por.username }}
+                        {% else %}
+                            Não Informado
+                        {% endif %}
+                    </small>
+                    <small>
+                        <strong>Atribuído ao setor:</strong> 
+                        {% if chamado.grupo_responsavel %}
+                            {{ chamado.grupo_responsavel.name }}
+                        {% else %}
+                            Não Atribuído
+                        {% endif %}
+                    </small>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Evidências -->
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="mb-3 text-primary">Evidências</h2>
+            <button class="btn btn-outline-primary btn-sm" id="toggle-evidencias-btn">
+                <i class="fas fa-chevron-down"></i> Mostrar/Ocultar
+            </button>
+        </div>
+        <div class="card mb-4 shadow" id="evidencias-container">
+            <div class="card-body">
+                <div class="miniaturas-evidencias">
+                    {% for evidencia in chamado.evidencias.all %}
+                    <div class="miniatura">
+                        {% if evidencia.arquivo.name|file_extension:"jpg,png,jpeg" %}
+                        <a href="{{ evidencia.arquivo.url }}" download>
+                            <img src="{{ evidencia.arquivo.url }}" alt="Evidência" class="img-thumbnail">
+                        </a>
+                        {% elif evidencia.arquivo.name|file_extension:"pdf" %}
+                        <a href="{{ evidencia.arquivo.url }}" download class="btn btn-sm btn-outline-primary">
+                            Baixar PDF
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% empty %}
+                    <p class="text-muted">Sem evidências anexadas.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+   
+
+        <!-- Mensagens -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="mb-3 text-primary">Mensagens</h2>
+            <button class="btn btn-outline-primary btn-sm" id="toggle-order-btn">
+                <i class="fas fa-chevron-down"></i> Exibir Mais Recentes Primeiro
+            </button>
+        </div>
+        <div class="card mb-4 shadow">
+            <div class="card-body">
+                <ul class="list-group mb-3" id="mensagens-list">
+                    {% for mensagem in mensagens %}
+                    <li class="list-group-item mensagem-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <strong style="color: {{ mensagem.usuario|cor_usuario }}">
+                                {{ mensagem.usuario.first_name }} {{ mensagem.usuario.last_name }}
+                            </strong>
+                            <small class="text-muted">{{ mensagem.data_envio|date:"d/m/Y H:i" }}</small>
+                        </div>
+                        <p class="mb-2 text-dark">{{ mensagem.texto }}</p>
+                        {% if mensagem.arquivo %}
+                        <div class="miniaturas-evidencias mt-2">
+                            {% if mensagem.arquivo.name|file_extension:"jpg,png,jpeg" %}
+                            <a href="{{ mensagem.arquivo.url }}" download>
+                                <img src="{{ mensagem.arquivo.url }}" alt="Evidência" class="img-thumbnail" style="max-width: 150px; max-height: 150px;">
+                            </a>
+                            {% elif mensagem.arquivo.name|file_extension:"pdf" %}
+                            <a href="{{ mensagem.arquivo.url }}" download class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-file-pdf"></i> Baixar PDF
+                            </a>
+                            {% else %}
+                            <a href="{{ mensagem.arquivo.url }}" download class="btn btn-sm btn-outline-secondary">
+                                Baixar Arquivo
+                            </a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item text-muted">Sem mensagens ainda.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Formulário de Mensagem -->
+        {% if chamado.status != 'Concluído' %}
+        <form method="POST" enctype="multipart/form-data" action="{% url 'enviar_mensagem' chamado.id %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <textarea name="mensagem" class="form-control" placeholder="Digite sua mensagem aqui..." rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label text-secondary">Anexar Arquivo:</label>
+                <input type="file" name="arquivo" class="form-control" accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx">
+            </div>
+            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane"></i> Enviar</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/ordem_servico/visualizar_chamado.js' %}"></script>
+{% endblock %}

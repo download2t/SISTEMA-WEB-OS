@@ -1,0 +1,118 @@
+/* Define um estilo geral para o formulário */
+body {
+   background-color: #f8f9fa; 
+}
+
+h2 {
+    font-size: 24px; /* Tamanho da fonte do título */
+    color: #343a40; /* Cor escura para o título */
+}
+
+/* Alinha o contêiner do formulário ao centro */
+.d-flex {
+    justify-content: center;
+    align-items: center;
+    height: 80vh; /* Altura do contêiner */
+}
+
+/* Estilo para as colunas do formulário */
+.form-group {
+    margin-bottom: 1.5rem; /* Espaçamento entre os campos */
+}
+
+/* Estilo para campos de entrada */
+.form-control {
+    height: 45px; /* Altura consistente para todos os campos */
+    border-radius: 0.25rem; /* Bordas arredondadas */
+}
+
+/* Estilo para o botão de submissão */
+.btn-primary {
+    background-color: #007bff; /* Cor de fundo do botão */
+    border-color: #007bff; /* Cor da borda do botão */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Cor de fundo do botão ao passar o mouse */
+    border-color: #004085; /* Cor da borda do botão ao passar o mouse */
+}
+
+/* Estilo para mensagens de erro */
+.alert {
+    margin-top: 1rem; /* Espaçamento acima das mensagens de alerta */
+}
+
+/* Especificando alinhamento para o formulário */
+.form-group label {
+    display: block; /* Exibe o rótulo como um bloco */
+    margin-bottom: 0.5rem; /* Espaçamento abaixo dos rótulos */
+}
+
+.form-row {
+    display: flex; /* Usa flexbox para o alinhamento */
+    justify-content: space-between; /* Espaça os elementos igualmente */
+}
+
+.form-row > div {
+    flex: 1; /* Faz os elementos ocuparem o mesmo espaço */
+    margin-right: 1rem; /* Espaçamento entre as colunas */
+}
+
+.form-row > div:last-child {
+    margin-right: 0; /* Remove a margem do último elemento */
+}
+
+/* Estilos para o toggle switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  border-radius: 50%;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+/* For the round slider */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}

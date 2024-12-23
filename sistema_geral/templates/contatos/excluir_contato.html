@@ -1,0 +1,27 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Excluir Contato: {{ contato.nome_responsavel }}</h1>
+
+    <!-- Confirmação de exclusão -->
+    <p>Tem certeza que deseja excluir o contato "{{ contato.nome_responsavel }}"? Esta ação é irreversível e não pode ser desfeita.</p>
+
+    <!-- Formulário para confirmação da exclusão -->
+    <form method="post" action="{% url 'excluir_contato' contato.id %}" class="mt-4">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Excluir Contato</button>
+        <a href="{% url 'listar_contatos' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

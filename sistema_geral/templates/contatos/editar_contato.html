@@ -1,0 +1,71 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block content %}
+<h1 class="mt-5">Editar Contato: {{ contato.nome_responsavel }}</h1>
+
+<!-- Formulário para editar contato -->
+<form method="post" action="{% url 'editar_contato' contato.id %}" class="mt-4">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="nome_responsavel" class="form-label">Nome do Responsável</label>
+        <input type="text" name="nome_responsavel" id="nome_responsavel" class="form-control" value="{{ contato.nome_responsavel }}" placeholder="Digite o nome do responsável" required>
+        {% if form.nome_responsavel.errors %}
+            <div class="alert alert-danger mt-2">
+                {{ form.nome_responsavel.errors|join:", " }}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="mb-3">
+        <label for="numero_telefone" class="form-label">Número de Telefone</label>
+        <input type="text" name="numero_telefone" id="numero_telefone" class="form-control" value="{{ contato.numero_telefone }}" placeholder="Digite o número de telefone" required>
+        {% if form.numero_telefone.errors %}
+            <div class="alert alert-danger mt-2">
+                {{ form.numero_telefone.errors|join:", " }}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="mb-3">
+        <label for="grupo" class="form-label">Grupo</label>
+        <select name="grupo" id="grupo" class="form-control" required>
+            <option value="" disabled {% if not contato.grupo %}selected{% endif %}>Selecione o grupo...</option>
+            {% for group in form.fields.grupo.queryset %}
+                <option value="{{ group.id }}" {% if group.id == contato.grupo.id %}selected{% endif %}>
+                    {{ group.name }}
+                </option>
+            {% endfor %}
+        </select>
+        {% if form.grupo.errors %}
+            <div class="alert alert-danger mt-2">
+                {{ form.grupo.errors|join:", " }}
+            </div>
+        {% endif %}
+    </div>
+        <!-- Campo Usuário -->
+        <div class="mb-3">
+            <label for="usuario" class="form-label">Usuário</label>
+            <select name="usuario" id="usuario" class="form-control">
+                <option value="" disabled {% if not contato.usuario %}selected{% endif %}>Selecione o usuário...</option>
+                {% for user in form.fields.usuario.queryset %}
+                    <option value="{{ user.id }}" {% if user.id == contato.usuario.id %}selected{% endif %}>
+                        {{ user.username }}
+                    </option>
+                {% endfor %}
+            </select>
+            {% if form.usuario.errors %}
+                <div class="alert alert-danger mt-2">
+                    {{ form.usuario.errors|join:", " }}
+                </div>
+            {% endif %}
+        </div>
+
+    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+    <a href="{% url 'listar_contatos' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+
+{% endblock %}

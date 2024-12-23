@@ -1,0 +1,10 @@
+<!-- core/templates/core/403.html -->
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="alert alert-danger text-center" style="margin-top: 20px;">
+    <h1>Permissão Negada</h1>
+    <p>Você não possui permissão para acessar esta página.</p>
+    <a href="{% url 'home' %}" class="btn btn-primary">Voltar para a página inicial</a>
+</div>
+{% endblock %}

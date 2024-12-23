@@ -1,0 +1,99 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Adicionando um padding no topo para o formulário ficar abaixo do menu -->
+<div class="d-flex justify-content-center align-items-center" style="height: calc(70vh - 10px); padding-top: 70px;">
+    <div class="col-lg-6 col-md-8 col-sm-12">
+        <div class="card shadow-sm p-4 rounded-3 bg-light">
+            <h2 class="text-center mb-4">Editar Ramal</h2>
+
+            <!-- Mensagens de sucesso ou erro -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} mb-3" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            
+            <form method="post" action="">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="numero_ramal" class="form-label">Número do Ramal:</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-phone-alt"></i></span>
+                        <input type="text" id="numero_ramal" name="numero_ramal" class="form-control" value="{{ ramal.numero_ramal }}" required>
+                    </div>
+                    {% if form.numero_ramal.errors %}
+                        <div class="alert alert-danger mt-2">
+                            {{ form.numero_ramal.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="atendente" class="form-label">Atendente:</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        <input type="text" id="atendente" name="atendente" class="form-control" value="{{ ramal.atendente }}" required>
+                    </div>
+                    {% if form.atendente.errors %}
+                        <div class="alert alert-danger mt-2">
+                            {{ form.atendente.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="linha_completa" class="form-label">Linha Completa:</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-arrow-right"></i></span>
+                        <input type="text" id="linha_completa" name="linha_completa" class="form-control" value="{{ ramal.linha_completa }}" required>
+                    </div>
+                    {% if form.linha_completa.errors %}
+                        <div class="alert alert-danger mt-2">
+                            {{ form.linha_completa.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="grupo" class="form-label">Grupo:</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-users"></i></span>
+                        <select id="grupo" name="grupo" class="form-select" required>
+                            <option value="">Selecione o Grupo</option>
+                            {% for grupo in grupos %}
+                                <option value="{{ grupo.id }}" {% if ramal.grupo.id == grupo.id %}selected{% endif %}>{{ grupo.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% if form.grupo.errors %}
+                        <div class="alert alert-danger mt-2">
+                            {{ form.grupo.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-check form-switch mb-4">
+                    <label class="form-check-label" for="ativo">Ativo?</label>
+                    <input class="form-check-input" type="checkbox" id="ativo" name="ativo" {% if ramal.ativo %}checked{% endif %}>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-phone-alt me-2"></i> Atualizar Ramal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+
+{% endblock %}

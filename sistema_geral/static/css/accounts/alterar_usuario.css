@@ -1,0 +1,23 @@
+/* Estilos adicionais */
+#available_groups, #assigned_groups {
+    height: 200px;
+    width: 100%;
+}
+
+button {
+    width: 100%;
+}
+
+#available_groups, #assigned_groups {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+select {
+    margin: 5px 0;
+}
+
+button {
+    margin-top: 10px;
+}

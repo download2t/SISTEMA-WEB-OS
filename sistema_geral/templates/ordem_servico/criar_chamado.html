@@ -1,0 +1,117 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="height: 80vh;">
+    <div class="col-md-6">
+        <h2 class="text-center mb-4">Cadastrar Chamado</h2>
+
+        <!-- Mensagem de sucesso ou erro -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Assunto -->
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="assunto" class="d-flex align-items-center">
+                        <i class="fas fa-heading me-2"></i>Assunto:
+                    </label>
+                    <input type="text" id="assunto" name="assunto" class="form-control" value="{{ form.assunto.value|default_if_none:'' }}" required>
+                    {% if form.assunto.errors %}
+                        <div class="alert alert-danger">
+                            {{ form.assunto.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Descrição -->
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="descricao" class="d-flex align-items-center">
+                        <i class="fas fa-pencil-alt me-2"></i>Descrição:
+                    </label>
+                    <textarea id="descricao" name="descricao" class="form-control" rows="4" required>{{ form.descricao.value|default_if_none:'' }}</textarea>
+                    {% if form.descricao.errors %}
+                        <div class="alert alert-danger">
+                            {{ form.descricao.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Grupo de Atendimento -->
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="grupo" class="d-flex align-items-center">
+                        <i class="fas fa-users me-2"></i>Grupo de Atendimento:
+                    </label>
+                    <select id="grupo" name="grupo" class="form-control" required>
+                        {% for grupo in grupos %}
+                            <option value="{{ grupo.id }}" {% if grupo.id == form.grupo.value %}selected{% endif %}>{{ grupo.name }}</option>
+                        {% endfor %}
+                    </select>
+                    {% if form.grupo.errors %}
+                        <div class="alert alert-danger">
+                            {{ form.grupo.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Prioridade -->
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="prioridade" class="d-flex align-items-center">
+                        <i class="fas fa-exclamation-circle me-2"></i>Prioridade:
+                    </label>
+                    <select id="prioridade" name="prioridade" class="form-control" required>
+                        <option value="Baixa" {% if form.prioridade.value == 'Baixa' %}selected{% endif %}>Baixa</option>
+                        <option value="Média" {% if form.prioridade.value == 'Média' %}selected{% endif %}>Média</option>
+                        <option value="Alta" {% if form.prioridade.value == 'Alta' %}selected{% endif %}>Alta</option>
+                        <option value="Urgente" {% if form.prioridade.value == 'Urgente' %}selected{% endif %}>Urgente</option>
+                    </select>
+                    {% if form.prioridade.errors %}
+                        <div class="alert alert-danger">
+                            {{ form.prioridade.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+
+            <!-- Evidências com ícones -->
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="evidencia" class="d-flex align-items-center">
+                        <i class="fas fa-paperclip me-2"></i>Evidências (Fotos, PDFs, etc.):
+                    </label>
+                    <input type="file" id="evidencia" name="evidencia" class="form-control" accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx" multiple>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-block">Cadastrar Chamado</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<!-- Font Awesome para os ícones -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% endblock %}
+
+{% block extra_js %}
+<!-- JavaScript específico para esta página -->
+<script src="{% static 'js/ordem_servico/cadastrar_chamado.js' %}"></script>
+{% endblock %}

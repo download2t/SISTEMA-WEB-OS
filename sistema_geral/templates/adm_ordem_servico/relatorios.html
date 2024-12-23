@@ -1,0 +1,193 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/adm_ordem_servico/relatorios.css' %}">
+<link rel="stylesheet" href="{% static 'css/adm_ordem_servico/menu_os.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-1">
+            {% include 'adm_ordem_servico/adm_menu_os.html' %}
+        </div>
+        
+        <div class="col-md-11">
+            <h1 class="text-left mb-4">Relatórios de Ordens de Serviço</h1>
+            
+            <!-- Filtros para Relatórios -->
+            <form method="get" action="{% url 'relatorio_chamados' %}" class="d-flex flex-column gap-4 mb-4">
+                <button type="button" id="toggle-filters" class="btn btn-primary mb-4">
+                    <i class="fas fa-filter"></i> Filtrar Relatórios
+                </button>
+
+                <div id="filter-options" class="d-none">
+                    <!-- Filtro por Status -->
+                    <div class="card p-3">
+                        <h5 class="fw-bold">Filtrar por Status</h5>
+                        <div id="status-options" class="d-flex flex-wrap gap-2 mt-2">
+                            <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Aberto">Aberto</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Em andamento">Em andamento</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Concluído">Concluído</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Encaminhado a TOTVS">Encaminhado a TOTVS</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Aguardando aprovação">Aguardando aprovação</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Em análise">Em análise</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Em desenvolvimento">Em desenvolvimento</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Manutenção">Manutenção</button>
+                        </div>
+                        <div id="selected-status-container" class="d-flex flex-wrap gap-2 mt-3"></div>
+                        <input type="hidden" id="status-input" name="status" value="{{ request.GET.status|default:'' }}" />
+                    </div>
+
+                    <!-- Filtro por Data -->
+                    <div class="card p-3">
+                        <h5 class="fw-bold">Filtrar por Data</h5>
+                        <div class="d-flex gap-3">
+                            <div>
+                                <label for="start_date" class="form-label">Data Inicial</label>
+                                <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request.GET.start_date }}">
+                            </div>
+                            <div>
+                                <label for="end_date" class="form-label">Data Final</label>
+                                <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request.GET.end_date }}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filtro por Grupo ou Responsável -->
+                    <div class="card p-3">
+                        <h5 class="fw-bold">Filtrar por Grupo ou Responsável</h5>
+                        <div class="d-flex gap-3">
+                            <div>
+                                <label for="grupo" class="form-label">Grupo</label>
+                                <select name="grupo" id="grupo" class="form-control">
+                                    <option value="">Selecione um Grupo</option>
+                                    {% for grupo in grupos %}
+                                    <option value="{{ grupo.id }}" {% if grupo.id == request.GET.grupo %} selected {% endif %}>{{ grupo.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div>
+                                <label for="responsavel" class="form-label">Responsável</label>
+                                <select name="responsavel" id="responsavel" class="form-control">
+                                    <option value="">Selecione um Responsável</option>
+                                    {% for usuario in usuarios %}
+                                    <option value="{{ usuario.id }}" {% if usuario.id == request.GET.responsavel %} selected {% endif %}>{{ usuario.username }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botões de Ação -->
+                    <div class="d-flex justify-content-between mt-3">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Gerar Relatório
+                        </button>
+                  
+                        <a href="{% url 'relatorio_chamados' %}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-times"></i> Limpar Filtros
+                        </a>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Botão de download -->
+            <div class="d-flex justify-content-between mt-3">
+                <a href="{% url 'gerar_relatorio_pdf' %}" class="btn btn-outline-success btn-sm ms-auto">
+                    <i class="fas fa-download"></i> Download
+                </a>
+            </div>
+
+            <!-- Exibição do Relatório -->
+            <div class="row mt-4">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>TICKET</th>
+                            <th>Assunto</th>
+                            <th>Status</th>
+                            <th>Data de Abertura</th>
+                            <th>Data de Conclusão</th>
+                            <th>Responsável</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for chamado in chamados %}
+                        <tr>
+                            <td>{{ chamado.id }}</td>
+                            <td>{{ chamado.assunto }}</td>
+                            <td>{{ chamado.status }}</td>
+                            <td>{{ chamado.data_abertura|date:"d/m/Y" }}</td>
+                            <td>{% if chamado.data_conclusao %} {{ chamado.data_conclusao|date:"d/m/Y" }} {% else %} Não Concluído {% endif %}</td>
+                            <td>{{ chamado.grupo_responsavel.name }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">Nenhum chamado encontrado.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    document.getElementById('toggle-filters').addEventListener('click', function () {
+        const filterOptions = document.getElementById('filter-options');
+        if (filterOptions.classList.contains('d-none')) {
+            filterOptions.classList.remove('d-none');
+            this.innerHTML = '<i class="fas fa-filter"></i> Fechar Filtros';
+        } else {
+            filterOptions.classList.add('d-none');
+            this.innerHTML = '<i class="fas fa-filter"></i> Filtrar Relatórios';
+        }
+    });
+</script>
+<script>
+    // Seleção de status para filtragem
+    document.addEventListener('DOMContentLoaded', function () {
+        const statusOptions = document.querySelectorAll('.status-option');
+        const selectedStatusContainer = document.getElementById('selected-status-container');
+        const statusInput = document.getElementById('status-input');
+    
+        let selectedStatus = [];
+    
+        function updateSelectedStatus() {
+            selectedStatusContainer.innerHTML = '';
+            selectedStatus.forEach((status) => {
+                const chip = document.createElement('div');
+                chip.className = 'badge bg-primary text-white d-flex align-items-center gap-2';
+                chip.innerHTML = `
+                    <span>${status}</span>
+                    <button type="button" class="btn-close btn-close-white" aria-label="Remove"></button>
+                `;
+                chip.querySelector('button').addEventListener('click', () => {
+                    selectedStatus = selectedStatus.filter((s) => s !== status);
+                    updateSelectedStatus();
+                });
+                selectedStatusContainer.appendChild(chip);
+            });
+            statusInput.value = selectedStatus.join(',');
+        }
+
+        statusOptions.forEach((button) => {
+            button.addEventListener('click', () => {
+                const status = button.getAttribute('data-value');
+                if (selectedStatus.includes(status)) {
+                    selectedStatus = selectedStatus.filter((s) => s !== status);
+                } else {
+                    selectedStatus.push(status);
+                }
+                updateSelectedStatus();
+            });
+        });
+    });
+</script>
+{% endblock %}

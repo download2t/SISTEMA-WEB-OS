@@ -1,0 +1,81 @@
+/* Estilo para o layout da lista de chamados */
+.chamados-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.chamado-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f7f7f7; /* Cor de fundo clara */
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    align-items: center;
+}
+
+.chamado-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.status-button {
+    grid-column: span 3; /* O status ocupa toda a linha */
+    display: flex;
+    justify-content: center;
+}
+
+.status-button .btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.actions {
+    grid-column: span 3; /* Botões de ações ocupam toda a linha */
+    display: flex;
+    justify-content: flex-end;
+}
+
+.chamado-card .btn {
+    width: 100%;
+}
+
+/* Estilo da prioridade */
+.prioridade {
+    padding: 5px 10px;
+    font-weight: bold;
+    border-radius: 5px;
+    color: #fff;
+    text-align: center;
+}
+
+/* Estilo para as diferentes prioridades */
+.prioridade-baixa {
+    background-color: #6c757d !important; /* Cor para BAIXA */
+}
+
+.prioridade-media {
+    background-color: #ffc107 !important; /* Cor para MÉDIA */
+}
+
+.prioridade-alta {
+    background-color: #dc3545 !important; /* Cor para ALTA */
+}
+
+.prioridade-urgente {
+    background-color: #343a40 !important; /* Cor para URGENTE */
+}
+
+.prioridade-padrao {
+    background-color: #f8f9fa !important; /* Cor para padrão */
+    color: #000;
+}

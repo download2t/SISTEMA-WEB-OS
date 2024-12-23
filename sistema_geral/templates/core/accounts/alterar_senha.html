@@ -1,0 +1,75 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="height: 50vh; background-color: #f8f9fa;">
+    <div class="col-lg-6 col-md-8 col-sm-12">
+        <div class="card shadow-sm rounded-4">
+            <div class="card-body">
+                <h2 class="text-center mb-4">Alterar Senha</h2>
+
+                <!-- Mensagem de sucesso ou erro -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} mb-3" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post" action="" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="id_old_password" class="form-label">Senha atual:</label>
+                        <input type="password" id="id_old_password" name="old_password" class="form-control" required>
+                        {% if form.old_password.errors %}
+                            <div class="alert alert-danger mt-2">
+                                {{ form.old_password.errors|join:", " }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_new_password1" class="form-label">Nova senha:</label>
+                        <input type="password" id="id_new_password1" name="new_password1" class="form-control" required>
+                        {% if form.new_password1.errors %}
+                            <div class="alert alert-danger mt-2">
+                                {{ form.new_password1.errors|join:", " }}
+                            </div>
+                        {% endif %}
+                        <small class="form-text text-muted">Sua senha deve ter pelo menos 8 caracteres, e não pode ser uma senha comumente utilizada.</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_new_password2" class="form-label">Confirmar nova senha:</label>
+                        <input type="password" id="id_new_password2" name="new_password2" class="form-control" required>
+                        {% if form.new_password2.errors %}
+                            <div class="alert alert-danger mt-2">
+                                {{ form.new_password2.errors|join:", " }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary w-100">Alterar Senha</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<!-- CSS específico para esta página -->
+<link rel="stylesheet" href="{% static 'css/accounts/alterar_senha.css' %}">
+
+{% endblock %}
+
+{% block extra_js %}
+<!-- JavaScript específico para esta página -->
+<script src="{% static 'js/accounts/alterar_senha.js' %}"></script>
+<script>
+
+</script>
+{% endblock %}

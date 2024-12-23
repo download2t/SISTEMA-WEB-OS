@@ -1,0 +1,27 @@
+/* Estilo para a tabela */
+.table-responsive {
+    margin-top: 20px;
+}
+
+/* Estilo dos botões */
+.btn i {
+    margin-right: 5px;
+}
+
+/* Estilo do título */
+h1 {
+    font-size: 1.8rem;
+    color: #495057;
+}
+/* Adiciona um estilo para o popup de mensagem */
+.alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    transition: opacity 0.5s ease-in-out;
+    opacity: 1;
+    width: auto;
+    padding: 15px;
+    margin: 10px;
+}

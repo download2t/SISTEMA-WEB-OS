@@ -1,0 +1,32 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/ordem_servico/criar_grupo.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1 class="mt-5">Adicionar Novo Grupo</h1>
+
+<!-- Formulário para criar grupo -->
+<form method="post" action="{% url 'criar_grupo' %}" class="mt-4">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="nome" class="form-label">Nome do Grupo</label>
+        <input type="text" name="nome" id="nome" class="form-control" placeholder="Digite o nome do grupo">
+    </div>
+    <button type="submit" class="btn btn-success">Salvar</button>
+    <a href="{% url 'listar_grupos' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+
+<!-- Mensagens de erro ou sucesso -->
+{% if messages %}
+    <div class="mt-4">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}

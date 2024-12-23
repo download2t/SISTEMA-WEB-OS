@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    {% load static %}
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Ícones -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- Bloco para CSS adicional de páginas específicas -->
+    {% block extra_css %}
+    {% endblock %}
+
+    <title>SANMA - Sistema</title>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="fas fa-cogs me-2"></i>SANMA
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if user.is_authenticated %}
+
+                                <!-- Líderes -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarLideres" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-users-cog me-1"></i> Líderança
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarLideres">
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'admin:index' %}">
+                                        <i class="fas fa-tachometer-alt me-2"></i> Painel ADM
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'listar_usuarios' %}">
+                                        <i class="fas fa-users me-2"></i> Listar Usuários
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'listar_grupos' %}">
+                                        <i class="fas fa-layer-group me-2"></i> Listar Setores
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'listar_contatos' %}">
+                                        <i class="fas fa-address-book me-2"></i> Listar Contatos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'adm_chamados_abertos' %}">
+                                        <i class="fas fa-tasks me-2"></i> Chamados - ADM
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- Sanma -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarUsuarios" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user me-2"></i>
+                                <span>Sanma</span>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarUsuarios">
+                                
+                                <li> <!-- Alterar senha -->
+                                    <a class="dropdown-item d-flex align-items-center" href="{% url 'alterar_senha' %}">
+                                        <i class="fas fa-key me-2"></i>
+                                        <span>Alterar Senha</span>
+                                    </a>
+                                </li>
+                                <li>  <!-- Listar ramais -->
+                                    <a class="dropdown-item d-flex align-items-center" href="{% url 'listar_ramais' %}">
+                                        <i class="fas fa-phone-alt me-2"></i>
+                                        <span>Listar Ramais</span>
+                                    </a>
+                                </li>
+
+                                <li>  <!-- Chamados-->
+                                    <a class="dropdown-item d-flex align-items-center" href="{% url 'chamados_abertos' %}">
+                                        <i class="fas fa-list-alt me-2"></i>
+                                        <span>Chamados</span>
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                        </li>
+                                                
+                        <!-- Logout -->
+                        <li class="nav-item">
+                            <a class="nav-link text-danger" href="{% url 'logout_confirm' %}">
+                                <i class="fas fa-sign-out-alt me-1"></i>Logout
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">
+                                <i class="fas fa-sign-in-alt me-1"></i>Login
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- HERDAR ESTE ESPAÇO NOS COMPONENTES COMO MENUS ETC.-->
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+    
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Bloco para scripts adicionais de páginas específicas -->
+    {% block scripts %}
+    {% endblock %}
+</body>
+</html>

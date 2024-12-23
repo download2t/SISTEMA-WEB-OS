@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+
+{% endblock %}
+
+{% block content %}
+<h1 class="mt-5">Excluir Grupo: {{ grupo.name }}</h1>
+
+<!-- Confirmação de exclusão -->
+<p>Tem certeza que deseja excluir o grupo "{{ grupo.name }}"? Esta ação é irreversível.</p>
+
+<!-- Formulário para confirmação da exclusão -->
+<form method="post" action="{% url 'excluir_grupo' grupo.id %}" class="mt-4">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Excluir Grupo</button>
+    <a href="{% url 'listar_grupos' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
