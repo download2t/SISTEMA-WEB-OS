@@ -1,11 +1,11 @@
 from django.contrib.auth.decorators import login_required, user_passes_test   
 from django.shortcuts import render, redirect, get_object_or_404
-from ordem_servico.models import Mensagem, Chamado
+from ordem_servico.models import Contato, Mensagem, Chamado
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib import messages
 from core.views import has_permission
-from django.core.mail import send_mail, EmailMessage
+from django.core.mail import send_mail
 
 def testar_envio_email():
     try:
@@ -20,6 +20,8 @@ def testar_envio_email():
     except Exception as e:
         print(f"Erro ao enviar e-mail: {e}")
 
+from django.core.exceptions import ObjectDoesNotExist
+
 def enviar_mensagem(request, id):
     chamado = get_object_or_404(Chamado, id=id)
 
@@ -27,7 +29,7 @@ def enviar_mensagem(request, id):
         texto = request.POST.get('mensagem')
         arquivo = request.FILES.get('arquivo')
 
-        if texto:  # Only create the message if the text was filled in
+        if texto:  # Cria a mensagem apenas se o texto for preenchido
             mensagem = Mensagem.objects.create(
                 chamado=chamado,
                 usuario=request.user,
@@ -35,23 +37,37 @@ def enviar_mensagem(request, id):
                 arquivo=arquivo
             )
 
-            # Send email to the user associated with the ticket
+            # Enviar e-mail para o contato responsável pelo grupo designado
             try:
-                user_email = chamado.criado_por.email
-                send_mail(
-                    'Nova Mensagem no Chamado',  # Email subject
-                    f'Nova mensagem no chamado {chamado.assunto}: "{texto}"',  # Email body
-                    settings.EMAIL_HOST_USER,  # Sender
-                    [user_email],  # Recipient
-                    fail_silently=False  # If fails, show exception
+                contato = Contato.objects.get(grupo=chamado.grupo_responsavel)
+                contato_email = contato.usuario.email  # Obtém o e-mail do usuário vinculado ao contato
+                
+                # Formato do e-mail
+                assunto = f"Atualização no Chamado #{chamado.id}"
+                mensagem_email = (
+                    f"Olá,\n\n"
+                    f"Houve uma atualização no chamado #{chamado.id}.\n\n"
+                    f"Mensagem:\n{texto}\n\n"
+                    f"Atenciosamente,\nEquipe sanma."
                 )
-                print("E-mail enviado para o usuário associado ao chamado.")
+
+                send_mail(
+                    assunto,
+                    mensagem_email,
+                    settings.EMAIL_HOST_USER,
+                    [contato_email],
+                    fail_silently=False
+                )
+                print(f"E-mail enviado para o contato responsável: {contato_email}")
+            except ObjectDoesNotExist:
+                print(f"Não foi encontrado um contato para o grupo {chamado.grupo_responsavel.name}.")
             except Exception as e:
                 print(f"Erro ao enviar e-mail: {e}")
 
-        return redirect('visualizar_chamado', id=id)  # Redirect back to the ticket page
+        return redirect('visualizar_chamado', id=id)  # Redireciona para a página do chamado
 
     return redirect('visualizar_chamado', id=id)
+
 
 @login_required
 @user_passes_test(has_permission, login_url='403')  # Redireciona para 403 se não for staff
@@ -70,10 +86,7 @@ def adm_enviar_mensagem(request, id):
     if request.method == 'POST':
         texto = request.POST.get('mensagem')
         arquivo = request.FILES.get('arquivo')
-
-        print(f"Texto: {texto}")
-        print(f"Arquivo: {arquivo}")
-
+        
         if texto:  # Apenas cria a mensagem se o texto foi preenchido
             Mensagem.objects.create(
                 chamado=chamado,
@@ -88,11 +101,8 @@ def adm_enviar_mensagem(request, id):
                 f"Olá,\n\n"
                 f"Houve uma atualização no chamado #{chamado.id}.\n\n"
                 f"Mensagem:\n{texto}\n\n"
-                f"Atenciosamente,\nEquipe."
+                f"Atenciosamente,\nEquipe sanma."
             )
-            
-            print(f"Assunto do e-mail: {assunto}")
-            print(f"Mensagem do e-mail: {mensagem}")
 
             try:
                 send_mail(

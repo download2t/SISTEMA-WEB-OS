@@ -36,7 +36,7 @@ urlpatterns = [
     path('admlistar/', adm_listar_chamados, name='adm_listar_chamados'),
     path('admvisualizar/<int:id>/', adm_visualizar_chamado, name='adm_visualizar_chamado'),
     path('admvisualizar/<int:chamado_id>/atualizar-status/', atualizar_status, name='atualizar_status'),
-    path('mensagem/<int:id>/enviar/', adm_enviar_mensagem, name='adm_enviar_mensagem'),
+    path('admmensagem/<int:id>/enviar/', adm_enviar_mensagem, name='adm_enviar_mensagem'),
     path('relatorio-chamados/', relatorio_chamados, name='relatorio_chamados'),
     path('relatorio/chamados/pdf/', gerar_relatorio_pdf, name='gerar_relatorio_pdf'),
 
