@@ -92,7 +92,7 @@
                                 </li>
 
                               <li> <!-- Chamados -->
-                                {% if request.user.is_superuser or request.user.is_staff %}
+                                {% if request.user.is_staff %}
                                     <a class="dropdown-item d-flex align-items-center" href="{% url 'adm_chamados_abertos' %}">
                                         <i class="fas fa-list-alt me-2"></i>
                                         <span>Chamados (Admin)</span>

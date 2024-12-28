@@ -4,6 +4,13 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/adm_ordem_servico/listar_chamados.css' %}">
 <link rel="stylesheet" href="{% static 'css/adm_ordem_servico/menu_os.css' %}">
+<style>
+body {
+    background: rgba(185, 185, 185, 0.34); /* Tom de cinza muito claro e translúcido */
+    backdrop-filter: blur(5px); /* Efeito de vidro fosco */
+}
+</style>
+
 {% endblock %}
 
 {% block content %}
@@ -195,6 +202,7 @@
             </div>
         </div>
     </div>
+
 
 {% endblock %}
 
