@@ -91,13 +91,19 @@
                                     </a>
                                 </li>
 
-                                <li>  <!-- Chamados-->
+                              <li> <!-- Chamados -->
+                                {% if request.user.is_superuser or request.user.is_staff %}
+                                    <a class="dropdown-item d-flex align-items-center" href="{% url 'adm_chamados_abertos' %}">
+                                        <i class="fas fa-list-alt me-2"></i>
+                                        <span>Chamados (Admin)</span>
+                                    </a>
+                                {% else %}
                                     <a class="dropdown-item d-flex align-items-center" href="{% url 'chamados_abertos' %}">
                                         <i class="fas fa-list-alt me-2"></i>
                                         <span>Chamados</span>
                                     </a>
-                                </li>
-                                
+                                {% endif %}
+                            </li>
                             </ul>
                         </li>
                                                 
