@@ -1,13 +1,18 @@
 from pathlib import Path
 from django.contrib.messages import constants as messages
-
+import os
 BASE_DIR = Path(__file__).resolve().parent.parent # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
-SECRET_KEY = 'django-insecure-kux5c0$f*zz+y5e6_d73$mmn8ha+^$6#u+cotz62f%0t!mg-y0' # SECURITY WARNING: keep the secret key used in production secret!
+key_file_path = os.path.join(os.path.dirname(__file__), 'key.txt')
+
+# Ler o valor da chave secreta do arquivo
+with open(key_file_path, 'r') as file:
+    SECRET_KEY = file.read().strip()
 
 DEBUG = True # SECURITY WARNING: don't run with debug turned on in production!
 
-ALLOWED_HOSTS = ['*','127.0.0.1', '172.16.10.26','ti_sanma']
+ALLOWED_HOSTS = ['*', '127.0.0.1', '172.16.10.26', 'ti_sanma']
+
 
 # Application definition
 
