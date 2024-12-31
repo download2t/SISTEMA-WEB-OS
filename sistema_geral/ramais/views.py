@@ -8,13 +8,13 @@ from .forms import RamalForm
 from core.views import has_permission
 from django.db.models import Q
 
+from django.db.models import Q
+
 @login_required
 def listar_ramais(request):
-    # Obtenção dos parâmetros de busca
     status = request.GET.get('status', 'todos')  # Default 'todos'
     search = request.GET.get('search', '')
 
-    # Filtragem dos ramais
     ramais = Ramal.objects.all()
 
     if status != 'todos':
@@ -28,7 +28,10 @@ def listar_ramais(request):
             Q(numero_ramal__icontains=search) | Q(atendente__icontains=search)
         )
 
+    ramais = ramais.order_by('numero_ramal')
+
     return render(request, 'ramais/listar_ramais.html', {'ramais': ramais})
+
 
 @user_passes_test(has_permission, login_url='403')  # Redireciona para 403 se não for staff
 @login_required

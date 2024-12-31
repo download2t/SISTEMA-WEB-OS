@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import alterar_senha, cadastrar_usuario, pesquisar_usuarios
+from .views import alterar_senha, cadastrar_usuario
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -24,6 +24,10 @@ urlpatterns = [
     path('accounts/<int:user_id>/ativar_usuario/', views.ativar_usuario_toggle, name='ativar_usuario'),
     path('accounts/<int:user_id>/desativar_usuario/', views.desativar_usuario_toggle, name='desativar_usuario'),
     path('accounts/alterar/<int:user_id>/', views.alterar_usuario, name='alterar_usuario'),  # Alterar dados do usuário
+    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),   # URL para solicitar o reset de senha
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),   # URL de confirmação de solicitação de reset de senha
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),     # URL de confirmação de reset de senha (onde o usuário insere a nova senha)
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),     # URL de sucesso após a mudança de senha
     
     ##Grupos
     path('grupos/listar_grupos', views.listar_grupos, name='listar_grupos'),

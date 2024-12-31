@@ -29,5 +29,10 @@ class UsuarioForm(forms.ModelForm):
     # Adiciona um campo para senha (opcional)
     password = forms.CharField(widget=forms.PasswordInput(), required=False)
     
-    
-    
+
+class SetNewPasswordForm(forms.Form):
+    new_password = forms.CharField(widget=forms.PasswordInput, label='Nova Senha')
+    confirm_password = forms.CharField(widget=forms.PasswordInput, label='Confirmar Nova Senha')
+
+class PasswordResetRequestForm(forms.Form):
+    email = forms.EmailField(label='E-mail', max_length=254)
