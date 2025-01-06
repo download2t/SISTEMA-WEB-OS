@@ -6,7 +6,7 @@
         {% if user.is_authenticated %}
             <!-- Área para usuários autenticados -->
             <div class="card shadow-lg p-4">
-                <h1 class="display-4">Bem-vindo de volta, {{ user.username }}!</h1>
+                <h1 class="display-4">Bem-vindo de volta, {{ user.first_name }}!</h1>
                 <p class="lead text-muted">Estamos felizes em vê-lo novamente.</p>
                 
                 <!-- Informações adicionais sobre a conta -->
