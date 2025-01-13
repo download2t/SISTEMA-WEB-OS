@@ -1,0 +1,77 @@
+.senha-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 300px; /* Altura fixa para uniformizar os cartões */
+    width: 100%; /* Largura total do grid */
+    max-width: 400px; /* Limita a largura máxima dos cards */
+    margin: 13px auto; /* Espaçamento vertical */
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.senha-card-header {
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+    padding: 8px;
+    border-radius: 8px 8px 0 0;
+}
+
+.senha-card.coletivo .senha-card-header {
+    background-color: #b87217;
+}
+
+.senha-card.privado .senha-card-header {
+    background-color: #eea3a3;
+}
+
+.senha-card-body {
+    font-size: 0.9rem;
+    color: #555;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.senha-card-body p {
+    margin: 0 0 8px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 2.8em; /* Limita a altura de 2 linhas */
+}
+
+.senha-card-body a {
+    color: #007bff;
+    text-decoration: none;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 100%;
+}
+
+.senha-card-actions {
+    margin-top: 16px;
+    text-align: center;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 cards por linha */
+    gap: 16px; /* Espaçamento horizontal e vertical entre os cards */
+    justify-items: center; /* Centraliza os cards na grid */
+}
+
+.col {
+    display: flex;
+    justify-content: center; /* Centraliza os cards na coluna */
+}

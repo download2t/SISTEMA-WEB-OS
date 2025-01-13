@@ -1,0 +1,108 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="height: calc(70vh - 10px); padding-top: 70px;">
+    <div class="col-lg-6 col-md-8 col-sm-12">
+        <div class="card shadow-sm p-4 rounded-3 bg-light">
+            <h2 class="text-center mb-4">EDITAR SENHA PESSOAL</h2>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} mb-3" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                
+                <!-- Exibe os erros de validação -->
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <ul>
+                            {% for field, errors in form.errors.items %}
+                                <li>{{ field }}: {{ errors|join:", " }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                
+                <!-- Categoria -->
+                <div class="mb-3 d-flex justify-content-between align-items-end">
+                    <div class="w-75">
+                        <label for="categoria" class="form-label">Categoria:</label>
+                        {{ form.categoria }}  <!-- Correção: Não especificar o valor manualmente -->
+                    </div>
+                    <!-- Botão de Criar Nova Categoria -->
+                    <button type="button" class="btn btn-primary btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#categoriaModal">Nova Categoria</button>
+                </div>
+
+                <!-- Descrição -->
+                <div class="mb-3">
+                    <label for="descricao" class="form-label">Descrição:</label>
+                    {{ form.descricao }}  <!-- O Django já renderiza o campo de forma correta -->
+                </div>
+
+                <!-- Usuário e Senha -->
+                <div class="mb-3">
+                    <label for="user" class="form-label">Usuário:</label>
+                    {{ form.user }}  <!-- Correção: Renderização correta do campo -->
+                </div>
+                <div class="mb-3">
+                    <label for="senha" class="form-label">Senha:</label>
+                    {{ form.senha }}  <!-- Correção: Renderização correta do campo -->
+                </div>
+
+                <!-- Link -->
+                <div class="mb-3">
+                    <label for="link" class="form-label">Link:</label>
+                    {{ form.link }}  <!-- Correção: Renderização correta do campo -->
+                </div>
+
+                <!-- Botão -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary w-100">Salvar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Criar Categoria -->
+<div class="modal fade" id="categoriaModal" tabindex="-1" aria-labelledby="categoriaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="categoriaModalLabel">Cadastrar Nova Categoria</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulário de Criar Categoria -->
+                <form method="post" action="{% url 'adicionar_categoria_senhas_privado' %}" id="categoriaForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="nome_categoria" class="form-label">Nome da Categoria:</label>
+                        <input type="text" id="nome_categoria" name="nome" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descricao_categoria" class="form-label">Descrição:</label>
+                        <textarea id="descricao_categoria" name="descricao" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tipo_categoria" class="form-label">Tipo de Categoria:</label>
+                        <select id="tipo_categoria" name="is_coletiva" class="form-select" required>
+                            <option value="False">Privado</option>
+                            <option value="True">Coletivo</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

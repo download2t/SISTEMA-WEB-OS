@@ -1,0 +1,98 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="height: 80vh;">
+    <div class="col-md-6">
+        <h2 class="text-center mb-4">Editar Categoria: {{ categoria.nome }}</h2>
+
+        <!-- Mensagem de sucesso ou erro -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- Nome da Categoria -->
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="nome_categoria" class="d-flex align-items-center">
+                        <i class="fas fa-tag me-2"></i>Nome da Categoria:
+                    </label>
+                    <input type="text" id="nome_categoria" name="nome" class="form-control" value="{{ form.nome.value|default_if_none:'' }}" required>
+                    {% if form.nome.errors %}
+                        <div class="alert alert-danger">
+                            {{ form.nome.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Descrição -->
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="descricao_categoria" class="d-flex align-items-center">
+                        <i class="fas fa-pencil-alt me-2"></i>Descrição:
+                    </label>
+                    <textarea id="descricao_categoria" name="descricao" class="form-control" rows="4" required>{{ form.descricao.value|default_if_none:'' }}</textarea>
+                    {% if form.descricao.errors %}
+                        <div class="alert alert-danger">
+                            {{ form.descricao.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Tipo de Categoria (Privado ou Coletivo) -->
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="tipo_categoria" class="d-flex align-items-center">
+                        <i class="fas fa-users me-2"></i>Tipo de Categoria:
+                    </label>
+                    <select id="tipo_categoria" name="is_coletiva" class="form-control" required>
+                        <option value="False" {% if form.is_coletiva.value == False %}selected{% endif %}>Privado</option>
+                        <option value="True" {% if form.is_coletiva.value == True %}selected{% endif %}>Coletivo</option>
+                    </select>
+                    {% if form.is_coletiva.errors %}
+                        <div class="alert alert-danger">
+                            {{ form.is_coletiva.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Exibir erros gerais do formulário -->
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ field.name }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-block">Atualizar Categoria</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<!-- Font Awesome para os ícones -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% endblock %}
+
+{% block extra_js %}
+<!-- JavaScript específico para esta página -->
+<script src="{% static 'js/categorias/editar_categoria.js' %}"></script>
+{% endblock %}

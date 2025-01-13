@@ -1,0 +1,31 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/senhas/selecionar.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Texto explicativo -->
+    <div class="text-center mb-4">
+        <h2>Selecione o tipo de senha que deseja cadastrar</h2>
+    </div>
+
+    <div class="d-flex justify-content-center align-items-center" style="height: 50vh; background-color: #f8f9fa;">
+        <div class="d-flex justify-content-around align-items-center w-50">
+            <!-- Botão PESSOAL -->
+            <a href="{% url 'adicionar_senha_privada' %}" class="btn senha-pessoal d-flex flex-column align-items-center justify-content-center shadow">
+                <i class="fas fa-user" style="font-size: 40px;"></i>  <!-- Ícone acima -->
+                <span>PESSOAL</span>  <!-- Texto abaixo -->
+            </a>
+            
+            <!-- Botão SANMA -->
+            <a href="{% url 'adicionar_senha_publica' %}" class="btn senha-sanma d-flex flex-column align-items-center justify-content-center shadow">
+                <i class="fas fa-users" style="font-size: 40px;"></i>  <!-- Ícone acima -->
+                <span>SANMA</span>  <!-- Texto abaixo -->
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

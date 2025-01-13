@@ -63,11 +63,31 @@
                                         <i class="fas fa-address-book me-2"></i> Listar Contatos
                                     </a>
                                 </li>
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'adm_chamados_abertos' %}">
-                                        <i class="fas fa-tasks me-2"></i> Chamados - ADM
+                            </ul>
+                        </li>
+
+                        <!-- Banco senhas -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarUsuarios" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-key me-2"></i>
+                                <span>Banco-Senhas</span>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarUsuarios">
+
+                                <li>  <!-- Listar Categorias -->
+                                    <a class="dropdown-item d-flex align-items-center" href="{% url 'listar_categorias' %}">
+                                        <i class="fas fa-cogs me-2"></i> <!-- Ícone de engrenagem para categorias -->
+                                        <span>Listar Categorias</span>
                                     </a>
                                 </li>
+
+                                <li>  <!-- Listar Senhas -->
+                                    <a class="dropdown-item d-flex align-items-center" href="{% url 'listar_senhas' %}">
+                                        <i class="fas fa-key me-2"></i> <!-- Ícone de chave para senhas -->
+                                        <span>Listar Senhas</span>
+                                    </a>
+                                </li>
+
                             </ul>
                         </li>
 

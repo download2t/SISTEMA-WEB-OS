@@ -59,7 +59,7 @@
                     <th>Setor</th>
                     <th>Linha Completa</th>
                     <th>Ativo?</th>
-                    <th>Ações</th>
+                    <th scope="col" class="text-end">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -78,7 +78,7 @@
                             <span class="badge bg-danger">Inativo</span>
                         {% endif %}
                     </td>    
-                    <td>
+                    <td class="text-end">
                         <!-- Botões de Editar e Excluir -->
                         <a href="{% url 'editar_ramal' ramal.pk %}" class="btn btn-sm btn-secondary">
                             <i class="fas fa-edit"></i> Editar

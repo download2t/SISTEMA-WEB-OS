@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<!-- Se necessário, inclua CSS adicional aqui -->
+{% endblock %}
+
+{% block content %}
+<h1 class="mt-5">Excluir Senha: {{ senha.descricao }}</h1>
+
+<!-- Confirmação de exclusão -->
+<p>Tem certeza que deseja excluir a senha "{{ senha.descricao }}"? Esta ação é irreversível.</p>
+
+<!-- Formulário para confirmação da exclusão -->
+<form method="post" action="{% url 'excluir_senha' senha.id %}" class="mt-4">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Excluir Senha</button>
+    <a href="{% url 'listar_senhas' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+<!-- Se necessário, inclua scripts específicos para esta página -->
+{% endblock %}

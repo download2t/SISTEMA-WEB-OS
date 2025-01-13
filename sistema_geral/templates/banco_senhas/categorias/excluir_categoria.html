@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<!-- Se necessário, inclua CSS adicional aqui -->
+{% endblock %}
+
+{% block content %}
+<h1 class="mt-5">Excluir Categoria: {{ categoria.nome }}</h1>
+
+<!-- Confirmação de exclusão -->
+<p>Tem certeza que deseja excluir a categoria "{{ categoria.nome }}"? Esta ação é irreversível.</p>
+
+<!-- Formulário para confirmação da exclusão -->
+<form method="post" action="{% url 'excluir_categoria' categoria.id %}" class="mt-4">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Excluir Categoria</button>
+    <a href="{% url 'listar_categorias' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+<!-- Se necessário, inclua scripts específicos para esta página -->
+{% endblock %}

@@ -1,0 +1,32 @@
+/* Estilos gerais para os botões */
+.senha-pessoal, .senha-sanma {
+    width: 180px;  /* Largura do botão */
+    height: 180px; /* Altura do botão */
+    font-size: 20px; /* Tamanho da fonte */
+    font-weight: bold; /* Negrito */
+    border-radius: 10px; /* Bordas arredondadas */
+    text-align: center; /* Alinhar o texto no centro */
+    display: flex; /* Usar flexbox */
+    align-items: center; /* Centralizar verticalmente */
+    justify-content: center; /* Centralizar horizontalmente */
+    color: white; /* Cor do texto */
+    text-decoration: none; /* Remover sublinhado */
+}
+
+.senha-pessoal {
+    background-color: #eea3a3; /* Cor de fundo do botão PESSOAL */
+}
+
+.senha-sanma {
+    background-color: #b87217; /* Cor de fundo do botão SANMA */
+}
+
+/* Estilo para os ícones dentro dos botões */
+.senha-pessoal i, .senha-sanma i {
+    font-size: 40px; /* Tamanho do ícone */
+}
+
+/* Estilo adicional para garantir o alinhamento correto do conteúdo dentro dos botões */
+.senha-pessoal span, .senha-sanma span {
+    margin-top: 10px; /* Espaço entre o ícone e o texto */
+}

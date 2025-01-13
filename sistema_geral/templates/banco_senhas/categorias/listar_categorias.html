@@ -1,0 +1,108 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<!-- <link rel="stylesheet" href="{% static 'css/senhas/listar_senhas.css' %}"> -->
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Lista de Categorias</h1>
+
+    <!-- Mensagem de sucesso ou erro -->
+    {% if messages %}
+        <div id="messages-container" class="mb-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} mb-2" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Filtro por Tipo (Coletiva/Pessoal) e Campo de Busca -->
+    <form method="get" action="{% url 'listar_categorias' %}" class="d-flex flex-wrap align-items-center mb-4">
+        {% csrf_token %}
+        <div class="d-flex align-items-center flex-grow-1">
+            <!-- Dropdown de tipo (Coletiva/Pessoal) -->
+            <select name="tipo" id="tipo" class="form-select me-2" style="width: 200px;" onchange="this.form.submit()">
+                <option value="todas" {% if request.GET.tipo == "todas" %}selected{% endif %}>Todas</option>
+                <option value="coletiva" {% if request.GET.tipo == "coletiva" %}selected{% endif %}>Sanma Hotel</option>
+                <option value="pessoal" {% if request.GET.tipo == "pessoal" %}selected{% endif %}>Pessoal</option>
+            </select>
+
+            <!-- Campo de busca -->
+            <input type="text" name="search" placeholder="Contem ..." value="{{ request.GET.search }}" class="form-control me-2" style="width: 300px;" />
+
+            <!-- Botão de buscar -->
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search me-1"></i>Buscar
+            </button>
+        </div>
+
+        <!-- Botão de Criar Nova Categoria -->
+        <div class="ms-auto">
+            <a href="{% url 'adicionar_categoria' %}" class="btn btn-primary">
+                <i class="fas fa-key me-1"></i> Criar Nova Categoria
+            </a>
+        </div>
+    </form>
+
+    <!-- Tabela de Categorias -->
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-primary">
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Tipo</th>
+                    <th scope="col" class="text-end">Ações</th>
+                </tr>
+            </thead>
+           <tbody>
+            {% for categoria in categorias %}
+            <tr>
+                <td>{{ categoria.id }}</td>
+                <td>{{ categoria.nome }}</td>
+                <td>{{ categoria.descricao }}</td>
+                <td>
+                    <!-- Exibindo "Coletiva" ou "Pessoal" com base no valor de is_coletiva -->
+                    {% if categoria.is_coletiva %}
+                        <span class="badge bg-success">Coletiva</span>
+                    {% else %}
+                        <span class="badge bg-danger">Pessoal</span>
+                    {% endif %}
+                </td>
+                <td class="text-end">
+                    <!-- Botões de Editar e Excluir -->
+                    <a href="{% url 'editar_categoria' categoria.pk %}" class="btn btn-sm btn-secondary">
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+                    <a href="{% url 'excluir_categoria' categoria.pk %}" class="btn btn-sm btn-danger">
+                        <i class="fas fa-trash"></i> Excluir
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">Nenhuma categoria encontrada.</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+
+
+        </table>
+    </div>
+</div>
+
+<!-- Incluindo o CSRF token para uso no JavaScript -->
+<script type="text/javascript">
+    var csrfToken = "{{ csrf_token }}";
+</script>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+{% endblock %}

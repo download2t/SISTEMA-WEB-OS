@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'core',
     'ordem_servico',
     'ramais',
+    'banco_senhas',
 ]
 
 MESSAGE_TAGS = {
