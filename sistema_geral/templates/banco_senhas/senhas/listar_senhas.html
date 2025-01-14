@@ -76,20 +76,32 @@
                     {% endif %}
                 </p>
             </div>
-            <div class="senha-card-actions">
-                {% if senha.is_coletiva %}
-                    <a href="{% url 'editar_senha_publica' senha.pk %}" class="btn btn-sm btn-secondary">
-                        <i class="fas fa-edit"></i> Editar
-                    </a>
-                {% else %}
-                    <a href="{% url 'editar_senha_privada' senha.pk %}" class="btn btn-sm btn-secondary">
-                        <i class="fas fa-edit"></i> Editar
-                    </a>
-                {% endif %}
-                <a href="{% url 'excluir_senha' senha.pk %}" class="btn btn-sm btn-danger">
-                    <i class="fas fa-trash"></i> Excluir
+            <div class="senha-card-actions  ">
+                <!-- Visualizar -->
+                 <a href="{% url 'visualizar_senha' senha.pk %}" class="btn btn-sm btn-info mb-2">
+                        <i class="fas fa-eye"></i> Visualizar
                 </a>
+                
+                <div class="justify-content-between align-items-center">
+                    <!-- Editar -->
+                    {% if senha.is_coletiva %}
+                        <a href="{% url 'editar_senha_publica' senha.pk %}" class="btn btn-sm btn-secondary">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                    {% else %}
+                        <a href="{% url 'editar_senha_privada' senha.pk %}" class="btn btn-sm btn-secondary">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                    {% endif %}
+                    <!-- Excluir -->
+                    <a href="{% url 'excluir_senha' senha.pk %}" class="btn btn-sm btn-danger">
+                        <i class="fas fa-trash"></i> Excluir
+                    </a>
+                </div>
+                
             </div>
+
+
         </div>
     </div>
     {% empty %}

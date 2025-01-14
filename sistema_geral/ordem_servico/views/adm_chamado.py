@@ -137,6 +137,7 @@ def adm_visualizar_chamado(request, id):
 @user_passes_test(has_permission, login_url='403')  # Redireciona para 403 se não for staff
 def atualizar_status(request, chamado_id):
     chamado = get_object_or_404(Chamado, id=chamado_id)
+    destinatario_email = chamado.criado_por.email  # Ou qualquer outro campo de relacionamento com o usuário responsável
 
     if request.method == 'POST':
         # Atualizar o status
@@ -177,6 +178,31 @@ def atualizar_status(request, chamado_id):
                 request,
                 f'Chamado atualizado com sucesso! Status definido como "{novo_status}" e prioridade como "{nova_prioridade}".'
             )
+
+            # Enviar mensagem e e-mail informando a alteração do status
+            if destinatario_email:
+                assunto = f"Alteração no Chamado #{chamado.id} - Status Atualizado"
+                mensagem = (
+                    f"Olá,\n\n"
+                    f"O status do seu chamado #{chamado.id} foi atualizado para: {novo_status}.\n\n"
+                    f"Atenciosamente,\nEquipe sanma."
+                )
+
+                try:
+                    send_mail(
+                        assunto,
+                        mensagem,
+                        settings.EMAIL_HOST_USER,
+                        [destinatario_email],
+                        fail_silently=False
+                    )
+                    messages.success(request, f"E-mail enviado com sucesso para {destinatario_email}.")
+                    print(f"E-mail enviado para {destinatario_email}")
+                except Exception as e:
+                    import traceback
+                    print(f"Erro ao enviar e-mail: {e}")
+                    print(traceback.format_exc())
+
             # Redirecionar para a página de listagem após salvar
             chamados = Chamado.objects.all()  # Exemplo de queryset para a página de listagem
             context = {'chamados': chamados}
@@ -184,6 +210,7 @@ def atualizar_status(request, chamado_id):
 
     # Se houver erros, permanecer na mesma página e exibir as mensagens
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
 
 @login_required
 @user_passes_test(has_permission, login_url='403')  # Redireciona para 403 se não for staff

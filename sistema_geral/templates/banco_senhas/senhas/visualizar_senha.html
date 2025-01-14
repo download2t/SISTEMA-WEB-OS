@@ -1,0 +1,53 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="height: calc(70vh - 10px); padding-top: 70px;">
+    <div class="col-lg-6 col-md-8 col-sm-12">
+        <div class="card shadow-sm p-4 rounded-3 bg-light">
+            <h2 class="text-center mb-4">VISUALIZAR SENHA</h2>
+
+            <!-- Exibe os erros de validação -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} mb-3" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Detalhes da Senha -->
+            <div class="mb-3">
+                <label for="categoria" class="form-label">Categoria:</label>
+                <input type="text" class="form-control" value="{{ senha.categoria }}" readonly>
+            </div>
+
+            <div class="mb-3">
+                <label for="descricao" class="form-label">Descrição:</label>
+                <textarea class="form-control" rows="3" readonly>{{ senha.descricao }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="user" class="form-label">Usuário:</label>
+                <input type="text" class="form-control" value="{{ senha.usuario }}" readonly>
+            </div>
+
+            <div class="mb-3">
+                <label for="senha" class="form-label">Senha:</label>
+                <input type="text" class="form-control" value="{{ senha.senha }}" readonly>
+            </div>
+
+            <div class="mb-3">
+                <label for="link" class="form-label">Link:</label>
+                <input type="text" class="form-control" value="{{ senha.link }}" readonly>
+            </div>
+
+            <!-- Botão para voltar -->
+            <div class="text-center">
+                <a href="{% url 'listar_senhas' %}" class="btn btn-secondary w-100">Voltar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

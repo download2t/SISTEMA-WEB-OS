@@ -10,6 +10,7 @@ urlpatterns = [
     path('senhas/adicionar_publica/', views.adicionar_senha_publica, name='adicionar_senha_publica'),
     path('senhas/editar_privado/<int:senha_id>/', views.editar_senha_privada, name='editar_senha_privada'),
     path('senhas/editar_publica/<int:senha_id>/', views.editar_senha_publica, name='editar_senha_publica'),
+    path('senhas/visualizar/<int:senha_id>/', views.visualizar_senha, name='visualizar_senha'),
 
 
     path('senhas/excluir/<int:pk>/', views.excluir_senha, name='excluir_senha'),

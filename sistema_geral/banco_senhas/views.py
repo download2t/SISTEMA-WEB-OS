@@ -334,6 +334,13 @@ def editar_senha_publica(request, senha_id):
         "form": form
     })
 
+@login_required
+def visualizar_senha(request, senha_id):
+    senha = get_object_or_404(Senha, id=senha_id, usuario=request.user)  # Filtra pela senha do usuário logado
+    
+    return render(request, "banco_senhas/senhas/visualizar_senha.html", {
+        "senha": senha
+    })
 
 @login_required
 def selecionar(request): # usado para selecionar senha pessoal ou publica ( cadastro )

@@ -202,87 +202,7 @@ def listar_chamados(request):
 
     return render(request, 'ordem_servico/listar_chamados.html', context)
 
-    grupos_usuario = request.user.groups.all()
-
-    # Filtrar chamados com base nos grupos do usuário e no criador
-    chamados = Chamado.objects.filter(
-        Q(grupo_responsavel__in=grupos_usuario) | Q(criado_por=request.user)
-    ).distinct()
-
-    # Filtrar chamados com base nos grupos liberados para o usuário
-    chamados = chamados.filter(
-        Q(grupos_liberados__in=grupos_usuario)
-    )
-
-    # Filtro por status múltiplo
-    status_selecionados = request.GET.get('status', '').split(',')
-
-    if status_selecionados and status_selecionados != ['']:
-        # Caso "Aberto" seja selecionado, excluímos "Concluído"
-        if 'Aberto' in status_selecionados:
-            chamados = chamados.exclude(status='Concluído')
-        
-        # Caso "Concluído" seja selecionado, filtramos apenas por "Concluído"
-        if 'Concluído' in status_selecionados:
-            chamados = chamados.filter(status='Concluído')
-
-        # Se outros status forem selecionados, incluímos na busca
-        else:
-            chamados = chamados.filter(status__in=status_selecionados)
-
-    # Filtro por número do chamado
-    numero_chamado = request.GET.get('search', '')
-    if numero_chamado:
-        chamados = chamados.filter(
-            Q(id__icontains=numero_chamado)
-        ).distinct()
-        if not chamados.exists():
-            messages.info(request, 'Nenhum chamado encontrado para o número selecionado.')
-
-    # Filtro por data (início e fim)
-    start_date = request.GET.get('start_date')
-    end_date = request.GET.get('end_date')
-
-    if start_date:
-        start_date = parse_date(start_date)
-        if start_date:
-            chamados = chamados.filter(data_abertura__date__gte=start_date)
-
-    if end_date:
-        end_date = parse_date(end_date)
-        if end_date:
-            chamados = chamados.filter(data_abertura__date__lte=end_date)
-
-    # Caso datas iguais (início e fim)
-    if start_date and end_date and start_date == end_date:
-        chamados = chamados.filter(data_abertura__date=start_date)
-
-    # Ordenação por prioridade e data de abertura
-    chamados = chamados.annotate(
-        prioridade_order=Case(
-            When(prioridade='Urgente', then=Value(1)),
-            When(prioridade='Alta', then=Value(2)),
-            When(prioridade='Média', then=Value(3)),
-            When(prioridade='Baixa', then=Value(4)),
-            default=Value(5),
-            output_field=IntegerField()
-        )
-    ).order_by('prioridade_order', '-data_abertura')
-
-    # Limitação de 100 chamados se nenhuma data estiver definida
-    if not start_date and not end_date:
-        chamados = chamados[:100]
-
-    context = {
-        'chamados': chamados,
-        'status_selecionados': status_selecionados if status_selecionados != [''] else [],
-        'search': numero_chamado,
-        'start_date': start_date,
-        'end_date': end_date,
-    }
-
-    return render(request, 'ordem_servico/listar_chamados.html', context)
-
+   
 
 
 @login_required
@@ -530,3 +450,4 @@ def chamados_encerrados(request):
         'status_selecionados': status_selecionados if action == 'filter_status' else [],
         'search': search if action == 'search_user' else '',
     })
+ 
