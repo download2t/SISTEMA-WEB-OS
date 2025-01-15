@@ -172,5 +172,5 @@ cython_debug/
 db_sistema.sqlite3
 venv
 /venv
-/media
-.media
+/media/
+

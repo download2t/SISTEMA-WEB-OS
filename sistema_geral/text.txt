@@ -1,31 +1,18 @@
-{
-    "workbench.startupEditor": "newUntitledFile", // inicia em branco já para bloco de anotações etc
-    "workbench.editor.labelFormat": "short", // caminha das pastas em cada aba
-    "explorer.compactFolders": false,  // pastas com um unico arquivo ficam agrupadas quando true.
-    "breadcrumbs.enabled": false, // caminho em cima da pagina
-    "workbench.activityBar.location": "default", // BARRA LATERAL
-    "editor.minimap.enabled": true, // tira aquele mapinha do lado  quando false
-}
-
+#####  SIMPLE COMMIT #################
 git add .
 git commit -m "Descrição das mudanças"
 git push origin main
 git push origin senhas
 
-git add .: Toda vez que você criar ou modificar arquivos no projeto.
-git commit -m "mensagem": Sempre que você completar um conjunto lógico de alterações (ex: uma nova funcionalidade ou correção de bug).
-git push: Para atualizar o repositório no GitHub com as alterações que você comitou localmente.
 
-
-#####BRANCHES
+#####  BRANCHES #####################
 
 git add .
 git commit -m "Descrição das alterações feitas"
 git push origin nome-da-branch
 
 
-
-###########
+#####  CLONE ########################
 
 git clone https://github.com/download2t/SISTEMA-WEB-OS.git
 python -m venv venv
@@ -36,12 +23,7 @@ cd sistema_geral
 pip install -r requirements.txt
 python manage.py migrate
 
+#####  LINK #####################
+
 python manage.py runserver 172.16.10.169:8000 
 http://172.16.10.169:8000/
-
-DEBUG=False
-SECRET_KEY = 'django-insecure-kux5c0$f*zz+y5e6_d73$mmn8ha+^$6#u+cotz62f%0t!mg-y0' # SECURITY WARNING: keep the secret key used in production secret!
-
-
-
-C:\Windows\System32\drivers\etc\hosts
