@@ -36,6 +36,7 @@ cd sistema_geral
 pip install -r requirements.txt
 python manage.py migrate
 
+python manage.py runserver 172.16.10.169:8000 
 http://172.16.10.169:8000/
 
 DEBUG=False
