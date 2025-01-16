@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<div class="d-flex justify-content-center align-items-center" style="height: 80vh;">
+<div class="d-flex justify-content-center " style="height: 100vh;">
     <div class="col-md-6">
         <h2 class="text-center mb-4">Cadastrar Chamado</h2>
 
@@ -71,13 +71,21 @@
             <div class="row mb-3">
                 <div class="col">
                     <label for="prioridade" class="d-flex align-items-center">
-                        <i class="fas fa-exclamation-circle me-2"></i>Prioridade:
+                        <i class="fas fa-exclamation-circle me-2" 
+                        data-bs-toggle="tooltip" 
+                        data-bs-html="true" 
+                        title="Tipos de Prioridade:
+                            Baixa: Atividades sem impacto operacional imediato, podem ser resolvidas sem pressa.
+                            Média: Tarefas que precisam de atenção em até 2 horas úteis, mas não comprometem a operação.
+                            Alta: Questões críticas que precisam de solução em até 1 hora útil para evitar problemas operacionais.
+                            Urgente: Problemas graves que paralisam a operação e exigem atenção imediata.">
+                        </i>Prioridade:
                     </label>
                     <select id="prioridade" name="prioridade" class="form-control" required>
-                        <option value="Baixa" {% if form.prioridade.value == 'Baixa' %}selected{% endif %}>Baixa</option>
-                        <option value="Média" {% if form.prioridade.value == 'Média' %}selected{% endif %}>Média</option>
-                        <option value="Alta" {% if form.prioridade.value == 'Alta' %}selected{% endif %}>Alta</option>
-                        <option value="Urgente" {% if form.prioridade.value == 'Urgente' %}selected{% endif %}>Urgente</option>
+                        <option value="Baixa" {% if form.prioridade.value == 'Baixa' %}selected{% endif %}>Baixa (Sem prazo específico)</option>
+                        <option value="Média" {% if form.prioridade.value == 'Média' %}selected{% endif %}>Média (Atendimento em até 2 horas úteis)</option>
+                        <option value="Alta" {% if form.prioridade.value == 'Alta' %}selected{% endif %}>Alta (Atendimento em até 1 hora útil)</option>
+                        <option value="Urgente" {% if form.prioridade.value == 'Urgente' %}selected{% endif %}>Urgente (Atendimento imediato)</option>
                     </select>
                     {% if form.prioridade.errors %}
                         <div class="alert alert-danger">
@@ -86,7 +94,6 @@
                     {% endif %}
                 </div>
             </div>
-
 
             <!-- Evidências com ícones -->
             <div class="row mb-3">
@@ -107,11 +114,17 @@
 {% endblock %}
 
 {% block extra_css %}
-<!-- Font Awesome para os ícones -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 {% endblock %}
 
 {% block extra_js %}
-<!-- JavaScript específico para esta página -->
-<script src="{% static 'js/ordem_servico/cadastrar_chamado.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>
 {% endblock %}
