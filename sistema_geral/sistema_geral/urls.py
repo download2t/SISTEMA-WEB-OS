@@ -18,4 +18,6 @@ urlpatterns = [
     path('ordem-servico/', include('ordem_servico.urls')),  # Rotas do app ordem_servico
     path('ramais/', include('ramais.urls')),  # Rotas do app stores
     path('banco-senhas/', include('banco_senhas.urls')),  # Rotas do app banco_senhas
+    path('canais/', include('canais.urls')), #Rotas do app canais
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

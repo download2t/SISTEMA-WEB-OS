@@ -111,20 +111,25 @@
                                         <span>Listar Ramais</span>
                                     </a>
                                 </li>
-
-                              <li> <!-- Chamados -->
-                                {% if request.user.is_staff %}
-                                    <a class="dropdown-item d-flex align-items-center" href="{% url 'adm_chamados_abertos' %}">
-                                        <i class="fas fa-list-alt me-2"></i>
-                                        <span>Chamados (Admin)</span>
+                                <li>  <!-- Listar ramais -->
+                                    <a class="dropdown-item d-flex align-items-center" href="{% url 'canais_tv' %}">
+                                        <i class="fas fa-tv me-2"></i>  <!-- Ícone de TV -->
+                                        <span>Listar Canais - TV</span>
                                     </a>
-                                {% else %}
-                                    <a class="dropdown-item d-flex align-items-center" href="{% url 'chamados_abertos' %}">
-                                        <i class="fas fa-list-alt me-2"></i>
-                                        <span>Chamados</span>
-                                    </a>
-                                {% endif %}
-                            </li>
+                                </li>
+                                <li> <!-- Chamados -->
+                                    {% if request.user.is_staff %}
+                                        <a class="dropdown-item d-flex align-items-center" href="{% url 'adm_chamados_abertos' %}">
+                                            <i class="fas fa-list-alt me-2"></i>
+                                            <span>Chamados (Admin)</span>
+                                        </a>
+                                    {% else %}
+                                        <a class="dropdown-item d-flex align-items-center" href="{% url 'chamados_abertos' %}">
+                                            <i class="fas fa-list-alt me-2"></i>
+                                            <span>Chamados</span>
+                                        </a>
+                                    {% endif %}
+                                </li>
                             </ul>
                         </li>
                                                 

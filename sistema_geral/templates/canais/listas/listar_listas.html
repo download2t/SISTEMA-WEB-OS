@@ -1,0 +1,103 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Histórico de listas de canais de TV</h1>
+
+    <!-- Exibir mensagens -->
+    {% if messages %}
+        <div class="alert-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Filtro e botão de busca -->
+    <form method="get" action="{% url 'listar_listas' %}" class="d-flex flex-wrap justify-content-between align-items-center mb-4" id="filter-form">
+        <div class="d-flex align-items-center mb-3">
+            <!-- Campo de filtro por data inicial -->
+            <div class="mb-3">
+                <label for="data_inicio" class="form-label">Data Inicial</label>
+                <input type="date" name="data_inicio" id="data_inicio" class="form-control me-2" value="{{ request.GET.data_inicio }}" style="width: 250px;">
+            </div>
+
+            <!-- Campo de filtro por data final -->
+            <div class="mb-3">
+                <label for="data_fim" class="form-label">Data Final</label>
+                <input type="date" name="data_fim" id="data_fim" class="form-control me-2" value="{{ request.GET.data_fim }}" style="width: 250px;">
+            </div>
+            
+            <!-- Botão de filtrar -->
+            <button type="submit" class="btn btn-primary" style="display: none;" id="filter-button">
+                <i class="fas fa-search me-1"></i> Filtrar
+            </button>
+        </div>
+
+        <!-- Botão de Adicionar Nova Lista -->
+        <a href="{% url 'criar_lista' %}" class="btn btn-success ms-auto">
+            <i class="fas fa-plus-circle me-1"></i> Nova Lista
+        </a>  
+    </form>
+
+    <!-- Formulário de Download PDF -->
+    <form method="get" action="{% url 'download_pdf_canais' %}" class="mb-4 text-end" id="download-form">
+        <input type="hidden" name="data_inicio" value="{{ request.GET.data_inicio }}">
+        <input type="hidden" name="data_fim" value="{{ request.GET.data_fim }}">
+
+        <button type="submit" class=" btn btn-outline-success btn-sm">
+            <i class="fas fa-download me-1"></i> Baixar PDF
+        </button>
+    </form>
+    <!-- Listagem das listas de canais -->
+    <ul class="list-group mt-4">
+        {% for lista in listas %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ lista.data_criacao }}
+
+                <!-- Botões de Ação (Editar e Excluir) -->
+                <div>
+                    <a href="{% url 'editar_lista' lista.id %}" class="btn btn-warning btn-sm me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+                    <a href="{% url 'excluir_lista' lista.id %}" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir">
+                        <i class="fas fa-trash-alt"></i> Excluir
+                    </a>
+                </div>
+            </li>
+        {% empty %}
+            <li class="list-group-item text-center">Não há listas de canais disponíveis.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+
+<script>
+    // Função para automaticamente submeter o formulário de filtro quando as duas datas forem preenchidas
+    document.getElementById('data_fim').addEventListener('change', function() {
+        var dataInicio = document.getElementById('data_inicio').value;
+        var dataFim = document.getElementById('data_fim').value;
+
+        // Verificar se ambas as datas estão preenchidas
+        if (dataInicio && dataFim) {
+            document.getElementById('filter-form').submit(); // Submeter o formulário automaticamente
+        }
+    });
+
+    // Inicializar tooltips (caso esteja usando Bootstrap)
+    var tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
+{% endblock %}

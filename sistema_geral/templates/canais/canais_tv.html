@@ -1,0 +1,49 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Lista de Canais Atualizada</h1>
+    <!-- Botões para acessar as outras páginas -->
+    <div class="mb-4 d-flex justify-content-between">
+        <div>
+            <a href="{% url 'listar_canais' %}" class="btn btn-primary me-2">
+                <i class="bi bi-list-ul"></i> Listar Canais de TV
+            </a>
+            <a href="{% url 'listar_listas' %}" class="btn btn-secondary">
+                <i class="bi bi-collection"></i> Histórico de Listas 
+            </a>
+        </div>
+        <div class="text-end">
+            <a href="{% url 'download_pdf' %}" class="btn btn-outline-success btn-sm">
+                <i class="bi bi-file-earmark-pdf"></i> Download PDF
+            </a>
+        </div>    
+    </div>
+
+    {% if canais_tv %}
+    <!-- Exibe a data da última lista criada -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Lista Criada em: {{ canais_tv.data_criacao }}</h5>
+
+            <!-- Exibe os canais dessa lista -->
+            <p class="card-text"><strong>Canais:</strong></p>
+            <ul class="list-group">
+                {% for canal in canais_tv.canais.all %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ canal.numero }} - {{ canal.titulo }}
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">Não há canais disponíveis para esta lista.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            Não há listas de canais disponíveis.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

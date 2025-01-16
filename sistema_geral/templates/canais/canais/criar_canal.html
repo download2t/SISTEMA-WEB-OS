@@ -1,0 +1,18 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Adicionar Novo Canal</h1>
+
+    <form method="post" action="{% url 'criar_canal' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a href="{% url 'listar_canais' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Excluir Canal: {{ canal.titulo }}</h1>
+
+    <!-- Confirmação de exclusão -->
+    <p>Tem certeza que deseja excluir o canal "{{ canal.titulo }}"? Esta ação é irreversível e não pode ser desfeita.</p>
+
+    <!-- Formulário para confirmação da exclusão -->
+    <form method="post" action="{% url 'excluir_canal' canal.id %}" class="mt-4">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Excluir Canal</button>
+        <a href="{% url 'listar_canais' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

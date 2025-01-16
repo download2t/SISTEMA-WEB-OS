@@ -2,11 +2,11 @@
 {% load static %}
 
 {% block extra_css %}
-
 {% endblock %}
+
 {% block content %}
 <div class="container mt-4">
-    <h1 class="mb-4">Lista de Contatos</h1>
+    <h1 class="mb-4">Lista de Canais</h1>
 
     <!-- Exibir mensagens -->
     {% if messages %}
@@ -21,10 +21,10 @@
     {% endif %}
 
     <!-- Filtro e botão de busca -->
-    <form method="get" action="{% url 'listar_contatos' %}" class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <form method="get" action="{% url 'listar_canais' %}" class="d-flex flex-wrap justify-content-between align-items-center mb-4">
         <div class="d-flex align-items-center">
             <!-- Campo de busca -->
-            <input type="text" name="search" placeholder="Nome ou Telefone do Contato" value="{{ request.GET.search }}" class="form-control me-2" style="width: 300px;">
+            <input type="text" name="search" placeholder="Número, Título ou Descrição do Canal" value="{{ request.GET.search }}" class="form-control me-2" style="width: 300px;">
             
             <!-- Botão de buscar -->
             <button type="submit" class="btn btn-primary">
@@ -32,43 +32,41 @@
             </button>
         </div>
 
-        <!-- Botão de Adicionar Novo Contato -->
-        <a href="{% url 'criar_contato' %}" class="btn btn-success">
-            <i class="fas fa-plus-circle me-1"></i> Novo Contato
+        <!-- Botão de Adicionar Novo Canal -->
+        <a href="{% url 'criar_canal' %}" class="btn btn-success">
+            <i class="fas fa-plus-circle me-1"></i>Novo Canal
         </a>
+
     </form>
 
-    <!-- Tabela de Contatos -->
+
+    <!-- Tabela de Canais -->
     <div class="table-responsive">
         <table class="table table-hover align-middle">
             <thead class="table-primary">
                 <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Nome</th>
-                    <th scope="col">Telefone</th>
-                    <th scope="col">Setor</th>
+                    <th scope="col">CANAL</th>
+                    <th scope="col">Título</th>
                     <th scope="col" class="text-end">Ações</th>
                 </tr>
             </thead>
             <tbody>
-                {% for contato in contatos %}
+                {% for canal in canais %}
                     <tr>
-                        <td>{{ contato.id }}</td>
-                        <td>{{ contato.nome_responsavel }}</td>
-                        <td>{{ contato.numero_telefone }}</td>
-                        <td>{{ contato.grupo.name }}</td>
+                        <td>{{ canal.numero }}</td>
+                        <td>{{ canal.titulo }}</td>
                         <td class="text-end">
-                            <a href="{% url 'editar_contato' contato.id %}" class="btn btn-sm btn-warning">
+                            <a href="{% url 'editar_canal' canal.id %}" class="btn btn-sm btn-warning">
                                 <i class="fas fa-edit"></i> Editar
                             </a>
-                            <a href="{% url 'excluir_contato' contato.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir este contato?');">
+                            <a href="{% url 'excluir_canal' canal.id %}" class="btn btn-sm btn-danger">
                                 <i class="fas fa-trash-alt"></i> Excluir
                             </a>
                         </td>
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="5" class="text-center">Nenhum contato encontrado.</td>
+                        <td colspan="4" class="text-center">Nenhum canal encontrado.</td>
                     </tr>
                 {% endfor %}
             </tbody>

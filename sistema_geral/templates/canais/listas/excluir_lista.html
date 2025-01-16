@@ -1,0 +1,14 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Excluir Lista de Canais</h1>
+    <p>Tem certeza que deseja excluir a lista de canais {{ lista }}?</p>
+    <form method="post" action="{% url 'excluir_lista' lista.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Excluir</button>
+        <a href="{% url 'listar_listas' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

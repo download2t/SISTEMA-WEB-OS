@@ -2,12 +2,11 @@
 {% load static %}
 
 {% block extra_css %}
-
 {% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-    <h1 class="mb-4">Adicionar Novo Contato</h1>
+    <h1 class="mb-4">Adicionar Novo Canal</h1>
 
     <!-- Mensagens de erro ou sucesso -->
     {% if messages %}
@@ -21,42 +20,21 @@
         </div>
     {% endif %}
 
-    <!-- Formulário para criar contato -->
-    <form method="post" action="{% url 'criar_contato' %}" class="mt-4">
+    <!-- Formulário para criar canal -->
+    <form method="post" action="{% url 'criar_canal' %}" class="mt-4">
         {% csrf_token %}
         <div class="mb-3">
-            <label for="nome_responsavel" class="form-label">Nome do Responsável</label>
-            <input type="text" name="nome_responsavel" id="nome_responsavel" class="form-control" placeholder="Digite o nome do responsável" value="{{ form.nome_responsavel.value }}" required>
+            <label for="numero" class="form-label">Número do Canal</label>
+            <input type="number" name="numero" id="numero" class="form-control" placeholder="Digite o número do canal" value="{{ form.numero.value }}" required>
         </div>
 
         <div class="mb-3">
-            <label for="numero_telefone" class="form-label">Número de Telefone</label>
-            <input type="tel" name="numero_telefone" id="numero_telefone" class="form-control" placeholder="Digite o número de telefone" value="{{ form.numero_telefone.value }}" required pattern="[0-9\s]+" title="Digite apenas números">
-        </div>
-
-        <div class="mb-3">
-            <label for="grupo" class="form-label">Grupo Responsável</label>
-            <select name="grupo" id="grupo" class="form-select" required>
-                <option value="" disabled selected>Selecione o grupo...</option>
-                {% for grupo in grupos %}
-                    <option value="{{ grupo.id }}" {% if grupo.id == form.grupo.value %}selected{% endif %}>{{ grupo.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <!-- Novo campo para o usuário responsável -->
-        <div class="mb-3">
-            <label for="usuario" class="form-label">Usuário Responsável</label>
-            <select name="usuario" id="usuario" class="form-select" required>
-                <option value="" disabled selected>Selecione o usuário...</option>
-                {% for usuario in usuarios %}
-                    <option value="{{ usuario.id }}" {% if usuario.id == form.usuario.value %}selected{% endif %}>{{ usuario.username }}</option>
-                {% endfor %}
-            </select>
+            <label for="titulo" class="form-label">Título do Canal</label>
+            <input type="text" name="titulo" id="titulo" class="form-control" placeholder="Digite o título do canal" value="{{ form.titulo.value }}" required>
         </div>
 
         <button type="submit" class="btn btn-success">Salvar</button>
-        <a href="{% url 'listar_contatos' %}" class="btn btn-secondary">Cancelar</a>
+        <a href="{% url 'listar_canais' %}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
 {% endblock %}
