@@ -24,3 +24,4 @@ urlpatterns = [
     path('categorias/excluir/<int:pk>/', views.excluir_categoria, name='excluir_categoria'),
     path('categorias/<str:tipo_banco>/', views.listar_categorias, name='listar_categorias'),
 ]
+ 

@@ -47,6 +47,7 @@
                 <tr>
                     <th scope="col">CANAL</th>
                     <th scope="col">Título</th>
+                    <th scope="col">Status</th>
                     <th scope="col" class="text-end">Ações</th>
                 </tr>
             </thead>
@@ -55,6 +56,13 @@
                     <tr>
                         <td>{{ canal.numero }}</td>
                         <td>{{ canal.titulo }}</td>
+                        <td>
+                            {% if canal.status %}
+                                <span class="badge bg-success">Ativo</span>
+                            {% else %}
+                                <span class="badge bg-danger">Inativo</span>
+                            {% endif %}
+                        </td>
                         <td class="text-end">
                             <a href="{% url 'editar_canal' canal.id %}" class="btn btn-sm btn-warning">
                                 <i class="fas fa-edit"></i> Editar

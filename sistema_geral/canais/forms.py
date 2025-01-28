@@ -1,11 +1,10 @@
 from django import forms
 from .models import ListaCanais, Canal
-from django.db import models
 
 class CanalForm(forms.ModelForm):
     class Meta:
         model = Canal
-        fields = ['numero', 'titulo']
+        fields = ['numero', 'titulo', 'status']  # Adicionado o campo 'status'
         widgets = {
             'numero': forms.NumberInput(attrs={
                 'class': 'form-control',
@@ -17,20 +16,22 @@ class CanalForm(forms.ModelForm):
                 'placeholder': 'Digite o título do canal',
                 'required': 'required',
             }),
+            'status': forms.CheckboxInput(attrs={
+                'class': 'form-check-input',
+            }),
         }
         labels = {
             'numero': 'Número do Canal',
             'titulo': 'Título do Canal',
+            'status': 'Ativo',  # Rotulo para o campo status
         }
-
-
 
 class ListaCanaisForm(forms.ModelForm):
     class Meta:
         model = ListaCanais
-        fields = ['data_criacao', 'canais']  # Inclua canais se você precisar deles também
+        fields = ['data_criacao', 'canais']
 
     data_criacao = forms.DateField(
-        widget=forms.DateInput(attrs={'type': 'date'}),  # Remova o readonly
+        widget=forms.DateInput(attrs={'type': 'date'}),
         label='Data de Criação'
     )
