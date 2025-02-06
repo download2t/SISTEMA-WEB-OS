@@ -66,6 +66,21 @@
                     {% endif %}
                 </div>
             </div>
+            <!-- Grupo de Trabalho -->
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="grupo_trabalho" class="d-flex align-items-center">
+                        <i class="fas fa-users me-2"></i>Grupo de Trabalho:
+                    </label>
+                    <select id="grupo_trabalho" name="grupo_trabalho" class="form-control" required>
+                        {% for grupo_trabalho in grupos_trabalho %}
+                            <option value="{{ grupo_trabalho.id }}">{{ grupo_trabalho.nome_grupo }}</option>
+                        {% empty %}
+                            <option disabled>Nenhum grupo de trabalho disponível</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
 
             <!-- Prioridade -->
             <div class="row mb-3">
@@ -104,7 +119,6 @@
                     <input type="file" id="evidencia" name="evidencia" class="form-control" accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx" multiple>
                 </div>
             </div>
-
             <div class="text-center">
                 <button type="submit" class="btn btn-primary btn-block">Cadastrar Chamado</button>
             </div>

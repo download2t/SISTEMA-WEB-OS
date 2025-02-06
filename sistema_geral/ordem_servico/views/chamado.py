@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import  Q, Case, When, Value, IntegerField
 from django.contrib.auth.models import Group
 from django.utils.dateparse import parse_date
-from ordem_servico.models import Chamado, Evidencia
+from ordem_servico.models import Chamado, Evidencia, GrupoTrabalho
 from django.core.mail import send_mail
 from django.utils.timezone import now
 from django.contrib import messages
@@ -11,8 +11,7 @@ from django.utils import timezone
 from django.conf import settings
 from ordem_servico.models import Contato
 from ordem_servico.forms import MensagemForm
-
-import requests
+import requests # type: ignore
 
         
 # Função para enviar a mensagem via API do WhatsApp
@@ -65,19 +64,24 @@ def criar_chamado(request):
     # Filtra os grupos para incluir apenas "TI" e "MANUTENÇÃO"
     grupos = Group.objects.filter(name__in=['TI', 'MANUTENÇÃO'])
     grupos_usuario = request.user.groups.all()  # Grupos aos quais o usuário pertence
-
+    
     # Ordena manualmente para garantir que "TI" venha primeiro
     grupos = sorted(grupos, key=lambda g: g.name != 'TI')
+
+    # Obtém todos os grupos de trabalho disponíveis
+    grupos_trabalho = GrupoTrabalho.objects.all()
 
     if request.method == 'POST':
         try:
             assunto = request.POST.get('assunto')
             descricao = request.POST.get('descricao')
             grupo_id = request.POST.get('grupo')
+            grupo_trabalho_id = request.POST.get('grupo_trabalho')  # Obtém o ID do grupo de trabalho
             prioridade = request.POST.get('prioridade')
 
             print(f"grupo_id enviado: {grupo_id}")
             print(f"prioridade enviada: {prioridade}")
+            print(f"grupo_trabalho_id enviado: {grupo_trabalho_id}")
 
             if grupo_id is None or grupo_id == "":
                 raise ValueError("Nenhum grupo foi selecionado.")
@@ -85,7 +89,12 @@ def criar_chamado(request):
             if prioridade not in ['Baixa', 'Média', 'Alta', 'Urgente']:
                 raise ValueError("Prioridade inválida.")
 
+            # Valida se o grupo de trabalho foi selecionado
+            if grupo_trabalho_id is None or grupo_trabalho_id == "":
+                raise ValueError("Nenhum grupo de trabalho foi selecionado.")
+
             grupo = Group.objects.get(id=grupo_id)  # Tenta encontrar o grupo com o ID
+            grupo_trabalho = GrupoTrabalho.objects.get(id=grupo_trabalho_id)  # Tenta encontrar o grupo de trabalho com o ID
             status = "Aberto"
 
             # Cria o chamado com os dois campos: grupo responsável e grupos do usuário
@@ -93,6 +102,7 @@ def criar_chamado(request):
                 assunto=assunto,
                 descricao=descricao,
                 grupo_responsavel=grupo,
+                grupo_trabalho=grupo_trabalho,  # Relaciona o grupo de trabalho ao chamado
                 status=status,
                 prioridade=prioridade,
                 prioridade_cliente=prioridade,  # Copia a prioridade do campo para o cliente
@@ -120,12 +130,14 @@ def criar_chamado(request):
 
         except Group.DoesNotExist:
             messages.error(request, 'Grupo selecionado não existe.')
+        except GrupoTrabalho.DoesNotExist:
+            messages.error(request, 'Grupo de trabalho selecionado não existe.')
         except ValueError as ve:
             messages.error(request, f'Erro: {ve}')
         except Exception as e:
             messages.error(request, f'Ocorreu um erro ao criar o chamado: {e}')
 
-    return render(request, 'ordem_servico/criar_chamado.html', {'grupos': grupos})
+    return render(request, 'ordem_servico/criar_chamado.html', {'grupos': grupos, 'grupos_trabalho': grupos_trabalho})
 
 
 @login_required
@@ -201,9 +213,6 @@ def listar_chamados(request):
     }
 
     return render(request, 'ordem_servico/listar_chamados.html', context)
-
-   
-
 
 @login_required
 def visualizar_chamado(request, id):
