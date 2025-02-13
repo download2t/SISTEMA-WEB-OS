@@ -1,6 +1,6 @@
 from django.urls import path
 from .views.itens import create_item_lavanderia, update_item_lavanderia, delete_item_lavanderia, list_item_lavanderia,selecionarGov
-from .views.relatorios import criar_relatorio, listar_relatorios,detalhar_relatorio
+from .views.relatorios import criar_relatorio, listar_relatorios,detalhar_relatorio, editar_relatorio
 
 urlpatterns = [
     # URLs  de seleçãow
@@ -14,6 +14,7 @@ urlpatterns = [
 
     # URLs do relatorio
     path('relatorio/criar/', criar_relatorio, name='criar_relatorio_lavanderia'),
+    path('relatorio/editar/<int:relatorio_id>/', editar_relatorio, name='editar_relatorio'),
     path('relatorios/', listar_relatorios, name='listar_relatorios'),
     path('relatorio/<int:relatorio_id>/', detalhar_relatorio, name='detalhes_relatorio'),
     
