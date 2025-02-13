@@ -47,7 +47,8 @@ def error_403_view(request):
 def permission_denied_view(request):
     return redirect('nao_autenticado')  # Redireciona para a página de erro
 
-# Função para renderizar a página inicial
+# Função para renderizar a página inicial, com redirecionamento para login se não autenticado
+@login_required(login_url='login')
 def home(request):
     return render(request, 'core/home.html')
 

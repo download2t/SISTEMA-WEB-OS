@@ -1,0 +1,154 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}">
+                <p>{{ message }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<h1 class="text-center my-4">Criar Relatório de Lavanderia</h1>
+
+<form method="post" class="container">
+    {% csrf_token %}
+    
+    <!-- Dados principais do relatório -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Dados do Relatório</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-3 d-flex align-items-center">
+                <label for="id_adata" class="form-label me-3">Data</label>
+                <input type="date" name="adata" id="id_adata" class="form-control" value="{{request.POST.adata}}" required>
+            </div>
+           <div class="mb-3">
+                <label for="id_vrTotal" class="form-label">Valor Total (R$)</label>
+                <input type="text" name="vrTotal" id="id_vrTotal" class="form-control" placeholder="0.00" value="{{ request.POST.vrTotal }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="id_pesoTotal" class="form-label">Peso Total (Kg)</label>
+                <input type="text" name="pesoTotal" id="id_pesoTotal" class="form-control" placeholder="0.00" value="{{ request.POST.pesoTotal }}" required>
+            </div>
+        </div>
+    </div>
+
+    <!-- Itens da lavanderia -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Itens da Lavanderia</h5>
+        </div>
+        <div class="card-body">
+            <div id="itens-container">
+                <!-- Aqui serão adicionados os campos para os itens dinamicamente -->
+            </div>
+            <button type="button" id="adicionar-item" class="btn btn-primary">➕ Adicionar Item</button>
+        </div>
+    </div>
+
+    <!-- Campo oculto para armazenar os dados dos itens -->
+    <input type="hidden" id="itens-lavanderia-data" name="itens_lavanderia_data" value="{{ request.POST.itens_lavanderia_data }}">
+
+    <button type="submit" class="btn btn-success w-100 mt-3">Salvar Relatório</button>
+</form>
+
+<!-- Template para adicionar novos itens -->
+<template id="item-template">
+    <div class="item mb-3 d-flex align-items-center">
+        <div class="input-group me-2">
+            <select name="item_lavanderia" class="form-select" required>
+                {% for item in itens_padrao %}
+                    <option value="{{ item.id }}">{{ item.nome }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="input-group me-2">
+            <input type="number" name="qtd_itens" placeholder="Quantidade" min="1" step="1" class="form-control" required>
+        </div>
+        <div class="input-group me-2">
+            <input type="number" name="qtd_relavagens" placeholder="Relavagens" min="0" step="1" class="form-control" required>
+        </div>
+        <button type="button" class="btn btn-danger remover-item">❌</button>
+    </div>
+</template>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const itensContainer = document.getElementById('itens-container');
+    const itemTemplate = document.getElementById('item-template').content;
+    const adicionarItemBtn = document.getElementById('adicionar-item');
+    const itensLavanderiaData = document.getElementById('itens-lavanderia-data');
+
+    // Função para adicionar um novo item
+    function adicionarItem(itemData = {}) {
+        const newItem = document.importNode(itemTemplate, true);
+        const select = newItem.querySelector('select[name="item_lavanderia"]');
+        const qtdItens = newItem.querySelector('input[name="qtd_itens"]');
+        const qtdRelavagens = newItem.querySelector('input[name="qtd_relavagens"]');
+        const removerItemBtn = newItem.querySelector('.remover-item');
+
+        if (itemData.item_lavanderia) {
+            select.value = itemData.item_lavanderia;
+        }
+        if (itemData.qtd_itens) {
+            qtdItens.value = itemData.qtd_itens;
+        }
+        if (itemData.qtd_relavagens) {
+            qtdRelavagens.value = itemData.qtd_relavagens;
+        }
+
+        removerItemBtn.addEventListener('click', function() {
+            newItem.remove();
+            atualizarDadosItens();
+        });
+
+        itensContainer.appendChild(newItem);
+        atualizarDadosItens();
+    }
+
+    // Função para atualizar os dados dos itens no campo oculto
+    function atualizarDadosItens() {
+        const itens = [];
+        itensContainer.querySelectorAll('.item').forEach(item => {
+            const itemData = {
+                item_lavanderia: item.querySelector('select[name="item_lavanderia"]').value,
+                qtd_itens: item.querySelector('input[name="qtd_itens"]').value,
+                qtd_relavagens: item.querySelector('input[name="qtd_relavagens"]').value
+            };
+            itens.push(itemData);
+        });
+        itensLavanderiaData.value = JSON.stringify(itens);
+    }
+
+    // Adicionar um item inicial se houver dados no campo oculto
+    if (itensLavanderiaData.value) {
+        const itens = JSON.parse(itensLavanderiaData.value);
+        itens.forEach(item => adicionarItem(item));
+    }
+
+    // Adicionar um novo item ao clicar no botão
+    adicionarItemBtn.addEventListener('click', function() {
+        adicionarItem();
+    });
+
+    // Atualizar os dados dos itens sempre que houver uma mudança
+    itensContainer.addEventListener('change', atualizarDadosItens);
+
+    // Formatar campos de moeda e peso automaticamente
+    function formatarCampo(input) {
+        input.addEventListener("input", function(e) {
+            let value = this.value.replace(/\D/g, ""); // Remove caracteres não numéricos
+            value = (parseFloat(value) / 100).toFixed(2).replace(",", "."); // Adiciona casas decimais e formata para brasileiro
+            this.value = value;
+        });
+    }
+
+    document.querySelectorAll("#id_vrTotal, #id_pesoTotal").forEach(formatarCampo);
+});
+</script>
+{% endblock %}

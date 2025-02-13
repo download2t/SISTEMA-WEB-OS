@@ -1,0 +1,48 @@
+/* Estilos gerais para os botões */
+.modern-btn {
+    width: 220px;  /* Largura do botão */
+    height: 220px; /* Altura do botão */
+    font-size: 20px; /* Tamanho da fonte */
+    font-weight: bold; /* Negrito */
+    border-radius: 12px; /* Bordas arredondadas */
+    text-align: center; /* Alinhar o texto no centro */
+    display: flex; /* Usar flexbox */
+    align-items: center; /* Centralizar verticalmente */
+    justify-content: center; /* Centralizar horizontalmente */
+    color: white; /* Cor do texto */
+    text-decoration: none; /* Remover sublinhado */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transições suaves */
+}
+
+.modern-btn:hover {
+    transform: scale(1.05); /* Aumenta o tamanho do botão ao passar o mouse */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Sombra ao passar o mouse */
+}
+
+/* Estilo para os botões com diferentes cores */
+.senha-pessoal {
+    background-color: #eea3a3; /* Cor de fundo do botão PESSOAL */
+}
+
+.senha-sanma {
+    background-color: #b87217; /* Cor de fundo do botão SANMA */
+}
+
+/* Estilo para os ícones dentro dos botões */
+.modern-btn i {
+    font-size: 50px; /* Tamanho maior do ícone */
+    transition: color 0.3s ease; /* Transição suave na cor do ícone */
+}
+
+.modern-btn:hover i {
+    color: #fff; /* Mudar a cor do ícone ao passar o mouse */
+}
+
+/* Estilo adicional para o texto abaixo do ícone */
+.modern-btn span {
+    margin-top: 10px; /* Espaço entre o ícone e o texto */
+    font-size: 16px; /* Tamanho do texto */
+    text-transform: uppercase; /* Texto em maiúsculas */
+    letter-spacing: 1px; /* Espaçamento entre letras */
+    font-weight: 600;
+}

@@ -5,26 +5,33 @@
     <div class="container text-center mt-5">
         {% if user.is_authenticated %}
             <!-- Área para usuários autenticados -->
-            <div class="card shadow-lg p-4">
-                <h1 class="display-4">Bem-vindo de volta, {{ user.first_name }}!</h1>
-                <p class="lead text-muted">Estamos felizes em vê-lo novamente.</p>
+            <div class="card shadow-lg p-5 border-0 rounded-4">
+                <h1 class="display-4 text-primary fw-bold">Bem-vindo de volta, {{ user.first_name }}!</h1>
+                <p class="lead text-muted mb-4">Estamos felizes em vê-lo novamente. Aqui está um resumo da sua conta.</p>
                 
                 <!-- Informações adicionais sobre a conta -->
-                <div class="my-4">
-                    <p><strong>Status da conta:</strong> {{ user.is_active|yesno:"Ativo,Inativo" }}</p>
-                    <p><strong>Email:</strong> {{ user.email }}</p>
-                    <p><strong>Data de cadastro:</strong> {{ user.date_joined|date:"d/m/Y" }}</p>
+                <div class="my-4 text-start">
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <p><strong>Status da conta:</strong> <span class="badge bg-success">{{ user.is_active|yesno:"Ativo,Inativo" }}</span></p>
+                            <p><strong>Email:</strong> {{ user.email }}</p>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <p><strong>Data de cadastro:</strong> {{ user.date_joined|date:"d/m/Y" }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         {% else %}
             <!-- Área para visitantes não autenticados -->
-            <div class="card shadow-lg p-4">
-                <h1 class="display-4">Bem-vindo ao Sistema</h1>
-                <p class="lead text-muted">Faça login para acessar todas as funcionalidades.</p>
+            <div class="card shadow-lg p-5 border-0 rounded-4">
+                <h1 class="display-4 text-primary fw-bold">Bem-vindo ao Sistema</h1>
+                <p class="lead text-muted mb-4">Para acessar todas as funcionalidades, faça login ou crie uma conta.</p>
                 
                 <!-- Botões para login ou cadastro -->
-                <div class="mt-4">
-                    <a href="{% url 'login' %}" class="btn btn-primary">Ir para Login</a>
+                <div class="mt-4 d-flex justify-content-center">
+                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg me-3">Ir para Login</a>
+                    <a href="{% url 'signup' %}" class="btn btn-outline-primary btn-lg">Criar Conta</a>
                 </div>
             </div>
         {% endif %}

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Ícones FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- Bloco para CSS adicional de páginas específicas -->
+    {% block extra_css %}
+    {% endblock %}
+
+    <title>SANMA - Sistema</title>
+</head>
+<body class="bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+                <img src="{% static 'images/logo_base_top.png' %}" alt="Logo" class="me-2" style="height: 40px;">
+                <span class="fw-bold text-primary">SANMA</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Alternar navegação">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarLideres" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-users-cog me-2"></i> Líderança
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarLideres">
+                            <li><a class="dropdown-item" href="{% url 'admin:index' %}"><i class="fas fa-tachometer-alt me-2"></i> Painel ADM</a></li>
+                            <li><a class="dropdown-item" href="{% url 'listar_usuarios' %}"><i class="fas fa-users me-2"></i> Listar Usuários</a></li>
+                            <li><a class="dropdown-item" href="{% url 'listar_grupos' %}"><i class="fas fa-layer-group me-2"></i> Listar Setores</a></li>
+                            <li><a class="dropdown-item" href="{% url 'listar_contatos' %}"><i class="fas fa-address-book me-2"></i> Listar Contatos</a></li>
+                            <li><a class="dropdown-item" href="{% url 'selecionar_gov' %}"><i class="fas fa-tv me-2"></i> Governança</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarUsuarios" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-key me-2"></i> Banco-Senhas
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarUsuarios">
+                            <li><a class="dropdown-item" href="{% url 'listar_categorias' %}"><i class="fas fa-cogs me-2"></i> Listar Categorias</a></li>
+                            <li><a class="dropdown-item" href="{% url 'listar_senhas' %}"><i class="fas fa-key me-2"></i> Listar Senhas</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarSanma" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user me-2"></i> Sanma
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarSanma">
+                            <li><a class="dropdown-item" href="{% url 'alterar_senha' %}"><i class="fas fa-key me-2"></i> Alterar Senha</a></li>
+                            <li><a class="dropdown-item" href="{% url 'listar_ramais' %}"><i class="fas fa-phone-alt me-2"></i> Listar Ramais</a></li>
+                            <li><a class="dropdown-item" href="{% url 'canais_tv' %}"><i class="fas fa-tv me-2"></i> Listar Canais - TV</a></li>
+                            <li>
+                                {% if request.user.is_staff %}
+                                    <a class="dropdown-item" href="{% url 'adm_chamados_abertos' %}"><i class="fas fa-list-alt me-2"></i> Chamados (Admin)</a>
+                                {% else %}
+                                    <a class="dropdown-item" href="{% url 'chamados_abertos' %}"><i class="fas fa-list-alt me-2"></i> Chamados</a>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-danger" href="{% url 'logout_confirm' %}">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Container Principal -->
+    <div class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Bloco para scripts adicionais -->
+    {% block scripts %}
+    {% endblock %}
+</body>
+</html>

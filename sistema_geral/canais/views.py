@@ -7,8 +7,8 @@ from core.views import has_permission
 from .models import ListaCanais, Canal
 from datetime import datetime
 from django.http import HttpResponse
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter # type: ignore
+from reportlab.pdfgen import canvas # type: ignore
 from io import BytesIO
 import io
 

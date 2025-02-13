@@ -17,27 +17,30 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <!-- Bloco para CSS adicional de páginas específicas -->
+     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% block extra_css %}
     {% endblock %}
+    
 
     <title>SANMA - Sistema</title>
 
+    <style>
+      
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
-                <img src="{% static 'images/logo_base_top.png' %}" alt="Logo" class="me-2" style="height: 20px;">
+                <img src="{% static 'images/logo_base_top_light.png' %}" alt="Logo" class="logo-img me-2">
             </a>
-
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}
-
-                                <!-- Líderes -->
+                        <!-- Líderes -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarLideres" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-users-cog me-1"></i> Líderança
@@ -63,86 +66,78 @@
                                         <i class="fas fa-address-book me-2"></i> Listar Contatos
                                     </a>
                                 </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" href="{% url 'selecionar_gov' %}">
+                                        <i class="fas fa-project-diagram me-2"></i> Governança
+                                    </a>
+                                </li>
                             </ul>
                         </li>
 
-                        <!-- Banco senhas -->
+                        <!-- Banco Senhas -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarUsuarios" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-key me-2"></i>
-                                <span>Banco-Senhas</span>
+                                <i class="fas fa-key me-2"></i> Banco-Senhas
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarUsuarios">
-
-                                <li>  <!-- Listar Categorias -->
+                                <li>
                                     <a class="dropdown-item d-flex align-items-center" href="{% url 'listar_categorias' %}">
-                                        <i class="fas fa-cogs me-2"></i> <!-- Ícone de engrenagem para categorias -->
-                                        <span>Listar Categorias</span>
+                                        <i class="fas fa-cogs me-2"></i> Listar Categorias
                                     </a>
                                 </li>
-
-                                <li>  <!-- Listar Senhas -->
+                                <li>
                                     <a class="dropdown-item d-flex align-items-center" href="{% url 'listar_senhas' %}">
-                                        <i class="fas fa-key me-2"></i> <!-- Ícone de chave para senhas -->
-                                        <span>Listar Senhas</span>
+                                        <i class="fas fa-key me-2"></i> Listar Senhas
                                     </a>
                                 </li>
-
                             </ul>
                         </li>
 
                         <!-- Sanma -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarUsuarios" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user me-2"></i>
-                                <span>Sanma</span>
+                                <i class="fas fa-user me-2"></i> Sanma
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarUsuarios">
-                                
-                                <li> <!-- Alterar senha -->
+                                <li>
                                     <a class="dropdown-item d-flex align-items-center" href="{% url 'alterar_senha' %}">
-                                        <i class="fas fa-key me-2"></i>
-                                        <span>Alterar Senha</span>
+                                        <i class="fas fa-key me-2"></i> Alterar Senha
                                     </a>
                                 </li>
-                                <li>  <!-- Listar ramais -->
+                                <li>
                                     <a class="dropdown-item d-flex align-items-center" href="{% url 'listar_ramais' %}">
-                                        <i class="fas fa-phone-alt me-2"></i>
-                                        <span>Listar Ramais</span>
+                                        <i class="fas fa-phone-alt me-2"></i> Listar Ramais
                                     </a>
                                 </li>
-                                <li>  <!-- Listar ramais -->
+                                <li>
                                     <a class="dropdown-item d-flex align-items-center" href="{% url 'canais_tv' %}">
-                                        <i class="fas fa-tv me-2"></i>  <!-- Ícone de TV -->
-                                        <span>Listar Canais - TV</span>
+                                        <i class="fas fa-tv me-2"></i> Listar Canais - TV
                                     </a>
                                 </li>
-                                <li> <!-- Chamados -->
+                                <li>
                                     {% if request.user.is_staff %}
                                         <a class="dropdown-item d-flex align-items-center" href="{% url 'adm_chamados_abertos' %}">
-                                            <i class="fas fa-list-alt me-2"></i>
-                                            <span>Chamados (Admin)</span>
+                                            <i class="fas fa-list-alt me-2"></i> Chamados (Admin)
                                         </a>
                                     {% else %}
                                         <a class="dropdown-item d-flex align-items-center" href="{% url 'chamados_abertos' %}">
-                                            <i class="fas fa-list-alt me-2"></i>
-                                            <span>Chamados</span>
+                                            <i class="fas fa-list-alt me-2"></i> Chamados
                                         </a>
                                     {% endif %}
                                 </li>
                             </ul>
                         </li>
-                                                
+
                         <!-- Logout -->
                         <li class="nav-item">
                             <a class="nav-link text-danger" href="{% url 'logout_confirm' %}">
-                                <i class="fas fa-sign-out-alt me-1"></i>Logout
+                                <i class="fas fa-sign-out-alt me-1"></i> Logout
                             </a>
                         </li>
                     {% else %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'login' %}">
-                                <i class="fas fa-sign-in-alt me-1"></i>Login
+                                <i class="fas fa-sign-in-alt me-1"></i> Login
                             </a>
                         </li>
                     {% endif %}
@@ -150,6 +145,7 @@
             </div>
         </div>
     </nav>
+
     <!-- HERDAR ESTE ESPAÇO NOS COMPONENTES COMO MENUS ETC.-->
     <div class="container">
         {% block content %}

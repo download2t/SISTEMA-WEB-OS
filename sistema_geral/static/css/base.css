@@ -1,47 +1,42 @@
-body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #f8f9fa;
-    padding-top: 72px; /* Ajuste para compensar a altura da navbar */
-}
 
+/* Custom Styles for Navbar */
 .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 1050;
-    background-color: #fff; /* Para garantir que a navbar tenha cor fixa */
+    background-color: #4C6B8C; /* Cor de fundo da navbar */
 }
 
-.navbar-brand {
-    font-weight: 700;
-    color: #007bff !important;
+.navbar .navbar-brand {
+    color: #ffffff; /* Cor da marca (logo) */
 }
 
-.navbar-nav .nav-link {
-    color: #333;
-    font-weight: 500;
+.navbar .navbar-nav .nav-item .nav-link {
+    color: #ffffff; /* Cor dos links na navbar */
+    padding: 15px 20px;
 }
 
-.navbar-nav .nav-link:hover {
-    color: #007bff;
-}
-
-.container {
-    margin-top: 20px;
-}
-
-.alert-custom {
-    position: fixed;
-    top: 20%; /* Distância do topo */
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1050;
-    width: 80%;
-    max-width: 500px;
-    padding: 15px;
+.navbar .navbar-nav .nav-item .nav-link:hover {
+    background-color: #36556F; /* Cor de hover com contraste */
     border-radius: 5px;
-    text-align: center;
-    display: none; /* Inicialmente escondido */
 }
+
+.dropdown-menu {
+    background-color: #4C6B8C; /* Cor do fundo do menu dropdown */
+    border-radius: 5px;
+}
+
+.dropdown-item {
+    color: #ffffff; /* Cor dos itens do menu dropdown */
+}
+
+.dropdown-item:hover {
+    background-color: #36556F; /* Cor de hover para os itens do menu dropdown */
+}
+
+.navbar-toggler-icon {
+    background-color: #ffffff; /* Cor do ícone de alternância */
+}
+
+.logo-img {
+    height: 45px;
+    width: auto;
+}
+

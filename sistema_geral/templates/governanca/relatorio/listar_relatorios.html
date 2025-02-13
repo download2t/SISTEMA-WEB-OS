@@ -1,0 +1,96 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}">
+                <p>{{ message }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+    <h2>📑 Relatórios de Lavanderia</h2>
+
+    <form method="get" action="{% url 'listar_relatorios' %}" class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center">
+            <!-- Campo de data de início -->
+            <input type="date" name="data_inicio" placeholder="Data de Início" value="{{ request.GET.data_inicio }}" class="form-control me-2" style="width: 300px;">
+
+            <!-- Campo de data de fim -->
+            <input type="date" name="data_fim" placeholder="Data de Fim" value="{{ request.GET.data_fim }}" class="form-control me-2" style="width: 300px;">
+            
+            <!-- Botão de buscar -->
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search me-1"></i> Buscar
+            </button>
+        </div>
+
+        <!-- Botão de Adicionar Novo Relatório -->
+        <a href="{% url 'criar_relatorio_lavanderia' %}" class="btn-criar">➕ Novo Relatório</a>
+    </form>
+
+
+    {% if relatorios %}
+        <div class="relatorio-container">
+            {% for relatorio in relatorios %}
+                <div class="relatorio-card">
+                    <h3>📅 {{ relatorio.adata|date:"d/m/Y" }}</h3>
+                    <p> 💰 Valor Total: R$ {{ relatorio.vrTotal }}</p>
+                    <p> ⚖️ Peso Total: {{ relatorio.pesoTotal }} kg</p>
+                    <a href="{% url 'detalhes_relatorio' relatorio.id %}" class="btn-detalhes">🔍 Mais informações</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Nenhum relatório encontrado.</p>
+    {% endif %}
+
+
+    <style>
+        .relatorio-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        .relatorio-card {
+            background:rgb(234, 243, 253);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            width: 300px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .relatorio-card h3 {
+            margin: 0;
+            color: #333;
+        }
+        .relatorio-card p {
+            margin: 5px 0;
+        }
+        .btn-detalhes {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            background: #007bff;
+            color: white;
+            padding: 8px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .btn-detalhes:hover {
+            background: #0056b3;
+        }
+        .btn-criar {
+            display: inline-block;
+            margin-top: 20px;
+            background: #28a745;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .btn-criar:hover {
+            background: #218838;
+        }
+    </style>
+{% endblock %}

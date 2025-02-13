@@ -1,0 +1,26 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<!-- Adicione CSS extra aqui, se necessário -->
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Excluir Item de Lavanderia: {{ item.nome }}</h1>
+
+    <!-- Confirmação de exclusão -->
+    <p>Tem certeza que deseja excluir o item de lavanderia "{{ item.nome }}"? Esta ação é irreversível e não pode ser desfeita.</p>
+
+    <!-- Formulário para confirmação da exclusão -->
+    <form method="post" action="{% url 'delete_item_lavanderia' item.pk %}" class="mt-4">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Excluir Item</button>
+        <a href="{% url 'item_lavanderia_list' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Se necessário, adicione scripts aqui -->
+{% endblock %}

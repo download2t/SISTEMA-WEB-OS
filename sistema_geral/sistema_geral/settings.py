@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'ramais',
     'banco_senhas',
     'canais',
+    'governanca',
 ]
 
 MESSAGE_TAGS = {

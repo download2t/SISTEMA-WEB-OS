@@ -1,17 +1,14 @@
-<!-- templates/core/nao_logado.html -->
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Não está logado</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1>Você não está logado</h1>
-        <p> Para acessar esta página, faça login primeiro.</p>
-        <a href="{% url 'login' %}" class="btn btn-primary">Ir para Login</a>
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="height: 100vh; background-color: #f4f6f9;">
+    <div class="card shadow-lg border-0 rounded-4" style="max-width: 500px; width: 100%; padding: 3rem;">
+        <div class="card-body text-center">
+            <h1 class="display-4 mb-4" style="color: #4C6B8C;">Você não está logado</h1>
+            <p class="lead text-muted mb-4">Para acessar esta página, é necessário fazer login primeiro.</p>
+            <a href="{% url 'login' %}" class="btn btn-primary btn-lg px-5 py-3">Ir para Login</a>
+        </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
