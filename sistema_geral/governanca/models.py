@@ -24,6 +24,7 @@ class ItemRelLavanderia(models.Model):
     pesokg = models.DecimalField(max_digits=10, decimal_places=2,default=0)
     valormedio = models.DecimalField(max_digits=10, decimal_places=2,default=0)
     relavagemkg = models.DecimalField(max_digits=10, decimal_places=2,default=0)
+    porcentagem_peso =models.DecimalField(max_digits=10, decimal_places=2,default=0)
 
     class Meta:
         unique_together = ('relatorio', 'item_lavanderia')

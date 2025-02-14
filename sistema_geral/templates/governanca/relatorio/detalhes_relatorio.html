@@ -9,6 +9,7 @@
             <p><strong>📅 Data do Relatório:</strong> {{ relatorio.adata }}</p>
             <p><strong>💰 Valor Total:</strong> <span class="text-success">R$ {{ relatorio.vrTotal }}</span></p>
             <p><strong>⚖ Peso Total:</strong> <span class="text-warning">{{ relatorio.pesoTotal }} kg</span></p>
+            <p><strong>⚖ Relavagem Total:</strong> <span class="text-warning">{{ porcentagem_relavada }}%</span></p>
         </div>
 
         <h3 class="mt-4">📜 Itens do Relatório</h3>
@@ -22,8 +23,8 @@
                         <th>Relavagens</th>
                         <th>Peso (kg)</th>
                         <th>relavagem (kg)</th>
+                        <th>% relave (kg)</th>
                         <th>Valor Médio</th>
-                       
                     </tr>
                 </thead>
                 <tbody>
@@ -32,11 +33,10 @@
                         <td>{{ item.item_lavanderia.nome }}</td>
                         <td class="text-center">{{ item.qtd_itens }}</td>
                         <td class="text-center">{{ item.qtd_relavagens }}</td>
-                        <td class="text-center">{{ item.pesokg }}</td>
-                        <td class="text-center">{{ item.relavagemkg }}</td>
+                        <td class="text-center">{{ item.pesokg }} Kg</td>
+                        <td class="text-center">{{ item.relavagemkg }} Kg</td>
+                        <td class="text-center">{{ item.porcentagem_peso }} %</td>
                         <td class="text-center text-primary">R$ {{ item.valormedio }}</td>
-                 
-                        
                     </tr>
                     {% empty %}
                     <tr>
@@ -49,9 +49,14 @@
 
         <div class="text-center mt-4">
             <a href="{% url 'listar_relatorios' %}" class="btn btn-secondary">
-                🔙 Voltar para a lista de relatórios
+                🔙 Voltar
+            </a>
+            <a href="{% url 'excluir_relatorio' relatorio.id %}" class="btn btn-danger">
+                🗑️ Excluir
             </a>
         </div>
+
     </div>
+</div>
 </div>
 {% endblock %}

@@ -12,7 +12,7 @@
     </div>
 {% endif %}
 
-<h1 class="text-center my-4">Criar Relatório de Lavanderia</h1>
+<h1 class="text-center my-4">Cadastro de Relatório de Lavanderia</h1>
 
 <form method="post" class="container">
     {% csrf_token %}
@@ -111,6 +111,13 @@ document.addEventListener('DOMContentLoaded', function() {
         atualizarDadosItens();
     }
 
+   // Remove um item do container
+    itensContainer.addEventListener('click', function(event) {
+        if (event.target.classList.contains('remover-item')) {
+            event.target.closest('.item').remove();
+        }
+    });
+
     // Função para atualizar os dados dos itens no campo oculto
     function atualizarDadosItens() {
         const itens = [];
@@ -150,5 +157,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.querySelectorAll("#id_vrTotal, #id_pesoTotal").forEach(formatarCampo);
 });
+
 </script>
 {% endblock %}

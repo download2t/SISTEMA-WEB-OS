@@ -111,6 +111,12 @@ def adicionar_itens_ao_relatorio(request, relatorio):
         # Cálculo de relavagemkg
         relavagemkg_value = qtd_relavagens * item.pesokg
 
+        # Cálculo da porcentagem de peso
+        if qtd_itens > 0:  # Evita divisão por zero
+            porcentagem_peso = (qtd_relavagens / qtd_itens) * 100
+        else:
+            porcentagem_peso = 0
+
         # Criação do ItemRelLavanderia
         ItemRelLavanderia.objects.create(
             relatorio=relatorio,
@@ -119,8 +125,10 @@ def adicionar_itens_ao_relatorio(request, relatorio):
             qtd_relavagens=qtd_relavagens,
             pesokg=item.pesokg,
             valormedio=item.valormedio,
-            relavagemkg=relavagemkg_value
+            relavagemkg=relavagemkg_value,
+            porcentagem_peso=porcentagem_peso  
         )
+
 
 def listar_relatorios(request):
     data_inicio = request.GET.get('data_inicio')
@@ -184,85 +192,42 @@ def detalhar_relatorio(request, relatorio_id):
     relatorio = get_object_or_404(RelatorioLav, id=relatorio_id)
     itens_relatorio = ItemRelLavanderia.objects.filter(relatorio=relatorio)
 
+    # Inicializando variáveis para o cálculo
+    total_quantidade = 0
+    total_relavagens = 0
+
+    # Somando as quantidades e relavagens
+    for item in itens_relatorio:
+        total_quantidade += item.qtd_itens  # Soma as quantidades de itens
+        total_relavagens += item.qtd_relavagens  # Soma as relavagens
+
+    # Calcular a porcentagem de relavagens em relação ao total de itens
+    if total_quantidade > 0:
+        porcentagem_relavada = (total_relavagens / total_quantidade) * 100
+        porcentagem_relavada = round(porcentagem_relavada, 2)  # Arredonda para 2 casas decimais
+    else:
+        porcentagem_relavada = 0
+
+    # Passa os dados para o contexto
     context = {
         'relatorio': relatorio,
-        'itens_relatorio': itens_relatorio
+        'itens_relatorio': itens_relatorio,
+        'total_quantidade': total_quantidade,
+        'total_relavagens': total_relavagens,
+        'porcentagem_relavada': porcentagem_relavada,
     }
 
     return render(request, 'governanca/relatorio/detalhes_relatorio.html', context)
 
 
 @login_required
-@user_passes_test(has_permission, login_url='403')  # Garantindo que o usuário tenha permissão
-@transaction.atomic
-def editar_relatorio(request, relatorio_id):
-    relatorio = get_object_or_404(RelatorioLav, id=relatorio_id)  # Recupera o relatório existente
+@user_passes_test(has_permission, login_url='403')
+def delete_relatorio(request, relatorio_id):
+    relatorio = get_object_or_404(RelatorioLav, id=relatorio_id)
+
     if request.method == 'POST':
-        form = RelatorioLavForm(request.POST, instance=relatorio)  # Popula o formulário com os dados do relatório existente
-        if form.is_valid():
-            try:
-                # Verifica se há pelo menos um item
-                itens = request.POST.getlist('item_lavanderia')
-                if not itens:
-                    messages.error(request, 'É necessário adicionar pelo menos um item ao relatório.')
-                    return render(request, 'governanca/relatorio/editar_relatorio.html', {
-                        'form': form,
-                        'relatorio': relatorio,
-                        'itens_padrao': ItemLavanderia.objects.all(),
-                        'post_data': request.POST,  # Passa os dados do POST de volta para o template
-                    })
+        relatorio.delete()
+        messages.success(request, 'Relatório excluído com sucesso!')
+        return redirect('listar_relatorios')
 
-                # Verifica se há itens duplicados
-                if len(itens) != len(set(itens)):
-                    messages.error(request, 'Não é permitido adicionar itens duplicados ao relatório.')
-                    return render(request, 'governanca/relatorio/editar_relatorio.html', {
-                        'form': form,
-                        'relatorio': relatorio,
-                        'itens_padrao': ItemLavanderia.objects.all(),
-                        'post_data': request.POST,  # Passa os dados do POST de volta para o template
-                    })
-
-                # Atualiza o relatório com os dados do formulário
-                relatorio = form.save(commit=False)
-
-                # Atualiza a data, caso seja fornecida
-                adata_str = request.POST.get('adata')
-                if adata_str:
-                    relatorio.adata = timezone.datetime.strptime(adata_str, '%Y-%m-%d')
-                else:
-                    relatorio.adata = timezone.now()
-
-                # Corrige os valores com a função formatar_valor
-                relatorio.vrTotal = formatar_valor(request.POST.get('vrTotal', '0'))
-                relatorio.pesoTotal = formatar_valor(request.POST.get('pesoTotal', '0'))
-
-                # Salva o relatório atualizado
-                relatorio.save()
-
-                # Chama a função para adicionar ou atualizar os itens no relatório
-                adicionar_itens_ao_relatorio(request, relatorio)
-
-                # Redireciona após salvar com sucesso
-                messages.success(request, 'Relatório editado com sucesso!')
-                return redirect('listar_relatorios')
-
-            except Exception as e:
-                print(f"Erro ao editar relatório: {e}")
-                messages.error(request, f'Erro ao editar o relatório: {str(e)}')
-                return render(request, 'governanca/relatorio/editar_relatorio.html', {
-                    'form': form,
-                    'relatorio': relatorio,
-                    'itens_padrao': ItemLavanderia.objects.all(),
-                    'post_data': request.POST,  # Passa os dados do POST de volta para o template
-                })
-    else:
-        form = RelatorioLavForm(instance=relatorio)  # Popula o formulário com os dados do relatório existente
-
-    # Carrega os itens padrão para o formulário
-    itens_padrao = ItemLavanderia.objects.all()
-    return render(request, 'governanca/relatorio/editar_relatorio.html', {
-        'form': form,
-        'relatorio': relatorio,
-        'itens_padrao': itens_padrao,
-        'post_data': request.POST if request.method == 'POST' else None,  # Passa os dados do POST de volta para o template
-    })
+    return render(request, 'governanca/relatorio/excluir_relatorio.html', {'relatorio': relatorio})
