@@ -1,0 +1,103 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Cadastrar novo Contrato</h1>
+
+    <!-- Formulário -->
+    <form method="post" enctype="multipart/form-data" class="card p-4 shadow-sm">
+        {% csrf_token %}
+
+        <!-- Linha para CNPJ, Razão Social e Nome Fantasia -->
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="documento">CNPJ/CPF <span class="text-danger">*</span></label>
+                {{ form.documento }}
+            </div>
+
+            <div class="col-md-4">
+                <label for="razao_social">Razão Social <span class="text-danger">*</span></label>
+                {{ form.razao_social }}
+            </div>
+
+            <div class="col-md-4">
+                <label for="nome_fantasia">Nome Fantasia</label>
+                {{ form.nome_fantasia }}
+            </div>
+        </div>
+
+        <!-- Linha para Telefone e Email -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="telefone">Telefone <span class="text-danger">*</span></label>
+                {{ form.telefone }}
+            </div>
+
+            <div class="col-md-6">
+                <label for="email">E-mail <span class="text-danger">*</span></label>
+                {{ form.email }}
+            </div>
+        </div>
+
+        <!-- Linha para Descrição, Data de Assinatura e Data de Validade -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="descricao">Descrição</label>
+                {{ form.descricao }}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="data_assinatura">Data de Assinatura <span class="text-danger">*</span></label>
+                {{ form.data_assinatura }}
+            </div>
+
+            <div class="col-md-6">
+                <label for="data_validade">Data de Validade <span class="text-danger">*</span></label>
+                {{ form.data_validade }}
+            </div>
+        </div>
+
+             <!-- Linha para Valor -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="valor">Valor do Contrato <span class="text-danger">*</span></label>
+                {{ form.valor }}
+            </div>
+        </div>
+
+        <!-- Botões -->
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <a href="{% url 'listar_contratos' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+<!-- Script para formatação do valor -->
+<script>
+    // Função para formatar o valor em formato de moeda
+    function formatarValor(event) {
+        var input = event.target;
+        var valor = input.value;
+
+        // Remover caracteres não numéricos
+        valor = valor.replace(/\D/g, '');
+
+        // Adicionar ponto a cada 3 dígitos e colocar o símbolo de R$
+        valor = valor.replace(/(\d)(\d{3})(\d)/, '$1.$2.$3');
+        valor = valor.replace(/(\d)(\d{3})$/, '$1.$2');
+        
+        // Adiciona o símbolo de R$ no início
+        input.value = 'R$ ' + valor;
+    }
+
+    // Adiciona o evento para formatação do campo "valor"
+    document.addEventListener('DOMContentLoaded', function () {
+        var valorInput = document.querySelector('#id_valor'); // A ID do campo de valor
+        valorInput.addEventListener('input', formatarValor);
+    });
+</script>

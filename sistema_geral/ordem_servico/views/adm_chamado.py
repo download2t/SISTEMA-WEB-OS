@@ -2,17 +2,17 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import  Q, Case, When, Value, IntegerField
 from django.http import HttpResponse, HttpResponseRedirect
-from reportlab.lib.pagesizes import landscape, letter
+from reportlab.lib.pagesizes import landscape, letter # type: ignore
 from django.contrib.auth.models import Group, User
 from core.views import has_permission
 from ordem_servico.models import Chamado
-from reportlab.platypus import Table, TableStyle
+from reportlab.platypus import Table, TableStyle # type: ignore
 from django.utils.dateparse import parse_date
 from django.core.mail import send_mail
 from django.contrib import messages
-from reportlab.pdfgen import canvas
+from reportlab.pdfgen import canvas # type: ignore
 from django.utils import timezone
-from reportlab.lib import colors
+from reportlab.lib import colors # type: ignore
 from django.conf import settings
 from ordem_servico.forms import MensagemForm
 

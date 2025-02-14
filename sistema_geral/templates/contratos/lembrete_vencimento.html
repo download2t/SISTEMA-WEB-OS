@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lembrete de Vencimento de Contrato</title>
+</head>
+<body style="font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; padding: 20px;">
+    <table style="width: 100%; max-width: 600px; margin: auto; background-color: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        <tr>
+            <td colspan="2" style="text-align: center; padding-bottom: 20px;">
+                <h2 style="color: #2c3e50;">Lembrete de Vencimento de Contrato</h2>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 150px; padding-right: 10px; font-weight: bold;">Nome Fantasia:</td>
+            <td>{{ contrato.nome_fantasia }}</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">Razão Social:</td>
+            <td>{{ contrato.razao_social }}</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">CNPJ/CPF:</td>
+            <td>{{ contrato.documento }}</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">Telefone:</td>
+            <td>{{ contrato.telefone }}</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">E-mail:</td>
+            <td>{{ contrato.email }}</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">Data de Assinatura:</td>
+            <td>{{ contrato.data_assinatura|date:"d/m/Y" }}</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">Data de Validade:</td>
+            <td>{{ contrato.data_validade|date:"d/m/Y" }}</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">Valor do Contrato:</td>
+            <td>R$ {{ contrato.valor|floatformat:2 }}</td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center; padding-top: 20px;">
+                <p style="font-size: 14px;">Este contrato está previsto para vencer até {{ data_limite|date:"d/m/Y" }}. Recomendamos a renovação o quanto antes.</p>
+                <p style="font-size: 14px;">Se você tiver alguma dúvida, entre em contato conosco.</p>
+                <p style="font-size: 14px;">Atenciosamente, <br>Equipe de Atendimento</p>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

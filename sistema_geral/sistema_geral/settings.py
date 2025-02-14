@@ -11,7 +11,7 @@ with open(key_file_path, 'r') as file:
 
 DEBUG = True # SECURITY WARNING: don't run with debug turned on in production!
 
-ALLOWED_HOSTS = ['*', '127.0.0.1', '172.16.10.26', 'ti_sanma']
+ALLOWED_HOSTS = ['*', '127.0.0.1', '172.16.10.26','172.16.10.169', 'ti_sanma']
 
 
 # Application definition
@@ -23,12 +23,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_crontab',
+    'django_cron',
     'core',
     'ordem_servico',
     'ramais',
     'banco_senhas',
     'canais',
     'governanca',
+    'contratos',
+   
 ]
 
 MESSAGE_TAGS = {
@@ -150,3 +154,8 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 20485760  # Limite de 20 MB em upload de chamados
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Usar o banco de dados para armazenar sessões
 SESSION_COOKIE_AGE = 28800 # Tempo em segundos que a sessão dura (exemplo: 8 horas)
+
+CRONJOBS = [
+    ('0 10 * * *', 'myapp.tasks.verificar_contratos_vencendo'), 
+    # executa às 10h todos os dias
+]

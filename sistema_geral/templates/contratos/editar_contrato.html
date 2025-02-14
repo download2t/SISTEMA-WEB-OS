@@ -1,0 +1,91 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Editar Contrato</h1>
+
+    <!-- Formulário -->
+    <form method="post" enctype="multipart/form-data" class="card p-4 shadow-sm">
+        {% csrf_token %}
+
+        <!-- Linha para CNPJ, Razão Social e Nome Fantasia -->
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="documento">CNPJ/CPF <span class="text-danger">*</span></label>
+                {{ form.documento }}
+            </div>
+
+            <div class="col-md-4">
+                <label for="razao_social">Razão Social <span class="text-danger">*</span></label>
+                {{ form.razao_social }}
+            </div>
+
+            <div class="col-md-4">
+                <label for="nome_fantasia">Nome Fantasia</label>
+                {{ form.nome_fantasia }}
+            </div>
+        </div>
+
+        <!-- Linha para Telefone e Email -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="telefone">Telefone <span class="text-danger">*</span></label>
+                {{ form.telefone }}
+            </div>
+
+            <div class="col-md-6">
+                <label for="email">E-mail <span class="text-danger">*</span></label>
+                {{ form.email }}
+            </div>
+        </div>
+
+        <!-- Linha para Descrição, Data de Assinatura e Data de Validade -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="descricao">Descrição</label>
+                {{ form.descricao }}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="data_assinatura">Data de Assinatura <span class="text-danger">*</span></label>
+                {{ form.data_assinatura }}
+            </div>
+
+            <div class="col-md-6">
+                <label for="data_validade">Data de Validade <span class="text-danger">*</span></label>
+                {{ form.data_validade }}
+            </div>
+        </div>
+
+        <!-- Linha para Valor -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="valor">Valor do Contrato <span class="text-danger">*</span></label>
+                {{ form.valor }}
+            </div>
+        </div>
+
+        <!-- Botões -->
+        <div class="d-flex justify-content-between">
+            <div>
+                {% if form.instance.ativo %}
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                {% else %}
+                    <button type="button" class="btn btn-primary" disabled>Contrato Inativo</button>
+                {% endif %}
+                <a href="{% url 'listar_contratos' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+            <div>
+                {% if form.instance.ativo %}
+                    <a href="{% url 'inativar_contrato' form.instance.id %}" class="btn btn-danger">Inativar</a>
+                {% else %}
+                    <a href="{% url 'ativar_contrato' form.instance.id %}" class="btn btn-success">Ativar</a>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
