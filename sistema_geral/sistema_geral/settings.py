@@ -23,8 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_crontab',
-    'django_cron',
+    'django_cron',  
     'core',
     'ordem_servico',
     'ramais',
@@ -32,8 +31,8 @@ INSTALLED_APPS = [
     'canais',
     'governanca',
     'contratos',
-   
 ]
+
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'debug',
@@ -156,6 +155,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Usar o banco de dados 
 SESSION_COOKIE_AGE = 28800 # Tempo em segundos que a sessão dura (exemplo: 8 horas)
 
 CRONJOBS = [
-    ('0 10 * * *', 'myapp.tasks.verificar_contratos_vencendo'), 
-    # executa às 10h todos os dias
+    ('10 08 * * *', 'myapp.tasks.verificar_contratos_vencendo'), 
+
+    # MINUTO / HORA / 8H e 10 min
 ]

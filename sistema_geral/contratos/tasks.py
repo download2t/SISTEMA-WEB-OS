@@ -32,3 +32,4 @@ def verificar_contratos_vencendo():
             print(f'E-mail de lembrete enviado para financeiro@sanmahotel.com.br sobre o contrato de {contrato.nome_fantasia}')
         except Exception as e:
             print(f"Erro ao enviar e-mail para financeiro@sanmahotel.com.br sobre o contrato de {contrato.nome_fantasia}: {e}")
+

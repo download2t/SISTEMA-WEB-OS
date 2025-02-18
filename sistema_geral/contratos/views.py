@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from .models import Contrato
 from .forms import ContratoForm
-from datetime import date
+from datetime import date, timedelta
 
 
 from datetime import date
@@ -113,3 +113,22 @@ def ativar_contrato(request, contrato_id):
     messages.success(request, "Contrato ativado com sucesso!")
 
     return redirect('listar_contratos')
+
+from django.utils.timezone import now
+from django.http import JsonResponse
+
+
+def contratos_vencendo(request):
+    # Define a data atual
+    hoje = now().date()
+    
+    # Define um intervalo de vencimento (exemplo: contratos vencendo nos próximos 30 dias)
+    limite_vencimento = hoje + timedelta(days=30)
+    
+    # Filtra apenas os contratos que ainda estão ativos e vencem dentro do intervalo
+    contratos = Contrato.objects.filter(ativo=True, data_validade__lte=limite_vencimento, data_validade__gte=hoje)
+    
+    return render(request, 'contratos/listar_contratos.html', {
+        'contratos': contratos,
+        'titulo_pagina': 'Contratos Vencendo'
+    })

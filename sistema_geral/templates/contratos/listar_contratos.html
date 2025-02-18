@@ -4,6 +4,12 @@
 {% block content %}
 <div class="container mt-4">
     <h1 class="mb-4">Lista de Contratos</h1>
+    
+    <div class="mb-3 text-end">
+        <a href="{% url 'contratos_vencendo' %}" class="btn btn-danger">
+            <i class="fas fa-bell"></i> Contratos Vencendo
+        </a>
+    </div>
 
     <!-- Exibir mensagens -->
     {% if messages %}
