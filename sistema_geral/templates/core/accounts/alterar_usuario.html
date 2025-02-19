@@ -2,156 +2,81 @@
 {% load static %}
 
 {% block extra_css %}
-<style>
-    #available_groups, #assigned_groups {
-        height: 200px;
-        width: 100%;
-    }
 
-    button {
-        width: 100%;
-        margin-top: 5px;
-    }
-</style>
 {% endblock %}
+
 {% block content %}
+<!-- Mensagens de sucesso ou erro -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-4" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
 <!-- Formulário para editar usuário com grupos -->
-<div class="d-flex justify-content-center align-items-center" style="height: calc(100vh - 100px)">
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light" style="padding-top: 70px;">
     <div class="col-lg-8 col-md-10 col-sm-12">
-        <div class="card shadow-sm p-4 rounded-3 bg-light">
-            <h2 class="text-center mb-4">Alterar Usuário</h2>
+        <div class="card shadow-lg rounded-4 border-0">
+            <div class="card-body p-4 p-md-5">
+                <h2 class="text-center mb-4 fw-bold">Alterar Usuário</h2>
 
-            <form method="post" action="{% url 'alterar_usuario' user.id %}">
-                {% csrf_token %}
-                
-                <!-- Linha: Nome de Usuário, Primeiro Nome, Último Nome -->
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <label for="username" class="form-label">Nome de Usuário:</label>
-                        <input type="text" id="username" name="username" class="form-control" value="{{ form.username.value|default_if_none:user.username }}" required>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="first_name" class="form-label">Primeiro Nome:</label>
-                        <input type="text" id="first_name" name="first_name" class="form-control" value="{{ form.first_name.value|default_if_none:user.first_name }}" required>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="last_name" class="form-label">Último Nome:</label>
-                        <input type="text" id="last_name" name="last_name" class="form-control" value="{{ form.last_name.value|default_if_none:user.last_name }}" required>
-                    </div>
-                </div>
-
-                <!-- Linha: E-mail, Status, Staff -->
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="email" class="form-label">E-mail:</label>
-                        <input type="email" id="email" name="email" class="form-control" value="{{ form.email.value|default_if_none:user.email }}" required>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="is_active" class="form-label">Status:</label>
-                        <select id="is_active" name="is_active" class="form-select">
-                            <option value="True" {% if user.is_active %}selected{% endif %}>Ativo</option>
-                            <option value="False" {% if not user.is_active %}selected{% endif %}>Inativo</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label </label>
-                        <p></p>
-                        <div class="form-check form-switch mb-4">
-                            <label class="form-check-label" for="is_staff">ADM</label>
-                            <input class="form-check-input" type="checkbox" id="is_staff" name="is_staff" {% if form.is_staff.value %}checked{% endif %}>
+                <form method="post" action="{% url 'alterar_usuario' user.id %}">
+                    {% csrf_token %}
+                    
+                    <!-- Linha: Nome de Usuário, Primeiro Nome, Último Nome -->
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <label for="username" class="form-label fw-medium">Nome de Usuário:</label>
+                            <input type="text" id="username" name="username" class="form-control form-control-lg" value="{{ form.username.value|default_if_none:user.username }}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="first_name" class="form-label fw-medium">Primeiro Nome:</label>
+                            <input type="text" id="first_name" name="first_name" class="form-control form-control-lg" value="{{ form.first_name.value|default_if_none:user.first_name }}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="last_name" class="form-label fw-medium">Último Nome:</label>
+                            <input type="text" id="last_name" name="last_name" class="form-control form-control-lg" value="{{ form.last_name.value|default_if_none:user.last_name }}" required>
                         </div>
                     </div>
-                </div>
 
-                <!-- Seção de grupos -->
-                <div class="mb-3">
-                    <div class="row">
-                        <!-- Grupos Disponíveis -->
-                        <div class="col-md-5">
-                            <label for="available_groups" class="form-label">Grupos Disponíveis:</label>
-                            <select id="available_groups" name="available_groups[]" class="form-control" size="8" multiple>
-                                {% for group in all_groups %}
-                                    {% if group not in user_groups %}
-                                        <option value="{{ group.id }}">{{ group.name }}</option>
-                                    {% endif %}
-                                {% endfor %}
+                    <!-- Linha: E-mail, Status, Staff -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="email" class="form-label fw-medium">E-mail:</label>
+                            <input type="email" id="email" name="email" class="form-control form-control-lg" value="{{ form.email.value|default_if_none:user.email }}" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="is_active" class="form-label fw-medium">Status:</label>
+                            <select id="is_active" name="is_active" class="form-select form-select-lg">
+                                <option value="True" {% if user.is_active %}selected{% endif %}>Ativo</option>
+                                <option value="False" {% if not user.is_active %}selected{% endif %}>Inativo</option>
                             </select>
                         </div>
-
-                        <!-- Botões de Adicionar e Remover -->
-                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
-                            <button type="button" id="add_group" class="btn btn-primary w-100 mb-2">
-                                Adicionar &gt;
-                            </button>
-                            <button type="button" id="remove_group" class="btn btn-danger w-100 mb-2">
-                                &lt; Remover
-                            </button>
-                        </div>
-
-                        <!-- Grupos Escolhidos -->
-                        <div class="col-md-5">
-                            <label for="assigned_groups" class="form-label">Grupos Escolhidos:</label>
-                            <select id="assigned_groups" name="groups[]" class="form-control" size="8" multiple>
-                                {% for group in user_groups %}
-                                    <option value="{{ group.id }}" selected>{{ group.name }}</option>
-                                {% endfor %}
-                            </select>
+                        <div class="col-md-3">
+                            <div class="form-check form-switch mt-4">
+                                <input class="form-check-input" type="checkbox" id="is_staff" name="is_staff" {% if form.is_staff.value %}checked{% endif %}>
+                                <label class="form-check-label fw-medium" for="is_staff">ADMINISTRADOR</label>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- Botões -->
-                <div class="text-center">
-                    <button type="submit" class="btn btn-success w-100">Salvar Alterações</button>
-                </div>
-            </form>
+
+                    <!-- Botões -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg fw-medium">
+                            <i class="fas fa-save me-2"></i> Salvar Alterações
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
+<!-- JavaScript específico para esta página -->
 <script src="{% static 'js/accounts/alterar_usuario.js' %}"></script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const addGroupBtn = document.getElementById('add_group');
-    const removeGroupBtn = document.getElementById('remove_group');
-    const availableGroups = document.getElementById('available_groups');
-    const assignedGroups = document.getElementById('assigned_groups');
-
-    // Função para mover opções selecionadas
-    function moveOptions(sourceSelect, targetSelect) {
-        const selectedOptions = Array.from(sourceSelect.selectedOptions);
-        console.log("Opções selecionadas:", selectedOptions); // LOG para debug
-        if (selectedOptions.length === 0) {
-            console.log("Nenhum item selecionado.");
-            return;
-        }
-        selectedOptions.forEach(option => {
-            console.log(`Movendo: ${option.text} para o outro select`);
-            targetSelect.appendChild(option); // Move o option
-        });
-    }
-
-    // Botão Adicionar
-    addGroupBtn.addEventListener('click', function () {
-        console.log("Botão Adicionar Clicado");
-        moveOptions(availableGroups, assignedGroups);
-    });
-
-    // Botão Remover
-    removeGroupBtn.addEventListener('click', function () {
-        console.log("Botão Remover Clicado");
-        moveOptions(assignedGroups, availableGroups);
-    });
-
-    // Log para garantir que o form está submetendo corretamente
-    document.querySelector('form')?.addEventListener('submit', function () {
-        console.log("Formulário Enviado!");
-    });
-});
-</script>
-
-
-        
 {% endblock %}

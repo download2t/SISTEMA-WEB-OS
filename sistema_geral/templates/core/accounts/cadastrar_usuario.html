@@ -3,112 +3,123 @@
 
 {% block content %}
 <!-- Adicionando um padding no topo para o formulário ficar abaixo do menu -->
-<div class="d-flex justify-content-center align-items-center" style="height: calc(100vh - 100px); padding-top: 70px;">
-    <div class="col-lg-6 col-md-8 col-sm-12">
-        <div class="card shadow-sm p-4 rounded-3 bg-light">
-            <h2 class="text-center mb-4">Cadastrar Usuário</h2>
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light" style="padding-top: 70px;">
+    <div class="col-lg-6 col-md-8 col-sm-10 col-12">
+        <div class="card shadow-lg rounded-4 border-0">
+            <div class="card-body p-4 p-md-5">
+                <h2 class="text-center mb-4 fw-bold">Cadastrar Usuário</h2>
 
-            <!-- Mensagens de sucesso ou erro -->
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} mb-3" role="alert">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-
-            <form method="post" action="">
-                {% csrf_token %}
-                
-                <div class="mb-3">
-                    <label for="username" class="form-label">Nome de Usuário:</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-user"></i></span>
-                        <input type="text" id="username" name="username" class="form-control" value="{{ form.username.value|default_if_none:'' }}" required>
-                    </div>
-                    {% if form.username.errors %}
-                        <div class="alert alert-danger mt-2">
-                            {{ form.username.errors|join:", " }}
+                <!-- Mensagens de sucesso ou erro -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-4" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                    {% endif %}
-                </div>
+                    {% endfor %}
+                {% endif %}
 
-                <div class="mb-3">
-                    <label for="first_name" class="form-label">Primeiro Nome:</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-font"></i></span>
-                        <input type="text" id="first_name" name="first_name" class="form-control" value="{{ form.first_name.value|default_if_none:'' }}" required>
-                    </div>
-                    {% if form.first_name.errors %}
-                        <div class="alert alert-danger mt-2">
-                            {{ form.first_name.errors|join:", " }}
+                <form method="post" action="" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    
+                    <!-- Campo Nome de Usuário -->
+                    <div class="mb-4">
+                        <label for="username" class="form-label fw-medium">Nome de Usuário:</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" id="username" name="username" class="form-control form-control-lg" value="{{ form.username.value|default_if_none:'' }}" required>
                         </div>
-                    {% endif %}
-                </div>
-
-                <div class="mb-3">
-                    <label for="last_name" class="form-label">Último Nome:</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-font"></i></span>
-                        <input type="text" id="last_name" name="last_name" class="form-control" value="{{ form.last_name.value|default_if_none:'' }}" required>
+                        {% if form.username.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.username.errors|join:", " }}
+                            </div>
+                        {% endif %}
                     </div>
-                    {% if form.last_name.errors %}
-                        <div class="alert alert-danger mt-2">
-                            {{ form.last_name.errors|join:", " }}
-                        </div>
-                    {% endif %}
-                </div>
 
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email:</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                        <input type="email" id="email" name="email" class="form-control" value="{{ form.email.value|default_if_none:'' }}" required>
+                    <!-- Campo Primeiro Nome -->
+                    <div class="mb-4">
+                        <label for="first_name" class="form-label fw-medium">Primeiro Nome:</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-font"></i></span>
+                            <input type="text" id="first_name" name="first_name" class="form-control form-control-lg" value="{{ form.first_name.value|default_if_none:'' }}" required>
+                        </div>
+                        {% if form.first_name.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.first_name.errors|join:", " }}
+                            </div>
+                        {% endif %}
                     </div>
-                    {% if form.email.errors %}
-                        <div class="alert alert-danger mt-2">
-                            {{ form.email.errors|join:", " }}
-                        </div>
-                    {% endif %}
-                </div>
 
-                <div class="mb-3">
-                    <label for="password1" class="form-label">Senha:</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                        <input type="password" id="password1" name="password1" class="form-control" required>
+                    <!-- Campo Último Nome -->
+                    <div class="mb-4">
+                        <label for="last_name" class="form-label fw-medium">Último Nome:</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-font"></i></span>
+                            <input type="text" id="last_name" name="last_name" class="form-control form-control-lg" value="{{ form.last_name.value|default_if_none:'' }}" required>
+                        </div>
+                        {% if form.last_name.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.last_name.errors|join:", " }}
+                            </div>
+                        {% endif %}
                     </div>
-                    {% if form.password1.errors %}
-                        <div class="alert alert-danger mt-2">
-                            {{ form.password1.errors|join:", " }}
-                        </div>
-                    {% endif %}
-                </div>
 
-                <div class="mb-3">
-                    <label for="password2" class="form-label">Confirmar Senha:</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                        <input type="password" id="password2" name="password2" class="form-control" required>
+                    <!-- Campo Email -->
+                    <div class="mb-4">
+                        <label for="email" class="form-label fw-medium">Email:</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input type="email" id="email" name="email" class="form-control form-control-lg" value="{{ form.email.value|default_if_none:'' }}" required>
+                        </div>
+                        {% if form.email.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.email.errors|join:", " }}
+                            </div>
+                        {% endif %}
                     </div>
-                    {% if form.password2.errors %}
-                        <div class="alert alert-danger mt-2">
-                            {{ form.password2.errors|join:", " }}
+
+                    <!-- Campo Senha -->
+                    <div class="mb-4">
+                        <label for="password1" class="form-label fw-medium">Senha:</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" id="password1" name="password1" class="form-control form-control-lg" required>
                         </div>
-                    {% endif %}
-                </div>
+                        {% if form.password1.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.password1.errors|join:", " }}
+                            </div>
+                        {% endif %}
+                    </div>
 
-                <div class="form-check form-switch mb-4">
-                    <label class="form-check-label" for="is_staff">ADMINISTRADOR</label>
-                    <input class="form-check-input" type="checkbox" id="is_staff" name="is_staff" {% if form.is_staff.value %}checked{% endif %}>
-                </div>
+                    <!-- Campo Confirmar Senha -->
+                    <div class="mb-4">
+                        <label for="password2" class="form-label fw-medium">Confirmar Senha:</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" id="password2" name="password2" class="form-control form-control-lg" required>
+                        </div>
+                        {% if form.password2.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.password2.errors|join:", " }}
+                            </div>
+                        {% endif %}
+                    </div>
 
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="fas fa-user-plus me-2"></i> Cadastrar
-                    </button>
-                </div>
-            </form>
+                    <!-- Checkbox para Administrador -->
+                    <div class="form-check form-switch mb-4">
+                        <input class="form-check-input" type="checkbox" id="is_staff" name="is_staff" {% if form.is_staff.value %}checked{% endif %}>
+                        <label class="form-check-label fw-medium" for="is_staff">ADMINISTRADOR</label>
+                    </div>
+
+                    <!-- Botão de Cadastro -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg fw-medium">
+                            <i class="fas fa-user-plus me-2"></i> Cadastrar
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
