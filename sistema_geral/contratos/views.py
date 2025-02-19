@@ -3,11 +3,10 @@ from django.contrib import messages
 from .models import Contrato
 from .forms import ContratoForm
 from datetime import date, timedelta
+from django.contrib.auth.decorators import login_required, user_passes_test
+from core.views import has_permission
 
 
-from datetime import date
-from django.shortcuts import render
-from .models import Contrato
 
 def listar_contratos(request):
     """ Lista os contratos com filtros opcionais por intervalo de datas, razão social, nome fantasia e documento """
@@ -56,7 +55,8 @@ def listar_contratos(request):
 
 
 
-
+@login_required
+@user_passes_test(has_permission, login_url='403')  # Garantindo que o usuário tenha permissão
 def criar_contrato(request):
     """ Cria um novo contrato """
     if request.method == 'POST':
@@ -70,7 +70,8 @@ def criar_contrato(request):
     
     return render(request, 'contratos/criar_contrato.html', {'form': form, 'titulo': 'Criar Contrato'})
 
-
+@login_required
+@user_passes_test(has_permission, login_url='403')  # Garantindo que o usuário tenha permissão
 def editar_contrato(request, contrato_id):
     """ Edita um contrato existente """
     contrato = get_object_or_404(Contrato, id=contrato_id)
@@ -86,7 +87,8 @@ def editar_contrato(request, contrato_id):
     
     return render(request, 'contratos/editar_contrato.html', {'form': form, 'titulo': 'Editar Contrato'})
 
-
+@login_required
+@user_passes_test(has_permission, login_url='403')  # Garantindo que o usuário tenha permissão
 def inativar_contrato(request, contrato_id):
     """ Inativa um contrato existente (não exclui o contrato, apenas marca como inativo) """
     contrato = get_object_or_404(Contrato, id=contrato_id)
@@ -100,7 +102,8 @@ def inativar_contrato(request, contrato_id):
 
     return redirect('listar_contratos')
 
-
+@login_required
+@user_passes_test(has_permission, login_url='403')  # Garantindo que o usuário tenha permissão
 def ativar_contrato(request, contrato_id):
     """ Ativa um contrato existente (não exclui o contrato, apenas marca como ativo) """
     contrato = get_object_or_404(Contrato, id=contrato_id)
