@@ -124,7 +124,7 @@
                             <td>{{ contrato.data_validade|date:"d/m/Y" }}</td>
                             <td>{{ contrato.grupo_responsavel.name }}</td>
                             <td>{{ contrato.valor }}</td>
-                            <td>{{ contrato.ativo }}</td>
+                            <td>{% if contrato.ativo %}Sim{% else %}Não{% endif %}</td>
                             <td>{{ contrato.descricao }}</td>
                         </tr>
                         {% empty %}

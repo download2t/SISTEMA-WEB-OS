@@ -362,4 +362,5 @@ def generate_excel(request):
         column_letter = get_column_letter(col_num)
         ws.column_dimensions[column_letter].auto_size = True
 
-    wb.save
+    wb.save(response)
+    return response
