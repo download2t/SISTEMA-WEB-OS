@@ -1,0 +1,74 @@
+<div class="d-flex">
+    <!-- Menu Sidebar -->
+    <nav id="sidebar" class="bg-dark p-4" style="width: 250px;">
+        <h5 class="text-white">Menu</h5>
+        <ul class="list-unstyled">
+            <!-- Novo Contrato -->
+            <li>
+                <form action="{% url 'criar_contrato' %}" method="get">
+                    <input type="hidden" name="status" value="">
+                    <button type="submit" class="nav-link text-white border-0 bg-dark">
+                        <i class="fas fa-file-signature me-2"></i> Novo Contrato
+                    </button>
+                </form>
+            </li>
+            
+            <!-- Relatórios -->
+            <li>
+                <form action="{% url 'listar_contratos_rel' %}" method="get">
+                    <input type="hidden" name="status" value="">
+                    <button type="submit" class="nav-link text-white border-0 bg-dark">
+                        <i class="fas fa-chart-bar me-2"></i> Relatórios
+                    </button>
+                </form>
+            </li>
+            
+            <!-- Todos os Contratos -->
+            <li>
+                <form action="{% url 'listar_contratos' %}" method="get">
+                    <input type="hidden" name="status" value="todos">
+                    <button type="submit" class="nav-link text-white border-0 bg-dark">
+                        <i class="fas fa-folder me-2"></i> Todos os Contratos
+                    </button>
+                </form>
+            </li>
+            
+            <!-- Contratos Ativos -->
+            <li>
+                <form action="{% url 'listar_contratos' %}" method="get">
+                    <input type="hidden" name="status" value="ativo">
+                    <button type="submit" class="nav-link text-white border-0 bg-dark">
+                        <i class="fas fa-folder-open me-2"></i> Contratos Ativos
+                    </button>
+                </form>
+            </li>
+            
+            <!-- Contratos Inativos -->
+            <li>
+                <form action="{% url 'listar_contratos' %}" method="get">
+                    <input type="hidden" name="status" value="inativo">
+                    <button type="submit" class="nav-link text-white border-0 bg-dark">
+                        <i class="fas fa-folder-minus me-2"></i> Contratos Inativos
+                    </button>
+                </form>
+            </li>
+            
+            <!-- Contratos Vencendo (30 Dias) -->
+            <li>
+                <form action="{% url 'listar_contratos' %}" method="get">
+                    <input type="hidden" name="status" value="vencendo">
+                    <button type="submit" class="nav-link text-white border-0 bg-dark">
+                        <i class="fas fa-exclamation-triangle me-2"></i> Vencendo (30 Dias)
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <div id="main-content" class="p-4 flex-grow-1">
+        {% block content %}
+        <!-- Aqui vai o conteúdo da página -->
+        {% endblock %}
+    </div>
+</div>

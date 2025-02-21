@@ -25,9 +25,9 @@
         <div class="card-body">
             <div class="mb-3 d-flex align-items-center">
                 <label for="id_adata" class="form-label me-3">Data</label>
-                <input type="date" name="adata" id="id_adata" class="form-control" value="{{request.POST.adata}}" required>
+                <input type="date" name="adata" id="id_adata" class="form-control" value="{{ request.POST.adata }}" required>
             </div>
-           <div class="mb-3">
+            <div class="mb-3">
                 <label for="id_vrTotal" class="form-label">Valor Total (R$)</label>
                 <input type="text" name="vrTotal" id="id_vrTotal" class="form-control" placeholder="0.00" value="{{ request.POST.vrTotal }}" required>
             </div>
@@ -54,7 +54,10 @@
     <!-- Campo oculto para armazenar os dados dos itens -->
     <input type="hidden" id="itens-lavanderia-data" name="itens_lavanderia_data" value="{{ request.POST.itens_lavanderia_data }}">
 
-    <button type="submit" class="btn btn-success w-100 mt-3">Salvar Relatório</button>
+    <div class="d-flex justify-content-start">
+        <button type="submit" class="btn btn-success me-2">Salvar Relatório</button>
+        <a href="{% url 'listar_relatorios' %}" class="btn btn-secondary">Cancelar</a>
+    </div>
 </form>
 
 <!-- Template para adicionar novos itens -->

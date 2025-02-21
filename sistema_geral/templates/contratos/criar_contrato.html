@@ -1,10 +1,23 @@
 {% extends 'core/base.html' %}
 {% load static %}
-
 {% block content %}
+
+{% if form.errors %}
+    <div class="alert alert-danger">
+        <strong>Erro ao enviar o formulário:</strong>
+        <ul>
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+
 <div class="container mt-4">
     <h1 class="mb-4">Cadastrar novo Contrato</h1>
-
     <!-- Formulário -->
     <form method="post" enctype="multipart/form-data" class="card p-4 shadow-sm">
         {% csrf_token %}
@@ -30,12 +43,12 @@
         <!-- Linha para Telefone e Email -->
         <div class="row mb-3">
             <div class="col-md-6">
-                <label for="telefone">Telefone <span class="text-danger">*</span></label>
+                <label for="telefone">Telefone <span class="text-danger">* </label>
                 {{ form.telefone }}
             </div>
 
             <div class="col-md-6">
-                <label for="email">E-mail <span class="text-danger">*</span></label>
+                <label for="email">E-mail </label>
                 {{ form.email }}
             </div>
         </div>
@@ -49,14 +62,25 @@
         </div>
 
         <div class="row mb-3">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label for="data_assinatura">Data de Assinatura <span class="text-danger">*</span></label>
                 {{ form.data_assinatura }}
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label for="data_validade">Data de Validade <span class="text-danger">*</span></label>
                 {{ form.data_validade }}
+            </div>
+
+             <div class="col-md-4">
+                  <label for="{{ form.grupo_responsavel.id_for_label }}">Setor de contratação: <span class="text-danger">*</span></label>
+                    {{ form.grupo_responsavel }}
+
+                    {% if form.grupo.errors %}
+                        <div class="alert alert-danger">
+                            {{ form.grupo.errors|join:", " }}
+                        </div>
+                    {% endif %}
             </div>
         </div>
 
@@ -76,6 +100,7 @@
     </form>
 </div>
 {% endblock %}
+
 
 <!-- Script para formatação do valor -->
 <script>

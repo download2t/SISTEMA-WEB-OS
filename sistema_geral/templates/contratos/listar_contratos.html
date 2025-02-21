@@ -1,35 +1,45 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block content %}
-<div class="container mt-4">
-    <h1 class="mb-4">Lista de Contratos</h1>
-    
-    <div class="mb-3 text-end">
-        <a href="{% url 'contratos_vencendo' %}" class="btn btn-danger">
-            <i class="fas fa-bell"></i> Contratos Vencendo
-        </a>
-    </div>
+{% block extra_css %}
 
-    <!-- Exibir mensagens -->
-    {% if messages %}
-        <div class="alert-container">
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-   <!-- Filtros -->
+<link rel="stylesheet" href="{% static 'css/contratos/listar_contratos.css' %}">
+<link rel="stylesheet" href="{% static 'css/contratos/menu_contratos.css' %}">
+<style>
+body {
+    background:rgb(233, 239, 241);   
+}
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<!-- MENU LATERAL -->
+<div class="col-md-1"> 
+        {% include 'contratos/menu_contratos.html' %}
+</div>
+
+<!-- Exibir mensagens -->
+{% if messages %}
+    <div class="alert-container">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="container mt-4">
+    <!-- Filtros -->
     <form method="get" action="{% url 'listar_contratos' %}" class="row g-3 mb-4">
-        <div class="col-lg-3 col-md-4">
-            <label for="tipo_data" class="form-label">Filtrar por:</label>
+        <div class="col-lg-2 col-md-4">
+            <label for="tipo_data" class="form-label">Filtrar por Data</label>
             <select id="tipo_data" name="tipo_data" class="form-select">
-                <option value="" {% if not tipo_data %}selected{% endif %}>-- Selecione --</option>
                 <option value="assinatura" {% if tipo_data == "assinatura" %}selected{% endif %}>Assinatura</option>
-                <option value="validade" {% if tipo_data == "validade" %}selected{% endif %}>Validade</option>
+                <option value="validade" {% if tipo_data == "validade" %}selected{% endif %}>Vencimento</option>
             </select>
         </div>
 
@@ -43,58 +53,66 @@
             <input type="date" id="data_fim" name="data_fim" value="{{ data_fim }}" class="form-control">
         </div>
 
-        <div class="col-lg-3 col-md-4">
-            <label for="razao_social" class="form-label">Razão Social</label>
-            <input type="text" id="razao_social" name="razao_social" value="{{ razao_social }}" class="form-control" placeholder="Digite a razão social">
+        <!-- Razão Social / Nome Fantasia -->
+        <div class="col-lg-2 col-md-4">
+            <label for="razao_social" class="form-label">Buscar Contrato</label>
+            <input type="text" id="razao_social" name="razao_social" value="{{ razao_social }}" class="form-control" placeholder="Nome Fantasia ou Razão Social">
         </div>
 
-        <div class="col-lg-3 col-md-4">
-            <label for="nome_fantasia" class="form-label">Nome Fantasia</label>
-            <input type="text" id="nome_fantasia" name="nome_fantasia" value="{{ nome_fantasia }}" class="form-control" placeholder="Digite o nome fantasia">
+        <!-- Grupo -->
+        <div class="col-lg-2 col-md-3">
+            <label for="grupo" class="form-label">Grupo</label>
+            <select id="grupo" name="grupo" class="form-select">
+                <option value="">Todos</option>
+                {% for grupo in grupos %}
+                    <option value="{{ grupo.id }}" {% if grupo.id|stringformat:"s" == grupo_selecionado %}selected{% endif %}>{{ grupo.name }}</option>
+                {% endfor %}
+            </select>
         </div>
 
-        <div class="col-lg-3 col-md-4">
-            <label for="documento" class="form-label">Documento</label>
-            <input type="text" id="documento" name="documento" value="{{ documento }}" class="form-control" placeholder="Digite o documento">
-        </div>
-
-        <div class="col-lg-5 col-md-12 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary w-100 me-2">
+        <!-- Botão Filtrar -->
+        <div class="col-lg-2 col-md-3 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">
                 <i class="fas fa-search me-1"></i> Filtrar
             </button>
-            <a href="{% url 'listar_contratos' %}" class="btn btn-secondary w-100 me-2">
+        </div>
+
+        <!-- Botões Ações -->
+        <div class="col-lg-6 col-md-12 d-flex align-items-end justify-content-start">
+            <a href="{% url 'listar_contratos' %}" class="btn btn-secondary me-2">
                 <i class="fas fa-times-circle me-1"></i> Limpar Filtros
             </a>
-            <a href="{% url 'criar_contrato' %}" class="btn btn-success w-100">
-                <i class="fas fa-plus-circle me-1"></i> Novo Contrato
+            <a href="{% url 'listar_contratos' %}" class="btn btn-outline-success">
+                <i class="fas fa-download me-1"></i> Download
             </a>
         </div>
     </form>
-
 
     <!-- Tabela de Contratos -->
     <div class="table-responsive">
         <table class="table table-hover align-middle">
             <thead class="table-primary">
                 <tr>
-                    <th scope="col">Código</th>
+                    <th scope="col">Setor</th>
                     <th scope="col">Nome Fantasia</th>
                     <th scope="col">Razão Social</th>
-                    <th scope="col">Data de Assinatura</th>
-                    <th scope="col">Data de Validade</th>
-                    <th scope="col">Valor</th>
+                    <th scope="col">Assinatura</th>
+                    <th scope="col">Vencimento</th>
+                    <th scope="col">Telefone</th>
+                     <th scope="col">E-mail</th>
                     <th scope="col" class="text-end">Ações</th>
                 </tr>
             </thead>
             <tbody>
             {% for contrato in contratos %}
             <tr>
-                <td>{{ contrato.id }}</td>
+                <td>{{ contrato.grupo_responsavel }}</td>
                 <td>{{ contrato.nome_fantasia }}</td>
                 <td>{{ contrato.razao_social }}</td>
                 <td>{{ contrato.data_assinatura|date:"d/m/Y" }}</td>
                 <td>{{ contrato.data_validade|date:"d/m/Y" }}</td>
-                <td>R$ {{ contrato.valor|floatformat:2 }}</td>
+                <td>{{ contrato.telefone }}</td>
+                <td>{{ contrato.email }}</td>
                 <td class="text-end">
                     <a href="{% url 'editar_contrato' contrato.id %}" class="btn btn-sm btn-warning">
                         <i class="fas fa-edit"></i> Editar
@@ -111,7 +129,6 @@
 
 </div>
 {% endblock %}
-
 {% block scripts %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 {% endblock %}

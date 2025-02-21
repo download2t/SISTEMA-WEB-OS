@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block content %}
+ 
 <div class="d-flex justify-content-center " style="height: 100vh;">
     <div class="col-md-6">
         <h2 class="text-center mb-4">Cadastrar Chamado</h2>
@@ -17,7 +18,6 @@
 
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            
             <!-- Assunto -->
             <div class="row mb-3">
                 <div class="col">
@@ -121,6 +121,7 @@
             </div>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary btn-block">Cadastrar Chamado</button>
+                <a href="{% url 'chamados_abertos' %}" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>
     </div>

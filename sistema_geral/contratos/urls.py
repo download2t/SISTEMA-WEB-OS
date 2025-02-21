@@ -8,4 +8,8 @@ urlpatterns = [
     path('contratos/inativar/<int:contrato_id>/', views.inativar_contrato, name='inativar_contrato'),
     path('contratos/ativar/<int:contrato_id>/', views.ativar_contrato, name='ativar_contrato'),
     path('contratos/vencendo/', views.contratos_vencendo, name='contratos_vencendo'),
+    path('relatorio/', views.listar_contratos_rel, name='listar_contratos_rel'),
+    path('relatorio/pdf/', views.gerar_relatorio_pdf, name='gerar_relatorio_pdf'),
+    path('relatorio/word/', views.generate_word, name='generate_word'),
+    path('relatorio/excel/', views.generate_excel, name='generate_excel'),
 ]
