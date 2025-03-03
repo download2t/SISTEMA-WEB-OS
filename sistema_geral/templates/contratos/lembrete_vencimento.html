@@ -32,6 +32,10 @@
             <td style="font-weight: bold;">E-mail:</td>
             <td>{{ contrato.email }}</td>
         </tr>
+         <tr>
+            <td style="font-weight: bold;">Setor Responsavel:</td>
+            <td>{{ contrato.grupo_responsavel.name }}</td>
+        </tr>
         <tr>
             <td style="font-weight: bold;">Data de Assinatura:</td>
             <td>{{ contrato.data_assinatura|date:"d/m/Y" }}</td>

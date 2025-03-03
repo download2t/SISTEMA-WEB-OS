@@ -1,21 +1,19 @@
 /* Estilo Principal para o Menu Lateral */
 #sidebar {
-    background: linear-gradient(145deg, #1f1f1f, #343a40); /* Gradiente para um visual mais elegante */
-    backdrop-filter: blur(15px); /* Aumento do efeito de vidro fosco */
-    color: #f8f9fa; /* Branco suave */
+    background: #4C6B8C;
+    backdrop-filter: blur(10px);
+    color: #fff;
     position: fixed;
-    top: 50px;
     left: 0;
     height: 100vh;
-    width: 240px;
+    width: 200px;
     z-index: 800;
-    transition: transform 0.3s ease-in-out, width 0.3s ease, background-color 0.5s;
+    transition: transform 0.3s ease-in-out, width 0.3s ease;
     overflow-y: auto;
-    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.5);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
     padding-top: 20px;
-    border-right: 1px solid rgba(255, 255, 255, 0.15);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
-
 /* Ocultar o menu quando colapsado */
 #sidebar.collapsed {
     transform: translateX(-100%);
@@ -23,28 +21,21 @@
 
 /* Ícone de Toggle */
 #menu-toggle {
-    background-color: #212529;
+    background-color: #4C6B8C; /* Preto para combinar com o menu */
     border: none;
-    color: #ffffff;
-    font-size: 1.8rem;
-    padding: 12px;
+    color: white;
+    font-size: 1.5rem;
+    padding: 10px;
     border-radius: 50%;
     position: fixed;
-    top: 20px;
-    left: 20px;
+    top: 15px;
+    left: 15px;
     z-index: 900;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease;
-}
-
-#menu-toggle:hover {
-    transform: scale(1.1);
-    background-color: #495057;
 }
 
 /* Ajustar conteúdo para largura total quando o menu está colapsado */
 #main-content {
-    margin-left: 240px;
+    margin-left: 200px;
     transition: margin-left 0.3s ease;
 }
 
@@ -73,41 +64,29 @@
 
 /* Botões do Menu */
 #sidebar .nav-link {
-    color: #f8f9fa;
+    color: #fff;
     background-color: transparent;
-    padding: 10px 20px;
-    font-size: 1.1rem;
+    padding: 8px 15px;
+    font-size: 1rem;
     border-radius: 8px;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease;
     display: flex;
     align-items: center;
-    text-decoration: none;
 }
 
 #sidebar .nav-link i {
-    margin-right: 12px;
-    font-size: 1.2rem;
+    margin-right: 10px;
 }
 
 #sidebar .nav-link:hover {
-    background-color: #1a1a1a;
-    color: #17a2b8;
-    transform: translateX(5px);
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+    background-color:  #36556F; 
+   
+   
+    color: #ffffff;
 }
 
 /* Estilo do título */
 #sidebar h5 {
-    color: #ced4da;
-    padding-left: 20px;
-    text-transform: uppercase;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-
-/* Transição mais suave para o botão ativo */
-#sidebar .nav-link.active {
-    background-color: #17a2b8;
-    color: #ffffff;
-    box-shadow: inset 2px 0 0 rgba(0, 0, 0, 0.3);
+    color: #fff;
+    padding-left: 15px;
 }

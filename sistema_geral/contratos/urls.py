@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from . import views, tasks
 
 urlpatterns = [
     path('', views.listar_contratos, name='listar_contratos'),
@@ -9,7 +9,7 @@ urlpatterns = [
     path('ativar/<int:contrato_id>/', views.ativar_contrato, name='ativar_contrato'),
     path('vencendo/', views.contratos_vencendo, name='contratos_vencendo'),
     path('relatorio/', views.listar_contratos_rel, name='listar_contratos_rel'),
-    path('relatorio/pdf/', views.gerar_relatorio_pdf, name='gerar_relatorio_pdf'),
-    path('relatorio/word/', views.generate_word, name='generate_word'),
-    path('relatorio/excel/', views.generate_excel, name='generate_excel'),
+    path('relatorio/pdf/', views.gerar_relatorio_pdf, name='contrato_gerar_relatorio_pdf'),
+    path('relatorio/word/', views.generate_word, name='contrato_generate_word'),
+    path('relatorio/excel/', views.generate_excel, name='contrato_generate_excel'),
 ]

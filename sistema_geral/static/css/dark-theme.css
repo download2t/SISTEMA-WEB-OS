@@ -1,0 +1,19 @@
+/* static/css/dark-theme.css */
+body.dark-mode {
+    background-color: #121212;
+    color: #fff;
+}
+
+.navbar-dark {
+    background-color: #343a40;
+}
+
+.btn-outline-light {
+    color: #fff;
+    border-color: #fff;
+}
+
+.btn-outline-light:hover {
+    background-color: #fff;
+    color: #000;
+}

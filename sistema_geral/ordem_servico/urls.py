@@ -38,7 +38,7 @@ urlpatterns = [
     path('admvisualizar/<int:chamado_id>/atualizar-status/', atualizar_status, name='atualizar_status'),
     path('admmensagem/<int:id>/enviar/', adm_enviar_mensagem, name='adm_enviar_mensagem'),
     path('relatorio-chamados/', relatorio_chamados, name='relatorio_chamados'),
-    path('relatorio/chamados/pdf/', gerar_relatorio_pdf, name='gerar_relatorio_pdf'),
+    path('relatorio/chamados/pdf/', gerar_relatorio_pdf, name='os_gerar_relatorio_pdf'),
 
     path('admmeus_chamados/', adm_meus_chamados, name='adm_meus_chamados'),    # Menu Lateral para chamados administrador
     path('admchamados_abertos/', adm_chamados_abertos, name='adm_chamados_abertos'),    # Menu Lateral para chamados administrador

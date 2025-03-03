@@ -21,7 +21,7 @@ def verificar_contratos_vencendo():
                 'Lembrete de Vencimento de Contrato',
                 f'O contrato {contrato.nome_fantasia} está próximo do vencimento.',
                 settings.EMAIL_HOST_USER,
-                ['financeiro@sanmahotel.com.br'],  # E-mail fixo para onde será enviado
+                ['ti@sanmahotel.com.br'],  # E-mail fixo para onde será enviado
                 fail_silently=False,
             )
             

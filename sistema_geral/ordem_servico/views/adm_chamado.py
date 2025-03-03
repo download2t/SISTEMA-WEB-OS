@@ -509,9 +509,9 @@ def gerar_relatorio_pdf(request):
     pdf = canvas.Canvas(response, pagesize=landscape(letter))
 
     largura_pagina, altura_pagina = landscape(letter)
-    margem = 30  # Margem lateral
-    altura_cabecalho = 50  # Espaço reservado para o cabeçalho
-    altura_rodape = 50  # Espaço reservado para o rodapé
+    margem = 5  # Margem lateral
+    altura_cabecalho = 80  # Espaço reservado para o cabeçalho
+    altura_rodape = 20  # Espaço reservado para o rodapé
     linha_inicial = altura_pagina - altura_cabecalho
     linha_final = altura_rodape + 20  # Linha onde o rodapé começa
 
