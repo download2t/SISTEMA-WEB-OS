@@ -88,8 +88,13 @@ def listar_contratos(request):
     return render(request, "contratos/listar_contratos.html", context)
 
 
+def has_permission_contratos(user):
+    # Verifica se o usuário está autenticado e é staff ou pertence aos grupos "ADMIN" ou "LIDERANÇA"
+    return user.is_authenticated and (user.is_staff or user.groups.filter(name__in=['ADMINISTRATIVO', 'ALMOXARIFADO','ADMIN','COMPRAS',
+                                                            'COMERCIAL','GOVERNANÇA','LIDERANÇA','TI','RESERVAS','RECEPÇÃO']).exists())
+
 @login_required
-@user_passes_test(has_permission, login_url='403')  # Garantindo que o usuário tenha permissão
+@user_passes_test(has_permission_contratos, login_url='403')  # Garantindo que o usuário tenha permissão
 def criar_contrato(request):
     """ Cria um novo contrato """
     if request.method == 'POST':
