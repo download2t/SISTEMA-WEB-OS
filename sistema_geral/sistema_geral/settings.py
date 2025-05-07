@@ -159,3 +159,8 @@ CRONJOBS = [
 
     # MINUTO / HORA / 8H e 10 min
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    #'https://f355-177-87-108-241.ngrok-free.app',
+    'https://outgoing-friendly-snake.ngrok-free.app',
+]
