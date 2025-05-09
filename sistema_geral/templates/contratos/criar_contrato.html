@@ -43,7 +43,7 @@
         <!-- Linha para Telefone e Email -->
         <div class="row mb-3">
             <div class="col-md-6">
-                <label for="telefone">Telefone <span class="text-danger">* </label>
+                <label for="telefone">Telefone  </label>
                 {{ form.telefone }}
             </div>
 
@@ -126,3 +126,26 @@
         valorInput.addEventListener('input', formatarValor);
     });
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Seleciona os campos de entrada de texto
+        var camposTexto = document.querySelectorAll("input[type='text'], textarea");
+
+        // Aplica evento de transformação para caixa alta
+        camposTexto.forEach(function (campo) {
+            campo.addEventListener("input", function () {
+                this.value = this.value.toUpperCase();
+            });
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var documentoInput = document.querySelector("#id_documento");
+
+        documentoInput.addEventListener("input", function () {
+            this.value = this.value.replace(/[^0-9]/g, "");  // Remove qualquer caractere não numérico
+        });
+    });
+</script>
+

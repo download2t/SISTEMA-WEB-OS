@@ -1,6 +1,6 @@
 /* static/css/dark-theme.css */
 body.dark-mode {
-    background-color: #121212;
+    background-color:  #302e2e;
     color: #fff;
 }
 
@@ -15,5 +15,5 @@ body.dark-mode {
 
 .btn-outline-light:hover {
     background-color: #fff;
-    color: #000;
+    color: #302e2e;
 }

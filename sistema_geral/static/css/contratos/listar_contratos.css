@@ -1,0 +1,117 @@
+/* Definir variáveis para os temas */
+:root {
+    --background-light: #F8FAFC;
+    --background-dark: #2C2C2C;
+    --text-light: #212529;
+    --text-dark: #FFFFFF;
+    --card-light: #FFFFFF;
+    --card-dark: #3C3C3C;
+    --border-light: rgba(0, 0, 0, 0.08);
+    --border-dark: rgba(255, 255, 255, 0.15);
+}
+
+/* Aplicar tema com base na classe do body */
+body.light-mode {
+    background-color: var(--background-light);
+    color: var(--text-light);
+}
+
+body.dark-mode {
+    background-color: var(--background-dark);
+    color: var(--text-dark);
+}
+
+/* Container principal */
+.container {
+    background: var(--card-light);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px var(--border-light);
+}
+
+body.dark-mode .container {
+    background: var(--card-dark);
+    box-shadow: 0 5px 20px var(--border-dark);
+}
+
+/* Tabela de contratos */
+.table {
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: var(--card-light);
+    box-shadow: 0 4px 12px var(--border-light);
+}
+
+body.dark-mode .table {
+    background-color: var(--card-dark);
+    box-shadow: 0 4px 12px var(--border-dark);
+}
+
+.table thead {
+    background-color: #007BFF;
+    color: white;
+}
+
+body.dark-mode .table thead {
+    background-color: #0056b3;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+body.dark-mode .table tbody tr:hover {
+    background-color: #444;
+}
+
+/* Estilo dos cartões */
+.card {
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px var(--border-light);
+    background: var(--card-light);
+    color: var(--text-light);
+}
+
+body.dark-mode .card {
+    background: var(--card-dark);
+    box-shadow: 0px 4px 12px var(--border-dark);
+    color: var(--text-dark);
+}
+
+/* Estilo dos botões */
+button.btn-primary,
+a.btn-secondary {
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 10px;
+    transition: 0.3s ease;
+}
+
+button.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+body.dark-mode button.btn-primary {
+    background-color: #0056b3;
+}
+
+a.btn-secondary:hover {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+body.dark-mode a.btn-secondary {
+    background-color: #444;
+    color: white;
+}
+
+.btn-warning {
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 6px 12px;
+}
+
+body.dark-mode .btn-warning {
+    background-color: #FFA500;
+    color: #FFFFFF;
+}

@@ -23,12 +23,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from reportlab.lib.units import inch # type: ignore
 from docx import Document # type: ignore
-import openpyxl
-from openpyxl.utils import get_column_letter
+import openpyxl # type: ignore
+from openpyxl.utils import get_column_letter # type: ignore
 from django.http import HttpResponse
 
 
-
+@login_required
 def listar_contratos(request):
     contratos = Contrato.objects.all()
 
@@ -47,13 +47,16 @@ def listar_contratos(request):
         elif tipo_data == "validade":
             contratos = contratos.filter(data_validade__range=[data_inicio, data_fim])
 
-    # Filtro por Razão Social ou Nome Fantasia (busca parcial)
+    # Filtro por Razão Social, Nome Fantasia ou Documento (busca parcial)
     if razao_social:
         contratos = contratos.filter(
             nome_fantasia__icontains=razao_social
         ) | contratos.filter(
             razao_social__icontains=razao_social
+        ) | contratos.filter(
+            documento__icontains=razao_social  # Adiciona a busca por documento
         )
+
 
     # Filtro por Grupo
     if grupo_id:
@@ -68,8 +71,8 @@ def listar_contratos(request):
     elif status == "vencido":
         contratos = contratos.filter(data_validade__lt=hoje)
     elif status == "vencendo":
-        data_limite = hoje + timedelta(days=30)
-        contratos = contratos.filter(data_validade__range=[hoje, data_limite])
+        data_limite = hoje + timedelta(days=60)
+        contratos = contratos.filter(data_validade__range=[hoje, data_limite], ativo=True)  # Apenas ativos
 
     # Pegando todos os grupos para exibir no filtro
     grupos = Group.objects.all()
@@ -93,10 +96,11 @@ def has_permission_contratos(user):
     return user.is_authenticated and (user.is_staff or user.groups.filter(name__in=['ADMINISTRATIVO', 'ALMOXARIFADO','ADMIN','COMPRAS',
                                                             'COMERCIAL','GOVERNANÇA','LIDERANÇA','TI','RESERVAS','RECEPÇÃO']).exists())
 
+
 @login_required
-@user_passes_test(has_permission_contratos, login_url='403')  # Garantindo que o usuário tenha permissão
+@user_passes_test(has_permission_contratos, login_url='403')
 def criar_contrato(request):
-    """ Cria um novo contrato """
+    """ Cria um novo contrato, garantindo preenchimento correto """
     if request.method == 'POST':
         form = ContratoForm(request.POST)
         if form.is_valid():
@@ -107,6 +111,7 @@ def criar_contrato(request):
         form = ContratoForm()
     
     return render(request, 'contratos/criar_contrato.html', {'form': form, 'titulo': 'Criar Contrato'})
+
 
 @login_required
 @user_passes_test(has_permission, login_url='403')  # Garantindo que o usuário tenha permissão

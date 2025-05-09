@@ -8,7 +8,6 @@
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -16,35 +15,36 @@
     <!-- Ícones -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
-    <!-- Carregar o tema padrão (light por padrão) -->
+    <!-- Estilos do Tema (Dinâmico) -->
     <link id="theme-stylesheet" rel="stylesheet" href="{% static 'css/light-theme.css' %}">
-    <link rel="stylesheet" href="{% static 'css/dark-theme.css' %}"> <!-- Mantido para referência -->
 
-    <!-- Bloco para CSS adicional de páginas específicas -->
-     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        <!-- Estilos base -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+    <!-- Bloco para CSS adicional -->
     {% block extra_css %}
     {% endblock %}
-    
 
     <title>SANMA - Sistema</title>
-
-    <style>
-      
-    </style>
 </head>
 <body class="light-mode">
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
                 <img src="{% static 'images/logo_base_top_light.png' %}" alt="Logo" class="logo-img me-2">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <!-- Adicione isso dentro do seu <nav> -->
+
+            <!-- Contêiner para botão de tema + hambúrguer -->
             <div class="d-flex align-items-center">
-                <button id="theme-toggle" class="btn btn-outline-light">
-                    <i id="theme-icon" class="fas fa-sun"></i> <!-- Ícone de sol -->
+                <!-- Botão de alternância de tema -->
+                <button id="theme-toggle" class="btn btn-outline-light btn-sm me-2">
+                    <i id="theme-icon" class="fas fa-sun"></i>
+                </button>
+
+                <!-- Botão do menu hambúrguer -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
             </div>
 
@@ -57,88 +57,40 @@
                                 <i class="fas fa-users-cog me-1"></i> Líderança
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarLideres">
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'admin:index' %}">
-                                        <i class="fas fa-tachometer-alt me-2"></i> Painel ADM
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'listar_usuarios' %}">
-                                        <i class="fas fa-users me-2"></i> Listar Usuários
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'listar_grupos' %}">
-                                        <i class="fas fa-layer-group me-2"></i> Listar Setores
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'listar_contatos' %}">
-                                        <i class="fas fa-address-book me-2"></i> Listar Contatos
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="{% url 'selecionar_gov' %}">
-                                        <i class="fas fa-project-diagram me-2"></i> Governança
-                                    </a>
-                                </li>
-                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="{% url 'listar_contratos' %}">
-                                        <i class="fas fa-file-contract me-2"></i> Contratos
-                                    </a>
-                                </li>
+                                <li><a class="dropdown-item" href="{% url 'admin:index' %}"><i class="fas fa-tachometer-alt me-2"></i> Painel ADM</a></li>
+                                <li><a class="dropdown-item" href="{% url 'listar_usuarios' %}"><i class="fas fa-users me-2"></i> Listar Usuários</a></li>
+                                <li><a class="dropdown-item" href="{% url 'listar_grupos' %}"><i class="fas fa-layer-group me-2"></i> Listar Setores</a></li>
+                                <li><a class="dropdown-item" href="{% url 'listar_contatos' %}"><i class="fas fa-address-book me-2"></i> Listar Contatos</a></li>
+                                <li><a class="dropdown-item" href="{% url 'selecionar_gov' %}"><i class="fas fa-project-diagram me-2"></i> Governança</a></li>
+                                <li><a class="dropdown-item" href="{% url 'listar_contratos' %}"><i class="fas fa-file-contract me-2"></i> Contratos</a></li>
                             </ul>
                         </li>
 
                         <!-- Banco Senhas -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarUsuarios" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarSenhas" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-key me-2"></i> Banco-Senhas
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarUsuarios">
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="{% url 'listar_categorias' %}">
-                                        <i class="fas fa-cogs me-2"></i> Listar Categorias
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="{% url 'listar_senhas' %}">
-                                        <i class="fas fa-key me-2"></i> Listar Senhas
-                                    </a>
-                                </li>
+                            <ul class="dropdown-menu" aria-labelledby="navbarSenhas">
+                                <li><a class="dropdown-item" href="{% url 'listar_categorias' %}"><i class="fas fa-cogs me-2"></i> Listar Categorias</a></li>
+                                <li><a class="dropdown-item" href="{% url 'listar_senhas' %}"><i class="fas fa-key me-2"></i> Listar Senhas</a></li>
                             </ul>
                         </li>
 
                         <!-- Sanma -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarUsuarios" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarSanma" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-user me-2"></i> Sanma
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarUsuarios">
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="{% url 'alterar_senha' %}">
-                                        <i class="fas fa-key me-2"></i> Alterar Senha
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="{% url 'listar_ramais' %}">
-                                        <i class="fas fa-phone-alt me-2"></i> Listar Ramais
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="{% url 'canais_tv' %}">
-                                        <i class="fas fa-tv me-2"></i> Listar Canais - TV
-                                    </a>
-                                </li>
+                            <ul class="dropdown-menu" aria-labelledby="navbarSanma">
+                                <li><a class="dropdown-item" href="{% url 'alterar_senha' %}"><i class="fas fa-key me-2"></i> Alterar Senha</a></li>
+                                <li><a class="dropdown-item" href="{% url 'listar_ramais' %}"><i class="fas fa-phone-alt me-2"></i> Listar Ramais</a></li>
+                                <li><a class="dropdown-item" href="{% url 'canais_tv' %}"><i class="fas fa-tv me-2"></i> Listar Canais - TV</a></li>
                                 <li>
                                     {% if request.user.is_staff %}
-                                        <a class="dropdown-item d-flex align-items-center" href="{% url 'adm_chamados_abertos' %}">
-                                            <i class="fas fa-list-alt me-2"></i> Chamados (Admin)
-                                        </a>
+                                        <a class="dropdown-item" href="{% url 'adm_chamados_abertos' %}"><i class="fas fa-list-alt me-2"></i> Chamados (Admin)</a>
                                     {% else %}
-                                        <a class="dropdown-item d-flex align-items-center" href="{% url 'chamados_abertos' %}">
-                                            <i class="fas fa-list-alt me-2"></i> Chamados
-                                        </a>
+                                        <a class="dropdown-item" href="{% url 'chamados_abertos' %}"><i class="fas fa-list-alt me-2"></i> Chamados</a>
                                     {% endif %}
                                 </li>
                             </ul>
@@ -146,15 +98,11 @@
 
                         <!-- Logout -->
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'logout_confirm' %}">
-                                <i class="fas fa-sign-out-alt me-1"></i> Logout
-                            </a>
+                            <a class="nav-link" href="{% url 'logout_confirm' %}"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'login' %}">
-                                <i class="fas fa-sign-in-alt me-1"></i> Login
-                            </a>
+                            <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-sign-in-alt me-1"></i> Login</a>
                         </li>
                     {% endif %}
                 </ul>
@@ -162,20 +110,20 @@
         </div>
     </nav>
 
-    <!-- HERDAR ESTE ESPAÇO NOS COMPONENTES COMO MENUS ETC.-->
-    <div class="container">
+    <!-- Conteúdo principal -->
+    <div class="container mt-5 pt-4">
         {% block content %}
         {% endblock %}
     </div>
-    
-    <!-- Bootstrap Bundle with Popper -->
+
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/theme-toggle.js' %}"></script>
 
-    <!-- Bloco para scripts adicionais de páginas específicas -->
+    <!-- Bloco para scripts adicionais -->
     {% block scripts %}
     {% endblock %}
-    
+
     <script>
     document.addEventListener("DOMContentLoaded", function () {
         const savedTheme = localStorage.getItem("theme");
@@ -183,7 +131,6 @@
             document.body.classList.add(savedTheme);
         }
     });
-</script>
-
+    </script>
 </body>
 </html>

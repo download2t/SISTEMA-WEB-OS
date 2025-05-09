@@ -24,6 +24,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_cron',  
+    'django_celery_beat',
+    'django_celery_results', 
     'core',
     'ordem_servico',
     'ramais',
@@ -164,3 +166,10 @@ CSRF_TRUSTED_ORIGINS = [
     #'https://f355-177-87-108-241.ngrok-free.app',
     'https://outgoing-friendly-snake.ngrok-free.app',
 ]
+
+# Configuração do Celery
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_BROKER_URL = 'sqla+sqlite:///db_sistema.sqlite3'
+CELERY_RESULT_BACKEND = 'db+sqlite:///db_sistema.sqlite3'

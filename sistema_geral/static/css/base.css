@@ -2,8 +2,11 @@
 /* Custom Styles for Navbar */
 .navbar {
     background-color: #4C6B8C; /* Cor de fundo da navbar */
-}
 
+}
+body {
+    padding-top: 70px; /* ou ajuste conforme a altura real da sua navbar */
+}
 .navbar .navbar-brand {
     color: #ffffff; /* Cor da marca (logo) */
 }
@@ -31,9 +34,31 @@
     background-color: #36556F; /* Cor de hover para os itens do menu dropdown */
 }
 
-.navbar-toggler-icon {
-    background-color: #ffffff; /* Cor do ícone de alternância */
+/* Estilos para garantir alinhamento correto */
+.navbar-toggler {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espaço entre tema e hambúrguer */
+    border: none;
 }
+
+/* Ajuste do botão de alternância de tema */
+#theme-toggle {
+    padding: 6px 12px;
+    font-size: 14px;
+}
+/* Ajuste do hambúrguer */
+.navbar-toggler-icon {
+    filter: brightness(0) invert(1);
+}
+
+/* Ajuste para modo escuro */
+body.dark-mode #theme-toggle {
+    background-color: #222;
+    color: white;
+}
+
+
 
 .logo-img {
     height: 45px;

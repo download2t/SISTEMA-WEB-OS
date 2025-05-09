@@ -5,7 +5,7 @@ from .models import Contrato
 class ContratoForm(forms.ModelForm):
     grupo_responsavel = forms.ModelChoiceField(
         queryset=Group.objects.all(),
-        required=True,  # Campo obrigatório
+        required=True,  
         widget=forms.Select(attrs={
             'class': 'form-control',
             'aria-required': 'true',
@@ -24,27 +24,29 @@ class ContratoForm(forms.ModelForm):
         widgets = {
             'documento': forms.TextInput(attrs={
                 'class': 'form-control', 
-                'placeholder': 'Digite o documento', 
+                'placeholder': 'Digite o documento (somente números)', 
                 'required': True,
                 'aria-required': 'true',
+                'maxlength': '14',
+                'oninput': 'this.value = this.value.replace(/[^0-9]/g, "")',  
             }),
             'razao_social': forms.TextInput(attrs={
                 'class': 'form-control', 
                 'placeholder': 'Digite a razão social', 
                 'required': True,
                 'aria-required': 'true',
+                'style': 'text-transform: uppercase;',
             }),
             'nome_fantasia': forms.TextInput(attrs={
                 'class': 'form-control', 
                 'placeholder': 'Digite o nome fantasia',
+                'style': 'text-transform: uppercase;',
             }),
-            'telefone': forms.NumberInput(attrs={
-                'class': 'form-control', 
+                'telefone': forms.NumberInput(attrs={
+                'class': 'form-control',
                 'placeholder': 'Digite o telefone', 
-                'required': True,
-                'aria-required': 'true',
             }),
-            'email': forms.EmailInput(attrs={  # Agora opcional
+            'email': forms.EmailInput(attrs={
                 'class': 'form-control', 
                 'placeholder': 'Digite o e-mail', 
             }),
@@ -52,6 +54,7 @@ class ContratoForm(forms.ModelForm):
                 'class': 'form-control', 
                 'rows': 3, 
                 'placeholder': 'Descrição do contrato',
+                'style': 'text-transform: uppercase;',
             }),
             'data_assinatura': forms.DateInput(format='%Y-%m-%d', attrs={
                 'class': 'form-control', 
@@ -72,3 +75,18 @@ class ContratoForm(forms.ModelForm):
                 'aria-required': 'true',
             }),
         }
+
+    def clean_documento(self):
+        documento = self.cleaned_data['documento']
+        if not documento.isdigit():
+            raise forms.ValidationError("O campo deve conter apenas números.")
+        return documento
+
+    def clean_razao_social(self):
+        return self.cleaned_data['razao_social'].upper()
+
+    def clean_nome_fantasia(self):
+        return self.cleaned_data['nome_fantasia'].upper()
+
+    def clean_descricao(self):
+        return self.cleaned_data['descricao'].upper()
