@@ -1,10 +1,12 @@
 /* Estilo Principal para o Menu Lateral */
 #sidebar {
-    background: #4C6B8C;
+    background: #314963;
     backdrop-filter: blur(10px);
     color: #fff;
     position: fixed;
     left: 0;
+    top: 0; /* <- Adicione esta linha */
+    margin-top:70px;
     height: 100vh;
     width: 200px;
     z-index: 800;
@@ -14,6 +16,7 @@
     padding-top: 20px;
     border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
+
 /* Ocultar o menu quando colapsado */
 #sidebar.collapsed {
     transform: translateX(-100%);
@@ -89,4 +92,47 @@
 #sidebar h5 {
     color: #fff;
     padding-left: 15px;
+}
+/* Definir variáveis para os temas */
+:root {
+    --sidebar-light: #314963;
+    --sidebar-dark: #1C1C1C;
+    --text-light: #FFFFFF;
+    --text-dark: #F8FAFC;
+    --hover-light: #36556F;
+    --hover-dark: #444;
+    --border-light: rgba(255, 255, 255, 0.1);
+    --border-dark: rgba(255, 255, 255, 0.15);
+}
+
+/* Menu lateral - Modo claro */
+body.light-mode #sidebar {
+    background: var(--sidebar-light);
+    color: var(--text-light);
+    border-right: 1px solid var(--border-light);
+}
+
+/* Menu lateral - Modo escuro */
+body.dark-mode #sidebar {
+    background: var(--sidebar-dark);
+    color: var(--text-dark);
+    border-right: 1px solid var(--border-dark);
+}
+
+/* Botões do menu - Modo claro */
+body.light-mode #sidebar .nav-link {
+    color: var(--text-light);
+}
+
+body.light-mode #sidebar .nav-link:hover {
+    background-color: var(--hover-light);
+}
+
+/* Botões do menu - Modo escuro */
+body.dark-mode #sidebar .nav-link {
+    color: var(--text-dark);
+}
+
+body.dark-mode #sidebar .nav-link:hover {
+    background-color: var(--hover-dark);
 }
