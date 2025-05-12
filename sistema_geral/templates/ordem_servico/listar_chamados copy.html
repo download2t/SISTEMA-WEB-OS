@@ -1,0 +1,277 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/ordem_servico/listar_chamados.css' %}">
+<link rel="stylesheet" href="{% static 'css/ordem_servico/menu_os.css' %}">
+{% endblock %}
+
+{% block content %}
+ 
+    <div class="container">
+        <div class="row">
+                <div class="col-md-1">
+                {% include 'ordem_servico/menu_os.html' %}
+                </div>
+                <div class="col-md-11">
+                    <div class="container mt-3">
+                        <div class="container mt-3">
+                            <h1 class="text-left mb-4">
+                                Gestão de Tickets
+                                <span 
+                                    class="text-warning ms-2" 
+                                    data-bs-toggle="tooltip" 
+                                    data-bs-placement="right" 
+                                    title="Esta página mostra seus tickets ou os tickets do seu setor."
+                                >
+                                    &#33;
+                                </span>
+                            </h1>
+                        </div>
+                        
+                        <!-- Exibição de Mensagens -->
+                        {% if messages %}
+                        <div class="messages-container mb-4">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                       <!-- Filtro de Status -->
+                       <form method="get" action="{% url 'listar_chamados' %}" class="d-flex flex-column gap-4 mb-4">
+                        <!-- Botão para Expandir/Reduzir -->
+                        <button type="button" id="toggle-filters" class="btn btn-primary mb-4">
+                            <i class="fas fa-filter"></i> Filtrar Chamados
+                        </button>
+                    
+                        <div id="filter-options" class="d-none">
+                            <!-- Filtro de Status -->
+                            <div class="card p-3">
+                                <h5 class="fw-bold">Filtrar por Status</h5>
+                                <div id="status-options" class="d-flex flex-wrap gap-2 mt-2">
+                                    <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Aberto">Aberto</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Em andamento">Em andamento</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Concluído">Concluído</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Encaminhado a TOTVS">Encaminhado a TOTVS</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Aguardando aprovação">Aguardando aprovação</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Em análise">Em análise</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Em desenvolvimento">Em desenvolvimento</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Manutenção">Manutenção</button>
+                                </div>
+                                <div id="selected-status-container" class="d-flex flex-wrap gap-2 mt-3"></div>
+                                <input type="hidden" id="status-input" name="status" value="{{ request.GET.status|default:'' }}" />
+                            </div>
+                    
+                            <!-- Filtro por Data -->
+                            <div class="card p-3">
+                                <h5 class="fw-bold">Filtrar por Data</h5>
+                                <div class="d-flex gap-3">
+                                    <div>
+                                        <label for="start_date" class="form-label">Data Inicial</label>
+                                        <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request.GET.start_date }}">
+                                    </div>
+                                    <div>
+                                        <label for="end_date" class="form-label">Data Final</label>
+                                        <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request.GET.end_date }}">
+                                    </div>
+                                </div>
+                            </div>
+                    
+                            <!-- Busca -->
+                            <div class="card p-3">
+                                <h5 class="fw-bold">Buscar Chamados</h5>
+                                <div class="d-flex align-items-center gap-3 mt-2">
+                                    <input type="text" name="search" placeholder="Buscar por Grupo ou Número" value="{{ request.GET.search }}" class="form-control" />
+                                </div>
+                            </div>
+                    
+                            <!-- Botões de Ação -->
+                            <div class="d-flex justify-content-between mt-3">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search"></i> Aplicar Filtros
+                                </button>
+                                <a href="{% url 'listar_chamados' %}" class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-times"></i> Limpar Filtros
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                
+                    <!-- Listagem de Chamados -->
+                    <div class="row">
+                        {% for chamado in chamados %}
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card shadow-sm border-0 h-100 chamado-card" data-status="{{ chamado.status }}">
+                                <div class="card-body d-flex flex-column">
+                                    <div class="d-flex justify-content-between">
+                                        <!-- Status Badge -->
+                                        <span class="badge chamado-status" data-status="{{ chamado.status }}">
+                                            {{ chamado.status }}
+                                        </span>
+                                        <!-- ID do Chamado -->
+                                        <span class="text-muted">#{{ chamado.id }}</span>
+                                    </div>
+
+                                    <h3 class="card-title mt-3">{{ chamado.assunto }}</h3>
+
+                                    <p class="card-text text-muted">{{ chamado.descricao }}</p>
+
+                                    <div class="d-flex justify-content-between mt-3">
+                                        <small><strong>Criado por:</strong> 
+                                            {% if chamado.criado_por %}
+                                                {{ chamado.criado_por.username }}
+                                            {% else %}
+                                                Não Informado
+                                            {% endif %}
+                                        </small>
+                                        <small><strong>Atribuído ao setor:</strong> 
+                                            {% if chamado.grupo_responsavel %}
+                                                {{ chamado.grupo_responsavel.name }}
+                                            {% else %}
+                                                Não Atribuído
+                                            {% endif %}
+                                        </small>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="d-flex flex-grow-1 text-start">
+                                            <small><strong>Data de Abertura:</strong> {{ chamado.data_abertura|date:"d/m/Y H:i" }}</small>
+                                        </div>
+
+                                        <div class="d-flex flex-grow-1 text-end">
+                                            <small><strong>Data de Conclusão:</strong> 
+                                                {% if chamado.data_conclusao %}
+                                                    {{ chamado.data_conclusao|date:"d/m/Y H:i" }}
+                                                {% else %}
+                                                    Não Concluído
+                                                {% endif %}
+                                            </small>
+                                        </div>
+                                    </div>
+
+                                    <span class="badge chamado-prioridade" data-prioridade="{{ chamado.prioridade }}">
+                                        {{ chamado.prioridade }}
+                                    </span>
+
+                                    <div class="mt-3">
+                                        <a href="{% url 'visualizar_chamado' chamado.id %}" class="btn btn-sm chamado-btn" data-status="{{ chamado.status }}">
+                                            <i class="bi bi-eye"></i> Ver Ticket
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                Nenhum chamado encontrado.
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script> /* Clique do filtro de chamados*/
+    document.getElementById('toggle-filters').addEventListener('click', function () {
+        const filterOptions = document.getElementById('filter-options');
+        if (filterOptions.classList.contains('d-none')) {
+            filterOptions.classList.remove('d-none');
+            this.innerHTML = '<i class="fas fa-filter"></i> Fechar Filtros'; // Mudar o texto do botão
+        } else {
+            filterOptions.classList.add('d-none');
+            this.innerHTML = '<i class="fas fa-filter"></i> Filtrar Chamados'; // Reverter o texto do botão
+        }
+    });
+</script>
+<script>
+/* Menu lateral cliques*/
+document.addEventListener('DOMContentLoaded', function () {
+    const menuLinks = document.querySelectorAll('.menu-filter');
+
+    menuLinks.forEach(link => {
+        link.addEventListener('click', function (event) {
+            event.preventDefault();
+            const action = this.getAttribute('data-action');
+
+            fetch(`/chamados/${action}/`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.querySelector('#chamados-container').innerHTML = data.html;
+            })
+            .catch(error => console.error('Erro ao carregar os chamados:', error));
+        });
+    });
+});
+</script>
+<script>
+     /* status Options*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const statusOptions = document.querySelectorAll('.status-option');
+        const selectedStatusContainer = document.getElementById('selected-status-container');
+        const statusInput = document.getElementById('status-input');
+    
+        let selectedStatus = [];
+    
+        function updateSelectedStatus() {
+            selectedStatusContainer.innerHTML = '';
+    
+            selectedStatus.forEach((status) => {
+                const chip = document.createElement('div');
+                chip.className = 'badge bg-primary text-white d-flex align-items-center gap-2';
+                chip.innerHTML = `
+                    <span>${status}</span>
+                    <button type="button" class="btn-close btn-close-white" aria-label="Remove"></button>
+                `;
+    
+                chip.querySelector('button').addEventListener('click', () => {
+                    selectedStatus = selectedStatus.filter((s) => s !== status);
+                    updateSelectedStatus();
+                });
+    
+                selectedStatusContainer.appendChild(chip);
+            });
+    
+            statusInput.value = selectedStatus.join(',');
+        }
+    
+        statusOptions.forEach((button) => {
+            button.addEventListener('click', () => {
+                const status = button.getAttribute('data-value');
+                if (!selectedStatus.includes(status)) {
+                    selectedStatus.push(status);
+                }
+                updateSelectedStatus();
+            });
+        });
+    });
+</script>
+<script>
+    /*Menu lateral evento*/
+    document.addEventListener("DOMContentLoaded", function () {
+        const menuToggle = document.getElementById("menu-toggle");
+        const sidebar = document.getElementById("sidebar");
+        const mainContent = document.getElementById("main-content");
+
+        menuToggle.addEventListener("click", function () {
+            sidebar.classList.toggle("collapsed");
+            mainContent.classList.toggle("full-width");
+        });
+    });
+</script>
+
+<script src="{% static 'js/ordem_servico/listar_chamados.js' %}"></script>
+<script src="{% static 'js/ordem_servico/menu_os.js' %}"></script>
+{% endblock %}

@@ -162,14 +162,6 @@ body {
     display: -webkit-box;
     -webkit-box-orient: vertical;
 }
-.chamado-card .card-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 300px;
-    overflow: hidden;
-}
-
 .chamado-header h1 {
     font-size: 2rem;
     font-weight: bold;
@@ -184,22 +176,4 @@ body {
 .mensagem-item {
     margin-bottom: 1rem;
     padding: 10px;
-}
-
-@media (max-width: 768px) {
-    #filter-options .card {
-        flex-direction: column;
-    }
-
-    #status-options {
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-
-    .status-option {
-        min-width: max-content;
-    }
-}
-#filter-options {
-    max-width: 100%;
 }
