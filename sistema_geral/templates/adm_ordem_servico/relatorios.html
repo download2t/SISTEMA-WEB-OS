@@ -7,16 +7,24 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="d-flex">
     <div class="row">
         <!-- Menu lateral-->
         <div class="col-md-1">
             {% include 'adm_ordem_servico/adm_menu_os.html' %}
         </div>
         
-        <div class="col-md-11">
-            <h1 class="text-left mb-4">Relatórios de Ordens de Serviço</h1>
-            
+        <div class="col-md-10">
+
+            <!-- Page Title -->
+            <h1 class="page-title">
+                Relatórios de Ordens de Serviço
+                <span class="text-warning ms-2" data-bs-toggle="tooltip" data-bs-placement="right" 
+                     title="Esta página facilita o gerenciamento dos relatórios.">
+                    !
+                </span>
+            </h1>
+
             <!-- Filtros para Relatórios -->
             <form method="get" action="{% url 'relatorio_chamados' %}" class="d-flex flex-column gap-4 mb-4">
                 <button type="button" id="toggle-filters" class="btn btn-primary mb-4">

@@ -10,7 +10,6 @@ body.menu-open {
     overflow: hidden;
 }
 
-
 .main-content-wrapper {
     margin-left: 200px;
     transition: margin-left 0.3s ease;
