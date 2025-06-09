@@ -1,67 +1,202 @@
-
-/* Custom Styles for Navbar */
-.navbar {
-    background-color: #4C6B8C; /* Cor de fundo da navbar */
-
-}
+/*============= BODY ==============*/
 body {
-    padding-top: 70px; /* ou ajuste conforme a altura real da sua navbar */
-}
-.navbar .navbar-brand {
-    color: #ffffff; /* Cor da marca (logo) */
+    background: linear-gradient(135deg, #f4f5f7 0%, #f0f8ff 100%);
+    color: #333;
 }
 
-.navbar .navbar-nav .nav-item .nav-link {
-    color: #ffffff; /* Cor dos links na navbar */
-    padding: 15px 20px;
+/* ============ NAVBAR ============ */
+.navbar {
+    background: linear-gradient(135deg, #6888aa, #395873); /* transição suave */
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0 0 12px 12px;
 }
 
-.navbar .navbar-nav .nav-item .nav-link:hover {
-    background-color: #36556F; /* Cor de hover com contraste */
-    border-radius: 5px;
+
+.navbar-nav {
+    margin-right: 3%;
 }
 
+.navbar-container {
+    display: flex;
+    align-items: center;
+    margin-left: 5%; /* margem da esquerda */
+    margin-right: 5%;
+}
+
+.navbar-brand {
+    margin-right: 2rem;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 1rem;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+.logo-img {
+    height: 40px;
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover .logo-img {
+    transform: scale(1.05);
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    color: #f8f2f3;
+}
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.5s;
+}
+
+.nav-link:hover::before {
+    left: 100%;
+}
+
+.nav-link:hover {
+    background: linear-gradient(135deg, #5a85aa, #2e4d67);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    transform: translateX(-50%);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 80%;
+}
+
+/* ============ DROPDOWN MENUS ============ */
 .dropdown-menu {
-    background-color: #4C6B8C; /* Cor do fundo do menu dropdown */
-    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    
 }
 
 .dropdown-item {
-    color: #ffffff; /* Cor dos itens do menu dropdown */
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
 }
 
 .dropdown-item:hover {
-    background-color: #36556F; /* Cor de hover para os itens do menu dropdown */
-}
-
-/* Estilos para garantir alinhamento correto */
-.navbar-toggler {
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Espaço entre tema e hambúrguer */
-    border: none;
-}
-
-/* Ajuste do botão de alternância de tema */
-#theme-toggle {
-    padding: 6px 12px;
-    font-size: 14px;
-}
-/* Ajuste do hambúrguer */
-.navbar-toggler-icon {
-    filter: brightness(0) invert(1);
-}
-
-/* Ajuste para modo escuro */
-body.dark-mode #theme-toggle {
-    background-color: #222;
+    background: linear-gradient(135deg, #4C6B8C, #395873); 
     color: white;
+    transform: translateX(5px);
+}
+
+.dropdown-item i {
+    width: 20px;
+    text-align: center;
+    margin-right: 0.5rem;
+}
+
+
+/* ============ ANIMAÇÕES ============ */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============ TEMA ESCURO ============ */
+body.dark-mode {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #f8f9fa;
+}
+
+body.dark-mode .navbar {
+    background: rgba(26, 26, 46, 0.95);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .nav-link {
+    color: #f7f7f7;
+}
+body.dark-mode .dropdown-item:hover {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #f8f9fa;
+    transform: translateX(5px);
+}
+body.dark-mode .nav-link:hover {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #f8f9fa;
+    transform: translateY(-2px);
 }
 
 
 
-.logo-img {
-    height: 45px;
-    width: auto;
+/* ============ RESPONSIVIDADE ============ */
+@media (max-width: 992px) {
+    .navbar-collapse {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(15px);
+        padding: 1rem;
+        border-radius: 12px;
+        margin-top: 0.5rem;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+    
+    body.dark-mode .navbar-collapse {
+        background: rgba(26, 26, 46, 0.95);
+    }
 }
 
+@media (max-width: 768px) {
+    main.container {
+        padding: 1.5rem;
+        margin-top: 70px;
+    }
+}
+
+@media (max-width: 576px) {
+    main.container {
+        padding: 1rem;
+        border-radius: 12px;
+    }
+    
+    .nav-link {
+        padding: 0.5rem;
+    }
+}

@@ -1,18 +1,45 @@
-.card {
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-.form-control-lg {
-    height: 50px;
-    font-size: 1.1rem;
-}
-.btn-primary {
-    background-color: #4C6B8C;
-    border-color: #4C6B8C;
-    font-size: 1.1rem;
-}
-.btn-primary:hover {
-    background-color: #3e5f73;
-    border-color: #3e5f73;
-}
+    body {
+            background-color: #f4f6f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .card-login {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-login {
+            background-color: #4C6B8C;
+            border: none;
+            font-weight: 600;
+        }
+
+        .btn-login:hover {
+            background-color: #3a516a;
+        }
+
+        .form-label {
+            color: #4C6B8C;
+            font-weight: 600;
+        }
+
+        .form-control::placeholder {
+            color: #ccc;
+            font-style: italic;
+        }
+
+        .login-title {
+            color: #4C6B8C;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        a.forgot-password {
+            color: #4C6B8C;
+            font-weight: 600;
+        }
+
+        a.forgot-password:hover {
+            text-decoration: underline;
+        }

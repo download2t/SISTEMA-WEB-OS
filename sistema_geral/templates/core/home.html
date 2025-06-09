@@ -1,38 +1,28 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <div class="container text-center mt-5">
-        {% if user.is_authenticated %}
-            <!-- Área para usuários autenticados -->
-            <div class="card shadow-lg p-5 border-0 rounded-4">
-                <h1 class="display-4 fw-bold theme-title">Bem-vindo de volta, {{ user.first_name }}!</h1>
-                <p class="lead theme-subtitle mb-4">Estamos felizes em vê-lo novamente. Aqui está um resumo da sua conta.</p>
-                
-                <!-- Informações adicionais sobre a conta -->
-                <div class="my-4 text-start">
-                    <div class="row">
-                        <div class="col-12 col-md-6">
-                            <p><strong>Status da conta:</strong> <span class="badge bg-success">{{ user.is_active|yesno:"Ativo,Inativo" }}</span></p>
-                            <p><strong>Email:</strong> {{ user.email }}</p>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <p><strong>Data de cadastro:</strong> {{ user.date_joined|date:"d/m/Y" }}</p>
-                        </div>
+<div class="text-center mt-5">
+    {% if user.is_authenticated %}
+        <!-- Área para usuários autenticados -->
+       
+            <h1 class="display-4 fw-bold theme-title">Bem-vindo de volta, {{ user.first_name }}!</h1>
+            <p class="lead theme-subtitle mb-4 ">Estamos felizes em vê-lo novamente. Aqui está um resumo da sua conta.</p>
+            
+            <!-- Informações adicionais sobre a conta -->
+            <div class="my-4 text-start mx-auto" style="max-width: 700px;">
+                <div class="row">
+                    <div class="col-12 col-md-6 mb-3">
+                        <p><strong>Status da conta:</strong> 
+                            <span class="badge bg-success">{{ user.is_active|yesno:"Ativo,Inativo" }}</span>
+                        </p>
+                        <p><strong>Email:</strong> {{ user.email }}</p>
+                    </div>
+                    <div class="col-12 col-md-6 mb-3">
+                        <p><strong>Data de cadastro:</strong> {{ user.date_joined|date:"d/m/Y" }}</p>
                     </div>
                 </div>
             </div>
-        {% else %}
-            <!-- Área para visitantes não autenticados -->
-            <div class="card shadow-lg p-5 border-0 rounded-4">
-                <h1 class="display-4 fw-bold theme-title">Bem-vindo ao Sistema</h1>
-                <p class="lead theme-subtitle mb-4">Para acessar todas as funcionalidades, faça login ou crie uma conta.</p>
-                
-                <!-- Botões para login ou cadastro -->
-                <div class="mt-4 d-flex justify-content-center">
-                    <a href="{% url 'login' %}" class="btn theme-button btn-lg me-3">Ir para Login</a>
-                    <a href="{% url 'signup' %}" class="btn theme-outline-button btn-lg">Criar Conta</a>
-                </div>
-            </div>
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

@@ -1,0 +1,14 @@
+# Usando uma imagem oficial do Python
+FROM python:3.10
+
+# Definir o diretório de trabalho
+WORKDIR /app
+
+# Copiar arquivos para dentro do contêiner
+COPY . .
+
+# Instalar dependências
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Definir o comando de inicialização do contêiner
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
