@@ -1,0 +1,161 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Agendamentos - SPA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/spa/listar_spa.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    
+        <!-- Filtros -->
+    <div class="filters-section">
+        <div class="filters-header2">
+            <h1><i class="fas fa-spa"></i> Serenity Spa</h1>
+            <button type="button" class="toggle-filters" onclick="toggleFilters()">
+                <span id="filter-toggle-text">Ocultar Filtros</span>
+            </button>
+        </div>
+
+        <div id="filters-content">
+            <form method="get" class="filters-form row g-3 align-items-end">
+                <!-- Status -->
+                <div class="col-md-2">
+                    <label for="status" class="form-label">Status</label>
+                    <select name="status" id="status" class="form-select">
+                        <option value="">Todos (válidos)</option>
+                        {% for value, label in status_choices.items %}
+                        <option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Nome -->
+                <div class="col-md-2">
+                    <label for="nome" class="form-label">Nome</label>
+                    <input type="text" name="nome" id="nome" class="form-control"
+                        placeholder="Hóspede" value="{{ request.GET.nome|default:'' }}">
+                </div>
+
+                <!-- Quarto -->
+                <div class="col-md-2">
+                    <label for="quarto" class="form-label">Quarto</label>
+                    <input type="text" name="quarto" id="quarto" class="form-control"
+                        placeholder="Nº Quarto" value="{{ request.GET.quarto|default:'' }}">
+                </div>
+
+                <!-- Data Início -->
+                <div class="col-md-2">
+                    <label for="data_inicio" class="form-label">Data Início</label>
+                    <input type="date" name="data_inicio" id="data_inicio" 
+                        class="form-control" value="{{ request.GET.data_inicio|default:'' }}">
+                </div>
+
+                <!-- Data Fim -->
+                <div class="col-md-2">
+                    <label for="data_fim" class="form-label">Data Fim</label>
+                    <input type="date" name="data_fim" id="data_fim" 
+                        class="form-control" value="{{ request.GET.data_fim|default:'' }}">
+                </div>
+
+                <!-- Ações -->
+                <div class="col-md-2 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary flex-grow-1">
+                        <i class="fas fa-search me-1"></i> Filtrar
+                    </button>
+                    <a href="{% url 'listar_spa' %}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Lista de Agendamentos -->
+    <section class="appointments-section mt-4">
+        <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Agendamentos</h2>
+
+        <div class="appointments-grid">
+            {% for agendamento in agendamentos %}
+            <div class="appointment-card {% if agendamento.esta_atrasado %}status-atrasado{% else %}status-{{ agendamento.status }}{% endif %}">
+                <div class="appointment-header2">
+                    <h3 class="guest-name">{{ agendamento.nome_hospede }}</h3>
+                    <span class="room-number">Quarto {{ agendamento.numero_quarto|default:"-" }}</span>
+                    <span class="status-badge">{{ agendamento.get_status_display }}{% if agendamento.esta_atrasado %} (Atrasado){% endif %}</span>
+                </div>
+
+                <div class="appointment-details">
+                    <div class="detail-item">
+                        <i class="fas fa-spa"></i>
+                        <span>{{ agendamento.tipo_massagem.nome }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-calendar"></i>
+                        <span>{{ agendamento.data|date:"d/m/Y" }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-clock"></i>
+                        <span>{{ agendamento.horario|time:"H:i" }} ({{ agendamento.duracao }} min)</span>
+                    </div>
+                    {% if agendamento.primeira_vez %}
+                    <div class="detail-item">
+                        <i class="fas fa-star"></i>
+                        <span>Primeira vez no spa</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if agendamento.observacoes %}
+                <div class="observations">
+                    <i class="fas fa-sticky-note"></i> {{ agendamento.observacoes }}
+                </div>
+                {% endif %}
+
+                {% if agendamento.motivo_cancelamento %}
+                <div class="cancel-reason">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <strong>Motivo do cancelamento:</strong> {{ agendamento.motivo_cancelamento }}
+                </div>
+                {% endif %}
+
+                <div class="appointment-actions">
+                    {% if agendamento.status == 'em_andamento' %}
+                    <a href="{% url 'finalizar_servico' agendamento.id %}" class="btn btn-complete">
+                        <i class="fas fa-check-circle"></i> Finalizar
+                    </a>
+                    {% endif %}
+
+                    <a href="{% url 'editar_spa' agendamento.id %}" class="btn btn-edit">
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+                     <a href="{% url 'cancelar_spa' agendamento.id %}" class="btn btn-cancel">
+                        <i class="fas fa-edit"></i> Cancelar
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <p class="no-appointments text-muted">Nenhum agendamento encontrado.</p>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<!-- Botão Nova Reserva -->
+<a href="{% url 'cadastro_spa' %}" class="new-reservation-btn">
+    <i class="fas fa-plus"></i> Nova Reserva
+</a>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/spa/listar_spa.js' %}"></script>
+{% endblock %}

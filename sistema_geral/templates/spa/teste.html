@@ -1,0 +1,246 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Agendamentos - SPA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/spa/listar_spa.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header -->
+    <header class="header">
+        <h1><i class="fas fa-spa"></i> Serenity Spa</h1>
+        <p class="subtitle">Relaxe e renove sua energia em nosso spa exclusivo</p>
+    </header>
+
+    <!-- Operating Hours -->
+    <section class="operating-hours">
+        <h2><i class="fas fa-clock"></i> Horário de Funcionamento</h2>
+        <div class="hours-grid">
+            <div class="hour-card">
+                <h3><i class="fas fa-sun"></i> Manhã</h3>
+                <p>08:00 - 12:00</p>
+            </div>
+            <div class="hour-card">
+                <h3><i class="fas fa-cloud-sun"></i> Tarde</h3>
+                <p>14:00 - 18:00</p>
+            </div>
+        </div>
+        <div class="unavailable-notice" id="unavailableNotice" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i>
+            Horário indisponível para reservas
+        </div>
+    </section>
+
+    <!-- Appointments Section -->
+    <section class="appointments-section">
+        <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Agendamentos do Dia</h2>
+        <div class="appointments-grid" id="appointmentsGrid">
+            {% for agendamento in agendamentos %}
+            <div class="appointment-card">
+                <div class="appointment-header">
+                    <h3 class="guest-name">{{ agendamento.nome_hospede }}</h3>
+                    <span class="room-number">Quarto {{ agendamento.numero_quarto }}</span>
+                </div>
+                <div class="appointment-details">
+                    <div class="detail-item">
+                        <i class="fas fa-spa"></i>
+                        <span class="service-name">{{ agendamento.tipo_massagem.nome }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-calendar"></i>
+                        <span>{{ agendamento.data|date:"d/m/Y" }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-clock"></i>
+                        <span>{{ agendamento.horario|time:"H:i" }}</span>
+                    </div>
+                </div>
+                {% if agendamento.observacoes %}
+                <div class="observations">
+                    <i class="fas fa-sticky-note"></i>
+                    {{ agendamento.observacoes }}
+                </div>
+                {% endif %}
+                <div class="appointment-actions">
+                    <a href="{% url 'editar_spa' agendamento.id %}" class="btn btn-edit">
+                        <i class="fas fa-edit"></i>
+                        Editar reserva
+                    </a>
+                    <a href="{% url 'excluir_spa' agendamento.id %}" class="btn btn-cancel">
+                        <i class="fas fa-times"></i>
+                        Cancelar reserva
+                    </a>
+                </div>
+
+            </div>
+            {% empty %}
+            <p style="text-align: center; color: #718096; font-style: italic;">Nenhum agendamento para hoje.</p>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<!-- New Reservation Button - Agora como link para a página de criação -->
+<a href="{% url 'cadastro_spa' %}" class="new-reservation-btn">
+    <i class="fas fa-plus"></i>
+    Nova Reserva
+</a>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/spa/listar_spa.js' %}"></script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Nova Reserva - SPA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/spa/cadastro_spa.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header -->
+    <header class="header">
+        <h1><i class="fas fa-calendar-plus"></i> Nova Reserva</h1>
+        <p class="subtitle">Agende seu momento de relaxamento e bem-estar</p>
+    </header>
+
+    
+        <!-- Mensagem de sucesso ou erro -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+    <!-- Formulário Django -->
+    <div class="form-container">
+        <h2 class="form-title">
+            <i class="fas fa-spa"></i>
+            Reserve Sua Experiência
+        </h2>
+
+        <form method="post" class="form" novalidate>
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+            <div class="form-grid">
+                <!-- Campos do formulário -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-user"></i> Informações do Hóspede</h3>
+
+                    <div class="form-group">
+                        {{ form.nome_hospede.label_tag }}
+                        {{ form.nome_hospede }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.telefone.label_tag }}
+                        {{ form.telefone }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.numero_quarto.label_tag }}
+                        {{ form.numero_quarto }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.numero_reserva.label_tag }}
+                        {{ form.numero_reserva }}
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-calendar-alt"></i> Data e Horário</h3>
+
+                    <div class="form-group">
+                        {{ form.data.label_tag }}
+                        {{ form.data }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.horario.label_tag }}
+                        {{ form.horario }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="section-title"><i class="fas fa-leaf"></i> Escolha seu Tratamento</h3>
+                <div class="form-group">
+                    {{ form.tipo_massagem.label_tag }}
+                    {{ form.tipo_massagem }}
+                </div>
+            </div>
+            <!-- Informações adicionais -->
+            <div class="form-section">
+                <h3 class="section-title"><i class="fas fa-sticky-note"></i> Informações Adicionais</h3>
+                
+                <div class="form-group">
+                    {{ form.observacoes.label_tag }}
+                    {{ form.observacoes }}
+                    <small class="form-text text-muted">Informe sobre alergias, preferências de pressão, música, etc.</small>
+                </div>
+
+                <div class="form-group">
+                    {{ form.primeira_vez.label_tag }}
+                    {{ form.primeira_vez }}
+                </div>
+            </div>
+
+            <!-- Ações do Formulário -->
+            <div class="form-actions">
+                <a href="{% url 'listar_spa' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-calendar-check"></i> Confirmar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/spa/cadastro_spa.js' %}"></script>
+{% endblock %}

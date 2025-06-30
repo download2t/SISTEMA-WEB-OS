@@ -1,0 +1,231 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}{% if editar %}Editar{% else %}Nova{% endif %} Reserva - SPA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/spa/cadastro_spa.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Mensagem de sucesso ou erro -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            <strong>Erros no formulário:</strong>
+            <ul>
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <li>{{ field|title }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    
+    <!-- Formulário Django -->
+    <div class="form-container">
+        <h2 class="form-title"><i class="fas fa-spa"></i>Reserve Sua Experiência</h2>
+        <form method="post" class="form" novalidate>
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+            <div class="form-grid">
+                <!-- Campos do formulário -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-user"></i> Informações do Hóspede</h3>
+
+                    <div class="form-group">
+                        {{ form.nome_hospede.label_tag }}
+                        {{ form.nome_hospede }}
+                        {% if form.nome_hospede.errors %}
+                        <div class="invalid-feedback">
+                            {{ form.nome_hospede.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.telefone.label_tag }}
+                        {{ form.telefone }}
+                        <small class="form-text text-muted">Opcional</small>
+                        {% if form.telefone.errors %}
+                        <div class="invalid-feedback">
+                            {{ form.telefone.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
+                        <small class="form-text text-muted">Opcional</small>
+                        {% if form.email.errors %}
+                        <div class="invalid-feedback">
+                            {{ form.email.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.numero_quarto.label_tag }}
+                        {{ form.numero_quarto }}
+                        <small class="form-text text-muted">Opcional</small>
+                        {% if form.numero_quarto.errors %}
+                        <div class="invalid-feedback">
+                            {{ form.numero_quarto.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.numero_reserva.label_tag }}
+                        {{ form.numero_reserva }}
+                        <small class="form-text text-muted">Opcional</small>
+                        {% if form.numero_reserva.errors %}
+                        <div class="invalid-feedback">
+                            {{ form.numero_reserva.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-calendar-alt"></i> Data e Horário</h3>
+
+                    <div class="form-group">
+                        {{ form.data.label_tag }}
+                        {{ form.data }}
+                        {% if form.data.errors %}
+                        <div class="invalid-feedback">
+                            {{ form.data.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.horario.label_tag }}
+                        {{ form.horario }}
+                        {% if form.horario.errors %}
+                        <div class="invalid-feedback">
+                            {{ form.horario.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.duracao.label_tag }}
+                        {{ form.duracao }}
+                        <small class="form-text text-muted">Duração em minutos</small>
+                        {% if form.duracao.errors %}
+                        <div class="invalid-feedback">
+                            {{ form.duracao.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="section-title"><i class="fas fa-leaf"></i> Escolha seu Tratamento</h3>
+                <div class="form-group">
+                    {{ form.tipo_massagem.label_tag }}
+                    {{ form.tipo_massagem }}
+                    {% if form.tipo_massagem.errors %}
+                    <div class="invalid-feedback">
+                        {{ form.tipo_massagem.errors }}
+                    </div>
+                    {% endif %}
+                    <small class="form-text text-muted">Apenas tratamentos ativos são exibidos</small>
+                </div>
+                <h3 class="section-title"><i class="fas fa-sticky-note"></i> Informações Adicionais</h3>
+                 {{ form.observacoes.label_tag }}
+                    {{ form.observacoes }}
+                    <small class="form-text text-muted">Informe sobre alergias, preferências de pressão, áreas específicas, etc.</small>
+                    {% if form.observacoes.errors %}
+                    <div class="invalid-feedback">
+                        {{ form.observacoes.errors }}
+                    </div>
+                    {% endif %}
+
+                    {{ form.primeira_vez }}
+                    <label class="form-check-label" for="{{ form.primeira_vez.id_for_label }}">
+                        {{ form.primeira_vez.label }}
+                    </label>
+                    {% if form.primeira_vez.errors %}
+                    <div class="invalid-feedback">
+                        {{ form.primeira_vez.errors }}
+                    </div>
+                    {% endif %}
+
+
+            <!-- Ações do Formulário -->
+            <div class="form-actions">
+                <a href="{% url 'listar_spa' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-calendar-check"></i> {% if editar %}Atualizar{% else %}Confirmar{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/spa/cadastro_spa.js' %}"></script>
+<script>
+    $(document).ready(function() {
+    // Adiciona classe 'is-invalid' para campos com erro
+    {% if form.errors %}
+        {% for field in form %}
+            {% if field.errors %}
+                $('#{{ field.id_for_label }}').addClass('is-invalid');
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    // Remove a classe quando o usuário começa a editar
+    $('input, select, textarea').on('input change', function() {
+        $(this).removeClass('is-invalid');
+    });
+});
+$(document).ready(function() {
+    // Atualiza a duração quando selecionar um tipo de massagem
+    $('#id_tipo_massagem').change(function() {
+        var selectedMassage = $(this).find(':selected');
+        if (selectedMassage.data('duration')) {
+            $('#id_duracao').val(selectedMassage.data('duration'));
+        }
+    });
+    
+    // Validação de data no front-end
+    $('#id_data').on('change', function() {
+        var selectedDate = new Date($(this).val());
+        var today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        if (selectedDate < today) {
+            alert('Não é possível agendar para datas passadas.');
+            $(this).val('');
+        }
+    });
+});
+</script>
+{% endblock %}

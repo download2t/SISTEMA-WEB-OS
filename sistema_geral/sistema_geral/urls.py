@@ -21,5 +21,5 @@ urlpatterns = [
     path('canais/', include('canais.urls')), #Rotas do app de canais
     path('governanca/', include('governanca.urls')), #Rotas do app de governança
     path('contratos/', include('contratos.urls')), #Rotas do app de contratos
-
+    path('spa/', include('spa.urls')),  #Rotas do app de spa
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'canais',
     'governanca',
     'contratos',
+    'spa',
 ]
 
 
