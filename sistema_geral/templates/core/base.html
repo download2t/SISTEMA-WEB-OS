@@ -102,6 +102,18 @@
     </div>
 </nav>
 
+<!-- Mensagens de erro -->
+{% if messages %}
+<div class="messages-container">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        <span class="message-text">{{ message }}</span>
+        <button class="close-btn" onclick="this.parentElement.style.display='none';">&times;</button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 <main class="container mt-5 pt-5">
     {% block content %}
     {% endblock %}
@@ -109,23 +121,11 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Script de tema -->
-<script>
-    document.getElementById('theme-toggle').addEventListener('click', function () {
-        const body = document.body;
-        const icon = document.getElementById('theme-icon');
-        const isDark = body.classList.toggle('dark-mode');
-        icon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
-        document.cookie = `theme=${isDark ? 'dark-mode' : 'light-mode'};path=/;max-age=31536000`;
-        document.getElementById('theme-stylesheet').href = isDark ? '{% static "css/dark-theme.css" %}' : '{% static "css/light-theme.css" %}';
-    });
-</script>
-
+<script src="{% static 'js/base.js' %}"></script>
 {% block extra_js %}{% endblock %}
 
 </body>
 <footer class="text-center py-4 mt-5">
     <small>&copy; {{ year|default:2025 }} SANMA. Todos os direitos reservados.</small>
 </footer>
-
 </html>

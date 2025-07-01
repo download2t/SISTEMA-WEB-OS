@@ -2,16 +2,6 @@
 
 {% block content %}
 
-{% if messages %}
-    <div class="messages">
-        {% for message in messages %}
-            <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}">
-                <p>{{ message }}</p>
-            </div>
-        {% endfor %}
-    </div>
-{% endif %}
-
 <h1 class="text-center my-4">Cadastro de Relatório de Lavanderia</h1>
 
 <form method="post" class="container">

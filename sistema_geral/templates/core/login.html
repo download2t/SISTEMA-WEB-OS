@@ -22,16 +22,6 @@
                 <div class="card-body">
                     <h2 class="text-center login-title mb-4">Acessar o Sistema</h2>
 
-                    <!-- Mensagens -->
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                                {{ message }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-
                     <!-- Formulário de login -->
                     <form method="post" action="{% url 'login' %}">
                         {% csrf_token %}

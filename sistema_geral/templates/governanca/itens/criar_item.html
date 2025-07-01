@@ -3,7 +3,6 @@
 {% block content %}
 <div class="container mt-5">
     <h1>Adicionar Novo Item</h1></br>
-
     <form method="post" action="{% url 'create_item_lavanderia' %}">
         {% csrf_token %}
         {{ form.as_p }}

@@ -8,18 +8,6 @@
 {% block content %}
 <div class="container mt-4">
     <h1 class="mb-4">Lista de Ramais</h1>
-
-    <!-- Mensagem de sucesso ou erro -->
-    {% if messages %}
-        <div id="messages-container" class="mb-3">
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} mb-2" role="alert">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-
     <!-- Filtro para Ramal Ativo/Inativo e Campo de Busca -->
     <form method="get" action="{% url 'listar_ramais' %}" class="d-flex flex-wrap align-items-center mb-4">
         {% csrf_token %}

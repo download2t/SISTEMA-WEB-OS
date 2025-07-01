@@ -6,16 +6,6 @@
     <div class="col-lg-6 col-md-8 col-sm-12">
         <div class="card shadow-sm p-4 rounded-3 bg-light">
             <h2 class="text-center mb-4">VISUALIZAR SENHA</h2>
-
-            <!-- Exibe os erros de validação -->
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} mb-3" role="alert">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-
             <!-- Detalhes da Senha -->
             <div class="mb-3">
                 <label for="categoria" class="form-label">Categoria:</label>

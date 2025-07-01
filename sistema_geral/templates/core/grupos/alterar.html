@@ -4,16 +4,6 @@
 {% block content %}
 <div class="d-flex justify-content-center align-items-center" style="height: 80vh;">
     <div class="col-lg-6 col-md-8 col-sm-12">
-
-        <!-- Mensagem de sucesso ou erro -->
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} mb-3" role="alert">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-
         <form method="post" action="{% url 'alterar_grupo' grupo.id %}" class="shadow-sm p-4 rounded-3 bg-light">
             {% csrf_token %}
             <div class="mb-3">

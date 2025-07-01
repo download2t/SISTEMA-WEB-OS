@@ -15,75 +15,63 @@
                 </div>
             </div>
         </div>
-
-        <div class="card-body">
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="mb-4">
+            <h3 class="border-bottom pb-2"><i class="fas fa-spa me-2"></i>Detalhes do Agendamento</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <strong>Hóspede:</strong> {{ agendamento.nome_hospede }}
                     </div>
-                {% endfor %}
-            {% endif %}
-
-            <div class="mb-4">
-                <h3 class="border-bottom pb-2"><i class="fas fa-spa me-2"></i>Detalhes do Agendamento</h3>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <strong>Hóspede:</strong> {{ agendamento.nome_hospede }}
-                        </div>
-                        <div class="mb-3">
-                            <strong>Quarto:</strong> {{ agendamento.numero_quarto|default:"-" }}
-                        </div>
+                    <div class="mb-3">
+                        <strong>Quarto:</strong> {{ agendamento.numero_quarto|default:"-" }}
                     </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <strong>Serviço:</strong> {{ agendamento.tipo_massagem.nome }}
-                        </div>
-                        <div class="mb-3">
-                            <strong>Data/Horário:</strong> {{ agendamento.data|date:"d/m/Y" }} às {{ agendamento.horario|time:"H:i" }}
-                        </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <strong>Serviço:</strong> {{ agendamento.tipo_massagem.nome }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Data/Horário:</strong> {{ agendamento.data|date:"d/m/Y" }} às {{ agendamento.horario|time:"H:i" }}
                     </div>
                 </div>
             </div>
-
-            <form method="post" class="needs-validation" novalidate>
-                {% csrf_token %}
-                
-                <div class="mb-3">
-                    <label for="motivo_cancelamento" class="form-label">
-                        <strong>Motivo do Cancelamento:</strong>
-                    </label>
-                    <textarea id="motivo_cancelamento" name="motivo_cancelamento" 
-                              class="form-control {% if messages and not motivo %}is-invalid{% endif %}" 
-                              rows="4" required
-                              placeholder="Informe detalhadamente o motivo do cancelamento..."></textarea>
-                    <div class="invalid-feedback">
-                        Por favor, informe o motivo do cancelamento.
-                    </div>
-                </div>
-
-                <div class="mb-4 form-check">
-                    <input type="checkbox" class="form-check-input" id="confirm_cancel" name="confirm_cancel" required>
-                    <label class="form-check-label" for="confirm_cancel">
-                        <strong>Confirmo que desejo cancelar este agendamento</strong>
-                    </label>
-                    <div class="invalid-feedback">
-                        Você deve confirmar o cancelamento para prosseguir.
-                    </div>
-                </div>
-
-                <div class="d-flex justify-content-between">
-                    <a href="{% url 'listar_spa' %}" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left me-2"></i>Voltar
-                    </a>
-                    <button type="submit" class="btn btn-danger">
-                        <i class="fas fa-times me-2"></i>Confirmar Cancelamento
-                    </button>
-                </div>
-            </form>
         </div>
+
+        <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label for="motivo_cancelamento" class="form-label">
+                    <strong>Motivo do Cancelamento:</strong>
+                </label>
+                <textarea id="motivo_cancelamento" name="motivo_cancelamento" 
+                            class="form-control {% if messages and not motivo %}is-invalid{% endif %}" 
+                            rows="4" required
+                            placeholder="Informe detalhadamente o motivo do cancelamento..."></textarea>
+                <div class="invalid-feedback">
+                    Por favor, informe o motivo do cancelamento.
+                </div>
+            </div>
+
+            <div class="mb-4 form-check">
+                <input type="checkbox" class="form-check-input" id="confirm_cancel" name="confirm_cancel" required>
+                <label class="form-check-label" for="confirm_cancel">
+                    <strong>Confirmo que desejo cancelar este agendamento</strong>
+                </label>
+                <div class="invalid-feedback">
+                    Você deve confirmar o cancelamento para prosseguir.
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a href="{% url 'listar_spa' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Voltar
+                </a>
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-times me-2"></i>Confirmar Cancelamento
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 

@@ -9,31 +9,6 @@
 
 {% block content %}
 <div class="container">
-    <!-- Mensagem de sucesso ou erro -->
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        {% endfor %}
-    {% endif %}
-
-    {% if form.errors %}
-        <div class="alert alert-danger">
-            <strong>Erros no formulário:</strong>
-            <ul>
-                {% for field, errors in form.errors.items %}
-                    {% for error in errors %}
-                        <li>{{ field|title }}: {{ error }}</li>
-                    {% endfor %}
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
-    
     <!-- Formulário Django -->
     <div class="form-container">
         <h2 class="form-title"><i class="fas fa-spa"></i>Reserve Sua Experiência</h2>
@@ -191,21 +166,7 @@
 {% block extra_js %}
 <script src="{% static 'js/spa/cadastro_spa.js' %}"></script>
 <script>
-    $(document).ready(function() {
-    // Adiciona classe 'is-invalid' para campos com erro
-    {% if form.errors %}
-        {% for field in form %}
-            {% if field.errors %}
-                $('#{{ field.id_for_label }}').addClass('is-invalid');
-            {% endif %}
-        {% endfor %}
-    {% endif %}
 
-    // Remove a classe quando o usuário começa a editar
-    $('input, select, textarea').on('input change', function() {
-        $(this).removeClass('is-invalid');
-    });
-});
 $(document).ready(function() {
     // Atualiza a duração quando selecionar um tipo de massagem
     $('#id_tipo_massagem').change(function() {

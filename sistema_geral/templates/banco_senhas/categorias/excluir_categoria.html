@@ -10,7 +10,6 @@
 
 <!-- Confirmação de exclusão -->
 <p>Tem certeza que deseja excluir a categoria "{{ categoria.nome }}"? Esta ação é irreversível.</p>
-
 <!-- Formulário para confirmação da exclusão -->
 <form method="post" action="{% url 'excluir_categoria' categoria.id %}" class="mt-4">
     {% csrf_token %}
