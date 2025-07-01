@@ -1,0 +1,184 @@
+/* ===== Base Sidebar Toggle ===== */
+.sidebar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+    color: #333;
+}
+
+/* Light Theme */
+.sidebar-toggle:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* Dark Theme */
+body.dark-theme .sidebar-toggle {
+    color: #e0e0e0;
+}
+
+body.dark-theme .sidebar-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ===== Sidebar Layout ===== */
+#sidebar {
+    background: linear-gradient(135deg, #4C6B8C, #395873);
+    backdrop-filter: blur(8px);
+    color: #f2f4f8;
+    position: fixed;
+    left: 0;
+    top: 80px;
+    height: calc(100vh - 70px);
+    width: 220px;
+    z-index: 800;
+    transition: all 0.3s ease;
+    overflow-y: auto;
+    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
+    padding: 1.5rem 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    /* Adicione estas propriedades para borda arredondada apenas no canto inferior direito */
+    border-bottom-right-radius: 0px;
+    border-top-right-radius: 12px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* Sidebar Header */
+.sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.sidebar-header h3 {
+    color: White;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.sidebar-header p {
+    color: white;
+    font-size: 14px;
+}
+
+/* Sidebar Menu */
+.sidebar-menu {
+    padding: 0;
+    list-style: none;
+    margin: 0;
+}
+
+.sidebar-menu li {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.sidebar-menu a {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    color: White;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    gap: 12px;
+}
+
+.sidebar-menu a:hover {
+    background: #f8f9fa;
+    color: #009ee3;
+    padding-left: 25px;
+}
+
+.sidebar-menu .icon {
+    width: 20px;
+    text-align: center;
+    font-size: 18px;
+}
+
+
+/* ============ TEMA ESCURO ============ */
+body.dark-mode #sidebar {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode #sidebar .nav-link:hover {
+    background: linear-gradient(135deg, #2a2a4e, #1e2a4e);
+}
+
+body.dark-mode #menu-toggle {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+}
+
+body.dark-mode #menu-toggle:hover {
+    background: linear-gradient(135deg, #2a2a4e, #1e2a4e);
+}
+
+#serviceCards {
+    display: grid;
+    /* This will automatically adjust columns based on available space */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 1.5rem; /* Space between cards */
+    margin-top: 2rem; /* Space below filters */
+}
+
+
+/* Adjust filters-section for better spacing within the new wrapper */
+.filters-section {
+    padding: 1.5rem; /* Add internal padding to the filter section */
+}
+/* ===== Responsividade: Ajustes para Telas Menores (Tablets e Celulares) ===== */
+
+/* Este é o breakpoint crítico para tablets. Sugiro 992px, que é o breakpoint de 'lg' do Bootstrap */
+@media (max-width: 991.98px) { /* Este é o breakpoint para telas menores que large (lg) */
+    .sidebar-toggle {
+        display: block; /* Mostra o botão de toggle em telas menores */
+    }
+
+    #sidebar {
+        /* *** CRITICAL FIX HERE *** */
+        width: 250px; /* Give it a definite width, even when hidden */
+        transform: translateX(-100%); /* Hides the sidebar by default */
+        left: 0; /* Ensures it's anchored to the left */
+        top: 60px; /* Adjust to sit below your navbar on mobile */
+        height: calc(100vh - 60px); /* Full viewport height minus navbar */
+        box-shadow: 2px 0 15px rgba(0, 0, 0, 0.4); /* More pronounced shadow for overlay */
+        border-right: none; /* Remove right border as it's not fixed alongside content */
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+        /* Ensure z-index is higher than main content but lower than modal if any */
+        z-index: 1040; /* Standard for off-canvas menus, just below Bootstrap modals */
+    }
+
+    #sidebar.active {
+        transform: translateX(0); /* Shows the sidebar when active */
+    }
+}
+
+/* If you have a class `sidebar-overlay` for darkening the background, adjust it here */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1039; /* Just below the sidebar */
+    display: none;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Prevenção de overflow horizontal no body */
+body {
+    overflow-x: hidden; /* Add this line to prevent horizontal scrolling if content overflows */
+    /* ... your other body styles ... */
+}

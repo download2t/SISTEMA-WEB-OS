@@ -311,3 +311,51 @@ body.dark-mode .dropdown-item:hover {
     from { opacity: 0; }
     to { opacity: 1; }
 }
+
+
+
+/* No seu arquivo base.css */
+
+/*CONTAINER BASE*/ /*CONTAINER BASE*/ /*CONTAINER BASE*/ /*CONTAINER BASE*/ /*CONTAINER BASE*/
+.container-base {
+    margin-top: 3rem !important;
+    padding-top: 3rem !important;
+    width: 100%;
+    /* Remova ou aumente o max-width inicial para que comece mais largo em telas menores */
+    max-width: 95%; /* Por exemplo, 95% da largura da viewport, ou um valor maior em px */
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* Ajuste os breakpoints conforme sua necessidade para expandir o container */
+@media (min-width: 576px) {
+    .container-base {
+        max-width: 90%; /* Exemplo: 90% da largura em telas SM */
+    }
+}
+
+@media (min-width: 768px) {
+    .container-base {
+        max-width: 90%; /* Exemplo: 90% da largura em telas MD */
+    }
+}
+
+@media (min-width: 992px) {
+    .container-base {
+        max-width: 1200px; /* Ou um valor fixo maior, como 1200px ou 1400px */
+    }
+}
+
+@media (min-width: 1200px) {
+    .container-base {
+        max-width: 1400px; /* Ou um valor ainda maior, ou 90% da tela */
+    }
+}
+
+@media (min-width: 1400px) { /* Adicione um novo breakpoint para telas muito grandes */
+    .container-base {
+        max-width: 1600px; /* Ou 85% para não colar nas bordas */
+    }
+}

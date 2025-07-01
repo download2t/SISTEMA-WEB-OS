@@ -1,56 +1,175 @@
-/* Aplicar tema com base na classe do body */
-body.light-mode {
-    background-color: var(--background-light);
-    color: var(--text-light);
+/* No seu arquivo CSS principal ou de layout (ex: base.css, layout.css) */
+
+/* 1. Estilos Base do Sidebar (do que já discutimos) */
+#sidebar {
+    /* ... seus estilos existentes para o sidebar ... */
+    position: fixed;
+    left: 0;
+    top: 80px; /* Ajuste conforme a altura da sua navbar */
+    height: calc(100vh - 70px);
+    width: 220px; /* Largura padrão para desktop */
+    z-index: 800;
+    transition: all 0.3s ease;
+    /* ... outros estilos ... */
 }
 
-body.dark-mode {
-    background-color: var(--background-dark);
-    color: var(--text-dark);
+/* 2. Estilos do Conteúdo Principal */
+.main-content-wrapper {
+    margin-left: 220px; /* Recuo padrão para o sidebar fixo */
+    padding-top: 3rem; /* Ajuste conforme a altura da sua navbar */
+    padding-right: 15px;
+    padding-left: 15px;
+    min-height: calc(100vh - 70px - 5rem); /* Ajuste o footer se houver */
+    transition: margin-left 0.3s ease; /* Transição suave para o recuo */
 }
 
-/* Estilo dos botões */
-button.btn-primary,
-a.btn-secondary {
-    border-radius: 8px;
-    font-weight: 600;
-    padding: 10px;
-    transition: 0.3s ease;
+/* 3. Estilos para o Overlay do Sidebar (se você estiver usando um) */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1039; /* Abaixo do sidebar, mas acima do conteúdo */
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-button.btn-primary:hover {
-    background-color: #0056b3;
+.sidebar-overlay.active {
+    display: block; /* Torna visível */
+    opacity: 1;
 }
 
-a.btn-secondary:hover {
-    background-color: #6c757d;
-    color: #fff;
+/* 4. Prevenir Scroll no Body quando o Sidebar está aberto */
+body.no-scroll {
+    overflow: hidden;
 }
 
-.btn-warning {
-    font-weight: 500;
-    border-radius: 6px;
-    padding: 6px 12px;
+/* --- Media Queries para Responsividade --- */
+
+@media (max-width: 991.98px) { /* Para telas de tablet e menores */
+    /* Sidebar */
+    .sidebar-toggle {
+        display: block; /* Mostra o botão de toggle */
+    }
+
+    #sidebar {
+        width: 250px; /* Largura do sidebar quando overlay */
+        transform: translateX(-100%); /* Esconde por padrão */
+        top: 60px; /* Ajuste para navbar menor, se aplicável */
+        height: calc(100vh - 60px);
+        box-shadow: 2px 0 15px rgba(0, 0, 0, 0.4); /* Sombra mais pronunciada */
+        border-right: none; /* Remove borda fixa */
+        z-index: 1040; /* Garante que ele fique acima de tudo */
+    }
+
+    #sidebar.active {
+        transform: translateX(0); /* Mostra o sidebar quando .active */
+    }
+
+    /* Conteúdo Principal */
+    .main-content-wrapper {
+        margin-left: 0; /* Remove o recuo quando o sidebar é um overlay */
+        padding-top: 1rem; /* Ajuste o padding superior para mobile */
+        padding-left: 15px; /* Padding padrão para mobile */
+        padding-right: 15px;
+    }
+
+    /* Container: Garante que o .container ocupe toda a largura do main-content-wrapper */
+    .main-content-wrapper .container {
+        max-width: 100%;
+        padding-left: var(--bs-gutter-x, 0.75rem);
+        padding-right: var(--bs-gutter-x, 0.75rem);
+    }
+}
+
+@media (max-width: 767.98px) { /* Para telas de celular */
+    /* Container: Pode ajustar o padding ainda mais fino para celulares pequenos */
+    .main-content-wrapper .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    /* Ajustes específicos para elementos dentro do container em telas de celular */
+    .card-filter {
+        padding: 1rem !important; /* Diminui o padding do card de filtro em celulares */
+    }
+
+    button.btn-primary,
+    a.btn-secondary,
+    .btn-warning {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Estilos para a seção de filtros (copiado de listar_chamados.css e ajustado) */
+
+.filters-section {
+    background-color: #ffffff; /* Cor de fundo para light mode */
+    border: 1px solid rgba(0, 0, 0, 0.125); /* Borda para light mode */
+    border-radius: 0.5rem; /* Bootstrap 5 default card border-radius */
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* Bootstrap 5 default card shadow */
+    margin-bottom: 1.5rem; /* Espaçamento inferior */
+    padding: 0; /* Remove padding padrão, o header e content terão seus próprios */
+    overflow: hidden; /* Garante que o border-radius seja aplicado corretamente */
+}
+
+/* Dark mode para a seção de filtros */
+body.dark-mode .filters-section {
+    background-color: var(--background-dark-card); /* Use sua variável para card escuro */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0.125rem 0.25rem rgba(255, 255, 255, 0.05);
 }
 
 
-.container {
-    max-width: 95%;
+.filters-header {
+    padding: 1.25rem 1.5rem; /* Equivalente ao p-4, mas com mais controle */
+    background-color: #f8f9fa; /* Fundo mais claro para o cabeçalho */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background-color 0.3s ease;
 }
 
-
-.table thead {
-    background-color: #007BFF;
-    color: white;
+body.dark-mode .filters-header {
+    background-color: var(--background-dark-header); /* Cor de fundo escura para o cabeçalho */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-dark); /* Cor do texto no dark mode */
 }
 
-.btn-primary {
-    background-color: #007BFF;
-    border: none;
+.filters-header:hover {
+    background-color: #e9ecef; /* Um pouco mais escuro no hover */
 }
 
-.btn-warning {
-    color: white;
-    background-color: #FFA500;
-    border: none;
+body.dark-mode .filters-header:hover {
+    background-color: var(--background-dark-hover); /* Dark mode hover */
 }
+
+.filters-header h5 {
+    margin-bottom: 0;
+    color: inherit; /* Herda a cor do .filters-header */
+}
+
+.filters-header .fas {
+    transition: transform 0.3s ease;
+}
+
+/* Quando o conteúdo dos filtros está visível (toggle) */
+.filters-content.d-none + .filters-header .fas.fa-chevron-down {
+    transform: rotate(180deg); /* Seta para cima quando o conteúdo está escondido */
+}
+
+.filters-content {
+    padding: 1.5rem; /* Espaçamento interno para o conteúdo dos filtros */
+    transition: all 0.3s ease-out; /* Transição para o d-none (via JS) */
+    /* Quando o d-none do Bootstrap é aplicado, ele usa display: none !important.
+       Para uma transição suave de altura, JavaScript é necessário para gerenciar a altura,
+       ou você pode usar max-height e overflow: hidden. Para simplicidade, usamos display: none. */
+}
+

@@ -1,49 +1,186 @@
-// listar_chamados.js
+document.addEventListener("DOMContentLoaded", function () {
+  // Menu Toggle (se necessário)
+  const menuToggle = document.getElementById("menu-toggle");
+  if (menuToggle) {
+    const sidebar = document.getElementById("sidebar-container");
+    const mainContent = document.querySelector("main");
+    menuToggle.addEventListener("click", function () {
+      sidebar.classList.toggle("collapsed");
+      if (mainContent) {
+        mainContent.classList.toggle("full-width");
+      }
+      document.body.classList.toggle("menu-open");
+    });
+  }
 
-// Função para exibir alerta quando um filtro for aplicado
-document.addEventListener('DOMContentLoaded', function () {
-    const statusSelect = document.getElementById('status');
-    const searchInput = document.querySelector('input[name="search"]');
-    const submitButton = document.querySelector('button[type="submit"]');
+  // Toggle dos Filtros Avançados
+  function toggleFilters() {
+    const filtersContent = document.getElementById("filtersContent");
+    const filterToggleIcon = document.getElementById("filterToggleIcon");
 
-    // Verifica se algum filtro foi aplicado (status ou busca)
-    if (statusSelect.value !== 'todos' || searchInput.value.trim() !== '') {
-        // Exibe um alerta para informar o filtro ativo
-        const alertMessage = `Filtros aplicados: 
-                              Status: ${statusSelect.options[statusSelect.selectedIndex].text} | 
-                              Busca: ${searchInput.value}`;
-        alertUser(alertMessage);
+    if (filtersContent && filterToggleIcon) {
+      filtersContent.classList.toggle("show");
+
+      if (filtersContent.classList.contains("show")) {
+        filterToggleIcon.classList.remove("fa-chevron-down");
+        filterToggleIcon.classList.add("fa-chevron-up");
+      } else {
+        filterToggleIcon.classList.remove("fa-chevron-up");
+        filterToggleIcon.classList.add("fa-chevron-down");
+      }
     }
+  }
 
-    // Função para mostrar uma mensagem de alerta
-    function alertUser(message) {
-        const alertBox = document.createElement('div');
-        alertBox.classList.add('alert', 'alert-info');
-        alertBox.textContent = message;
-        document.body.appendChild(alertBox);
+  // Adiciona o evento ao cabeçalho dos filtros
+  const filtersHeader = document.querySelector(".filters-header");
+  if (filtersHeader) {
+    filtersHeader.addEventListener("click", toggleFilters);
+  }
 
-        setTimeout(() => {
-            alertBox.remove();
-        }, 5000); // Remove o alerta após 5 segundos
-    }
+  // Filtro de Status
+  const statusButtons = document.querySelectorAll(
+    ".status-buttons .status-btn"
+  );
+  const selectedStatusContainer = document.getElementById(
+    "selected-status-container"
+  );
+  const statusInput = document.getElementById("status-input");
+  let selectedStatus =
+    statusInput && statusInput.value ? statusInput.value.split(",") : [];
 
+  function updateSelectedStatus() {
+    if (!selectedStatusContainer) return;
 
+    selectedStatusContainer.innerHTML = "";
 
+    selectedStatus.forEach((status) => {
+      const chip = document.createElement("div");
+      chip.className =
+        "badge bg-primary text-white d-flex align-items-center gap-2 me-2 mb-2";
+      chip.innerHTML = `
+                <span>${status}</span>
+                <button type="button" class="btn-close btn-close-white" aria-label="Remove"></button>
+            `;
 
-    // Função para destacar a linha de um chamado quando o mouse passar sobre ela
-    const chamadoItems = document.querySelectorAll('.list-group-item');
-    chamadoItems.forEach(item => {
-        item.addEventListener('mouseenter', function() {
-            item.classList.add('shadow-lg');
-        });
-        item.addEventListener('mouseleave', function() {
-            item.classList.remove('shadow-lg');
-        });
+      chip.querySelector("button").addEventListener("click", () => {
+        selectedStatus = selectedStatus.filter((s) => s !== status);
+        updateSelectedStatus();
+        updateStatusButtons();
+      });
+
+      selectedStatusContainer.appendChild(chip);
     });
 
-    // Filtro de status e campo de busca com ações de submit
-    submitButton.addEventListener('click', function () {
-        // Ações do filtro podem ser feitas aqui, como envio de formulários ou manipulação adicional de dados.
-        console.log("Filtros aplicados - Status: " + statusSelect.value + ", Busca: " + searchInput.value);
+    if (statusInput) {
+      statusInput.value = selectedStatus.join(",");
+    }
+  }
+
+  function updateStatusButtons() {
+    statusButtons.forEach((button) => {
+      const status = button.getAttribute("data-status");
+      if (selectedStatus.includes(status)) {
+        button.classList.add("active");
+      } else {
+        button.classList.remove("active");
+      }
     });
+  }
+
+  if (statusButtons.length > 0) {
+    statusButtons.forEach((button) => {
+      button.addEventListener("click", function (e) {
+        e.preventDefault();
+        const status = this.getAttribute("data-status");
+
+        if (selectedStatus.includes(status)) {
+          selectedStatus = selectedStatus.filter((s) => s !== status);
+        } else {
+          selectedStatus.push(status);
+        }
+
+        updateSelectedStatus();
+        updateStatusButtons();
+      });
+    });
+
+    // Inicializa os botões de status
+    updateStatusButtons();
+  }
+
+  // Ordenação
+  function changeSort(sortOption) {
+    const url = new URL(window.location.href);
+    url.searchParams.set("sort", sortOption);
+    window.location.href = url.toString();
+  }
+
+  // Exportação (exemplo - implementação real depende do backend)
+  function exportToExcel() {
+    const url = new URL(window.location.href);
+    url.searchParams.set("export", "excel");
+    window.location.href = url.toString();
+  }
+
+  function exportToPDF() {
+    const url = new URL(window.location.href);
+    url.searchParams.set("export", "pdf");
+    window.location.href = url.toString();
+  }
+
+  // Adiciona eventos aos botões de ordenação e exportação
+  document.querySelectorAll('[onclick^="changeSort"]').forEach((btn) => {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      const sortOption = this.getAttribute("onclick").match(/'([^']+)'/)[1];
+      changeSort(sortOption);
+    });
+  });
+
+  document.querySelectorAll('[onclick^="exportTo"]').forEach((btn) => {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      const exportType = this.getAttribute("onclick")
+        .match(/(Excel|PDF)/)[0]
+        .toLowerCase();
+      if (exportType === "excel") {
+        exportToExcel();
+      } else {
+        exportToPDF();
+      }
+    });
+  });
+
+  // AJAX para atualização dos chamados (se necessário)
+  const menuLinks = document.querySelectorAll(".menu-filter");
+  if (menuLinks.length > 0) {
+    menuLinks.forEach((link) => {
+      link.addEventListener("click", function (event) {
+        event.preventDefault();
+        const action = this.getAttribute("data-action");
+
+        fetch(`/chamados/${action}/`, {
+          method: "GET",
+          headers: { "X-Requested-With": "XMLHttpRequest" },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("serviceCards").innerHTML = data.html;
+
+            const sidebar = document.getElementById("sidebar-container");
+            if (
+              sidebar &&
+              !sidebar.classList.contains("collapsed") &&
+              window.innerWidth < 992
+            ) {
+              sidebar.classList.add("collapsed");
+              document.body.classList.remove("menu-open");
+            }
+          })
+          .catch((error) =>
+            console.error("Erro ao carregar os chamados:", error)
+          );
+      });
+    });
+  }
 });

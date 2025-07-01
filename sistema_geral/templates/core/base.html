@@ -102,6 +102,9 @@
     </div>
 </nav>
 
+<!-- Overlay para menu mobile -->
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+
 <!-- Mensagens de erro -->
 {% if messages %}
 <div class="messages-container">
@@ -114,7 +117,7 @@
 </div>
 {% endif %}
 
-<main class="container mt-5 pt-5">
+<main class="container-base">
     {% block content %}
     {% endblock %}
 </main>

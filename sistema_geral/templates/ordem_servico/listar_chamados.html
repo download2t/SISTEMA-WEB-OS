@@ -2,230 +2,150 @@
 {% load static %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/ordem_servico/menu_os.css' %}">
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
 <link rel="stylesheet" href="{% static 'css/ordem_servico/listar_chamados.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="main-wrapper">
-    <!-- Sidebar -->
-    {% include 'ordem_servico/menu_os.html' %}
 
-    <!-- Main Content -->
-    <div class="main-content-wrapper" id="main-content">
-        <div class="container-fluid">
-            <!-- Page Title -->
-            <h1 class="page-title">
-                Gestão de Tickets
-                <span class="text-warning ms-2" data-bs-toggle="tooltip" data-bs-placement="right" 
-                     title="Esta página mostra seus tickets ou os tickets do seu setor.">
-                    !
-                </span>
-            </h1>
-            <!-- Filter Form -->
-            <form method="get" action="{% url 'listar_chamados' %}" class="filter-form">
-                <button type="button" id="toggle-filters" class="btn btn-primary filter-toggle-btn">
-                    <i class="fas fa-filter"></i> <span>Filtros</span>
-                </button>
+<!-- Sidebar -->
+{% include 'ordem_servico/menu_os.html' %}
 
-                <div id="filter-options" class="filter-options collapse">
-                    <!-- Status Filter -->
-                    <div class="card filter-card">
-                        <div class="card-body">
-                            <h5 class="filter-title">Filtrar por Status</h5>
-                            <div id="status-options" class="status-options">
-                                <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Aberto">Aberto</button>
-                                <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Em andamento">Em andamento</button>
-                                <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Concluído">Concluído</button>
-                                <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Encaminhado a TOTVS">Encaminhado a TOTVS</button>
-                                <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Aguardando aprovação">Aguardando aprovação</button>
-                                <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Em análise">Em análise</button>
-                                <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Em desenvolvimento">Em desenvolvimento</button>
-                                <button type="button" class="btn btn-outline-primary btn-sm status-option" data-value="Manutenção">Manutenção</button>
-                            </div>
-                            <div id="selected-status-container" class="selected-status-container"></div>
-                            <input type="hidden" id="status-input" name="status" value="{{ request.GET.status|default:'' }}" />
-                        </div>
-                    </div>
-
-                    <!-- Date Filter -->
-                    <div class="card filter-card">
-                        <div class="card-body">
-                            <h5 class="filter-title">Filtrar por Data</h5>
-                            <div class="date-filters">
-                                <div class="date-filter">
-                                    <label for="start_date" class="form-label">Data Inicial</label>
-                                    <input type="date" name="start_date" id="start_date" class="form-control" 
-                                           value="{{ request.GET.start_date }}">
-                                </div>
-                                <div class="date-filter">
-                                    <label for="end_date" class="form-label">Data Final</label>
-                                    <input type="date" name="end_date" id="end_date" class="form-control" 
-                                           value="{{ request.GET.end_date }}">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Search -->
-                    <div class="card filter-card">
-                        <div class="card-body">
-                            <h5 class="filter-title">Buscar Chamados</h5>
-                            <input type="text" name="search" placeholder="Buscar por Grupo ou Número" 
-                                   value="{{ request.GET.search }}" class="form-control" />
-                        </div>
-                    </div>
-
-                    <!-- Filter Actions -->
-                    <div class="filter-actions">
-                        <button type="submit" class="btn btn-primary apply-filters-btn">
-                            <i class="fas fa-search"></i> Aplicar
-                        </button>
-                        <a href="{% url 'listar_chamados' %}" class="btn btn-outline-secondary clear-filters-btn">
-                            <i class="fas fa-times"></i> Limpar
-                        </a>
-                    </div>
-                </div>
-            </form>
-
-            <!-- Ticket List -->
-            <div class="chamados-container row">
-                {% for chamado in chamados %}
-                <div class="col-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card chamado-card h-100" data-status="{{ chamado.status }}">
-                        <div class="card-body d-flex flex-column">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span class="chamado-status badge" data-status="{{ chamado.status }}">
-                                    {{ chamado.status }}
-                                </span>
-                                <span class="chamado-id text-muted">#{{ chamado.id }}</span>
-                            </div>
-                            <h3 class="chamado-assunto">{{ chamado.assunto }}</h3>
-                            <p class="chamado-descricao text-muted">{{ chamado.descricao }}</p>
-                            <div class="chamado-info mt-auto">
-                                <div><strong>Criado por:</strong> 
-                                    {{ chamado.criado_por.username|default:'Não Informado' }}
-                                </div>
-                                <div><strong>Setor:</strong> 
-                                    {{ chamado.grupo_responsavel.name|default:'Não Atribuído' }}
-                                </div>
-                            </div>
-                            <div class="chamado-datas mt-2">
-                                <div><strong>Abertura:</strong> {{ chamado.data_abertura|date:"d/m/Y H:i" }}</div>
-                                <div><strong>Conclusão:</strong> 
-                                    {{ chamado.data_conclusao|date:"d/m/Y H:i"|default:'Não Concluído' }}
-                                </div>
-                            </div>
-                            <span class="chamado-prioridade badge mt-2" data-prioridade="{{ chamado.prioridade }}">
-                                {{ chamado.prioridade }}
-                            </span>
-                            <a href="{% url 'visualizar_chamado' chamado.id %}" 
-                               class="btn chamado-btn mt-3" data-status="{{ chamado.status }}">
-                                <i class="bi bi-eye"></i> Ver Ticket
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                {% empty %}
-                <div class="col-12">
-                    <div class="alert alert-info no-chamados">
-                        Nenhum chamado encontrado.
-                    </div>
-                </div>
-                {% endfor %}
+{# --- START: New Main Content Wrapper --- #}
+<div class="main-content-wrapper"> 
+<div class="header-section">
+    <div class="container"> 
+        <div class="row">
+            <div class="col-12">
+                <h1 class="mb-2"><i class="fas fa-tasks me-3"></i>Ordens de Serviço</h1>
+                <p class="mb-0">Gerencie e acompanhe todos os chamados de serviço com filtros avançados</p>
             </div>
         </div>
     </div>
-
-    <!-- Mobile Menu Toggle -->
-    <button class="menu-toggle-btn btn btn-primary d-lg-none" id="menu-toggle" type="button">
-        <i class="fas fa-bars"></i>
-    </button>
 </div>
+ <div class="filters-section container"> 
+        <div class="filters-header" onclick="toggleFilters()">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Filtros Avançados</h5>
+                <i class="fas fa-chevron-down" id="filterToggleIcon"></i>
+            </div>
+        </div>
+        <form method="get" action="{% url 'adm_listar_chamados' %}" id="filtersContent" class="filters-content">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="filter-group">
+                        <label>Status dos Chamados:</label>
+                        <div class="status-buttons">
+                            <button type="button" class="status-btn aberto" data-status="Aberto">Aberto</button>
+                            <button type="button" class="status-btn andamento" data-status="Em andamento">Em Andamento</button>
+                            <button type="button" class="status-btn concluido" data-status="Concluído">Concluído</button>
+                            <button type="button" class="status-btn cancelado" data-status="Cancelado">Cancelado</button>
+                            <button type="button" class="status-btn encaminhado" data-status="Encaminhado a TOTVS">Encaminhado</button>
+                            <button type="button" class="status-btn aprovacao" data-status="Aguardando aprovação">Aguardando</button>
+                            <button type="button" class="status-btn analise" data-status="Em análise">Em Análise</button>
+                            <button type="button" class="status-btn desenvolvimento" data-status="Em desenvolvimento">Em Desenv.</button>
+                            <button type="button" class="status-btn manutencao" data-status="Manutenção">Manutenção</button>
+                        </div>
+                        <input type="hidden" id="status-input" name="status" value="{{ request.GET.status|default:'' }}" />
+                        <div id="selected-status-container" class="selected-status-container mt-2"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="filter-group">
+                        <label for="search">Buscar Chamados:</label>
+                        <input type="text" name="search" class="form-control" id="search" 
+                                placeholder="Buscar por Grupo ou Número" value="{{ request.GET.search }}">
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="filter-group">
+                                <label for="start_date">Data Início:</label>
+                                <input type="date" name="start_date" class="form-control" id="start_date" 
+                                        value="{{ request.GET.start_date }}">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="filter-group">
+                                <label for="end_date">Data Fim:</label>
+                                <input type="date" name="end_date" class="form-control" id="end_date" 
+                                        value="{{ request.GET.end_date }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex gap-2 mt-3">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search me-2"></i>Aplicar Filtros
+                </button>
+                <a href="{% url 'adm_listar_chamados' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times me-2"></i>Limpar Filtros
+                </a>
+            </div>
+        </form>
+    </div>
 
+    <div id="serviceCards" class="container"> {# Also add container here #}
+        {% for chamado in chamados %}
+        <div class="service-card {{ chamado.status|slugify }}">
+            <div class="card-header">
+                <div class="ticket-number">#{{ chamado.id }}</div>
+                <span class="status-badge {{ chamado.status|slugify }}">{{ chamado.status }}</span>
+            </div>
+            <div class="card-body">
+                <div class="subject">{{ chamado.assunto }}</div>
+                <div class="description">{{ chamado.descricao }}</div>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <i class="fas fa-user info-icon"></i>
+                        <span class="info-text"><strong>Criado por:</strong> {{ chamado.criado_por.username|default:"Não Informado" }}</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-building info-icon"></i>
+                        <span class="info-text"><strong>Setor:</strong> {{ chamado.grupo_responsavel.name|default:"Não Atribuído" }}</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-calendar-plus info-icon"></i>
+                        <span class="info-text"><strong>Abertura:</strong> {{ chamado.data_abertura|date:"d/m/Y H:i" }}</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-calendar-check info-icon"></i>
+                        <span class="info-text"><strong>Conclusão:</strong> {{ chamado.data_conclusao|date:"d/m/Y H:i"|default:"Não Concluído" }}</span>
+                    </div>
+                </div>
+
+                <span class="priority-badge {{ chamado.prioridade|lower }}">{{ chamado.prioridade }}</span>
+
+                <div class="groups-list mt-3">
+                    <strong>Grupos Liberados:</strong>
+                    {% if chamado.grupos_liberados.all %}
+                        {% for grupo in chamado.grupos_liberados.all %}
+                            <div class="group-item">{{ grupo.name }}</div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="group-item">Não há grupos liberados.</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'adm_visualizar_chamado' chamado.id %}" class="view-ticket-btn {{ chamado.status|slugify }}">
+                    <i class="fas fa-eye me-1"></i> Ver Ticket
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <h4>Nenhum chamado encontrado</h4>
+            <p>Não há chamados que correspondam aos filtros aplicados.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{# --- END: New Main Content Wrapper --- #}
 {% endblock %}
 
-{% block scripts %}
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    // Menu Toggle
-    const menuToggle = document.getElementById('menu-toggle');
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.getElementById('main-content');
-    menuToggle.addEventListener('click', function () {
-        sidebar.classList.toggle('collapsed');
-        mainContent.classList.toggle('full-width');
-        document.body.classList.toggle('menu-open');
-    });
-
-    // Filter Toggle
-    const toggleFiltersBtn = document.getElementById('toggle-filters');
-    const filterOptions = document.getElementById('filter-options');
-    toggleFiltersBtn.addEventListener('click', () => {
-        filterOptions.classList.toggle('show');
-        const isExpanded = filterOptions.classList.contains('show');
-        toggleFiltersBtn.querySelector('span').textContent = isExpanded ? 'Fechar Filtros' : 'Filtros';
-    });
-
-    // Status Filter
-    const statusOptions = document.querySelectorAll('.status-option');
-    const selectedStatusContainer = document.getElementById('selected-status-container');
-    const statusInput = document.getElementById('status-input');
-    let selectedStatus = statusInput.value ? statusInput.value.split(',') : [];
-
-    function updateSelectedStatus() {
-        selectedStatusContainer.innerHTML = '';
-        selectedStatus.forEach(status => {
-            const chip = document.createElement('div');
-            chip.className = 'badge bg-primary text-white d-flex align-items-center gap-2 me-2 mb-2';
-            chip.innerHTML = `
-                <span>${status}</span>
-                <button type="button" class="btn-close btn-close-white" aria-label="Remove"></button>
-            `;
-            chip.querySelector('button').addEventListener('click', () => {
-                selectedStatus = selectedStatus.filter(s => s !== status);
-                updateSelectedStatus();
-            });
-            selectedStatusContainer.appendChild(chip);
-        });
-        statusInput.value = selectedStatus.join(',');
-    }
-
-    statusOptions.forEach(button => {
-        button.addEventListener('click', () => {
-            const status = button.getAttribute('data-value');
-            if (!selectedStatus.includes(status)) {
-                selectedStatus.push(status);
-                updateSelectedStatus();
-            }
-        });
-    });
-
-    // Initialize selected status
-    updateSelectedStatus();
-
-    // Menu AJAX
-    const menuLinks = document.querySelectorAll('.menu-filter');
-    menuLinks.forEach(link => {
-        link.addEventListener('click', function (event) {
-            event.preventDefault();
-            const action = this.getAttribute('data-action');
-            fetch(`/chamados/${action}/`, {
-                method: 'GET',
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.querySelector('.chamados-container').innerHTML = data.html;
-                if (sidebar.classList.contains('collapsed') === false && window.innerWidth < 992) {
-                    sidebar.classList.add('collapsed');
-                    mainContent.classList.add('full-width');
-                    document.body.classList.remove('menu-open');
-                }
-            })
-            .catch(error => console.error('Erro ao carregar os chamados:', error));
-        });
-    });
-});
-</script>
+{% block extra_js %}
+<script src="{% static 'js/ordem_servico/listar_chamados.js' %}" defer></script>
 {% endblock %}

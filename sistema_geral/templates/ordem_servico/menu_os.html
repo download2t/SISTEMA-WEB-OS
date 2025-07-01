@@ -1,48 +1,13 @@
-<div class="d-flex">
-    <!-- Menu Sidebar -->
-    <nav id="sidebar">
-        <h5>Menu</h5>
-            <ul class="list-unstyled">
-                <li>
-                    <a href="{% url 'criar_chamado' %}" class="nav-link">
-                        <i class="fas fa-plus-circle"></i> Novo Chamado
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'meus_chamados' %}" class="nav-link">
-                        <i class="fas fa-user-tag"></i> Meus Chamados
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'chamados_abertos' %}" class="nav-link">
-                        <i class="fas fa-folder-open"></i> Chamados Abertos
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'chamados_encerrados' %}" class="nav-link">
-                        <i class="fas fa-archive"></i> Chamados Encerrados
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    <!-- Conteúdo Principal -->
-    <div id="main-content" class="p-4 flex-grow-1">
-        {% block content %}
-        {% endblock %}
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h3>Menu</h3>
     </div>
-</div>
-
-<script>
-    /*Menu lateral evento*/
-    document.addEventListener("DOMContentLoaded", function () {
-        const menuToggle = document.getElementById("menu-toggle");
-        const sidebar = document.getElementById("sidebar");
-        const mainContent = document.getElementById("main-content");
-
-        menuToggle.addEventListener("click", function () {
-            sidebar.classList.toggle("collapsed");
-            mainContent.classList.toggle("full-width");
-        });
-    });
-</script>
+    <ul class="sidebar-menu">
+        <li><a href="{% url 'criar_chamado' %}" class="nav-link"><i class="fas fa-plus-circle"></i> Novo Chamado</a></li>
+        <li><a href="{% url 'meus_chamados' %}" class="nav-link"><i class="fas fa-user-tag"></i> Meus Chamados</a></li>
+        <li><a href="{% url 'chamados_abertos' %}" class="nav-link"><i class="fas fa-folder-open"></i> Chamados Abertos</a></li>
+        <li><a href="{% url 'chamados_encerrados' %}" class="nav-link"><i class="fas fa-archive"></i> Chamados Encerrados</a></li>
+    </div>
+</aside>
+       
