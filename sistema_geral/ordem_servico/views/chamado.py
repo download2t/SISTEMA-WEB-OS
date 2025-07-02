@@ -143,52 +143,57 @@ def criar_chamado(request):
 @login_required
 def listar_chamados(request):
     grupos_usuario = request.user.groups.all()
-
-    # Filtrar chamados com base nos grupos do usuário e no criador
+    # All these conditions should be combined with an OR.
     chamados = Chamado.objects.filter(
-        Q(grupo_responsavel__in=grupos_usuario) | Q(criado_por=request.user)
-    ).distinct()
-
-    # Filtrar chamados com base nos grupos liberados para o usuário
-    chamados = chamados.filter(
+        Q(grupo_responsavel__in=grupos_usuario) | 
+        Q(criado_por=request.user) |
         Q(grupos_liberados__in=grupos_usuario)
-    )
+    ).distinct() # `distinct()` is crucial here to avoid duplicate results
 
-    # Filtro por status múltiplo
-    status_selecionados = request.GET.get('status', '').split(',')
+    # --- Filter by Multiple Statuses ---
+    status_selecionados_str = request.GET.get('status', '')
+    status_selecionados = [s.strip() for s in status_selecionados_str.split(',') if s.strip()]
 
-    if status_selecionados and status_selecionados != ['']:
-        # Filtra chamados com os status selecionados
+    if status_selecionados:
+        # for a literal status filter.
         chamados = chamados.filter(status__in=status_selecionados)
 
-    # Filtro por número do chamado
-    numero_chamado = request.GET.get('search', '')
-    if numero_chamado:
+    # --- Filter by Search Term (ID, Subject, Description, Responsible Group, Creator) ---
+    search_term = request.GET.get('search', '').strip() # Consistent variable name
+    if search_term:
+        # The search is applied *only* to the calls already filtered by visibility.
         chamados = chamados.filter(
-            Q(id__icontains=numero_chamado)
-        ).distinct()
-        if not chamados.exists():
-            messages.info(request, 'Nenhum chamado encontrado para o número selecionado.')
+            Q(id__icontains=search_term) |                  # Search by call ID
+            Q(assunto__icontains=search_term) |             # Search in subject
+            Q(descricao__icontains=search_term) |           # Search in description
+            Q(grupo_responsavel__name__icontains=search_term) | # Search in responsible group name
+            Q(criado_por__username__icontains=search_term) | # Search in creator's username
+            Q(criado_por__first_name__icontains=search_term) | # Search in creator's first name
+            Q(criado_por__last_name__icontains=search_term)   # Search in creator's last name
+        ).distinct() # Keep distinct() here to prevent duplicates after implicit JOINs
 
-    # Filtro por data (início e fim)
-    start_date = request.GET.get('start_date')
-    end_date = request.GET.get('end_date')
+    # --- Filter by Date (Start and End) ---
+    start_date_str = request.GET.get('start_date')
+    end_date_str = request.GET.get('end_date')
 
-    if start_date:
-        start_date = parse_date(start_date)
-        if start_date:
-            chamados = chamados.filter(data_abertura__date__gte=start_date)
+    start_date_obj = None
+    end_date_obj = None
 
-    if end_date:
-        end_date = parse_date(end_date)
-        if end_date:
-            chamados = chamados.filter(data_abertura__date__lte=end_date)
+    if start_date_str:
+        start_date_obj = parse_date(start_date_str)
+        if start_date_obj:
+            chamados = chamados.filter(data_abertura__date__gte=start_date_obj)
 
-    # Caso datas iguais (início e fim)
-    if start_date and end_date and start_date == end_date:
-        chamados = chamados.filter(data_abertura__date=start_date)
+    if end_date_str:
+        end_date_obj = parse_date(end_date_str)
+        if end_date_obj:
+            chamados = chamados.filter(data_abertura__date__lte=end_date_obj)
+    
+    # If both dates are provided and are the same, filter for that exact day.
+    if start_date_obj and end_date_obj and start_date_obj == end_date_obj:
+        chamados = chamados.filter(data_abertura__date=start_date_obj)
 
-    # Ordenação por prioridade e data de abertura
+    # --- Order by Priority and Open Date ---
     chamados = chamados.annotate(
         prioridade_order=Case(
             When(prioridade='Urgente', then=Value(1)),
@@ -200,20 +205,24 @@ def listar_chamados(request):
         )
     ).order_by('prioridade_order', '-data_abertura')
 
-    # Limitação de 100 chamados se nenhuma data estiver definida
-    if not start_date and not end_date:
+    # --- Limit to 100 Calls (if no date filter is applied) ---
+    if not start_date_str and not end_date_str:
         chamados = chamados[:100]
 
+    # Display message only if, *after all filters*, no results are found.
+    if not chamados.exists():
+        messages.info(request, 'Nenhum chamado encontrado para os filtros aplicados.')
+        
+    # --- Prepare Context for Template ---
     context = {
         'chamados': chamados,
-        'status_selecionados': status_selecionados if status_selecionados != [''] else [],
-        'search': numero_chamado,
-        'start_date': start_date,
-        'end_date': end_date,
+        'status_selecionados': status_selecionados,
+        'search': search_term, # Pass the consistent search term to the template
+        'start_date': start_date_str, # Pass original string for form field
+        'end_date': end_date_str,     # Pass original string for form field
     }
 
     return render(request, 'ordem_servico/listar_chamados.html', context)
-
 @login_required
 def visualizar_chamado(request, id):
     chamado = get_object_or_404(Chamado, id=id)

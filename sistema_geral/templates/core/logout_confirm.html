@@ -1,42 +1,40 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Confirmar Logout</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Ícones (Font Awesome) -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <title>Confirmar Saída</title>
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+    <link rel="stylesheet" href="{% static 'css/registration/login.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <div class="container d-flex justify-content-center align-items-center" style="height: 80vh;">
-        <div class="card logout-card p-4" style="max-width: 420px; width: 100%;">
-            <div class="card-body text-center">
-                <h3 class="logout-title mb-3">Tem certeza que deseja sair?</h3>
-                <p class="logout-text mb-4">Você está prestes a encerrar sua sessão. Se não tiver certeza, clique em Cancelar.</p>
+    <div class="container fade-in">
+        <div class="recovery-card">
+            <div class="icon-container">
+                <div class="lock-icon">
 
-                <!-- Formulário de logout -->
-                <form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger btn-lg w-100 mb-3">
-                        <i class="fas fa-sign-out-alt"></i> Sair
-                    </button>
-                </form>
-
-                <!-- Botão cancelar -->
-                <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-lg w-100">
-                    <i class="fas fa-arrow-left"></i> Cancelar
+                    <i class="fas fa-sign-out-alt"></i> 
+                </div>
+            </div>
+            <h1>Tem certeza que deseja sair?</h1>
+            <p class="subtitle">
+                Você está prestes a encerrar sua sessão.
+            </p>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-submit" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+            </form>
+            <div class="back-link mt-3">
+                <a href="{% url 'home' %}"> 
+                    <i class="fas fa-arrow-left"></i> Voltar à Página Inicial
                 </a>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap JS (opcional) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

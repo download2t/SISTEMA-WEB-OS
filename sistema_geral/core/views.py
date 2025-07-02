@@ -15,6 +15,7 @@ from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LoginView
+from django.urls import reverse # Importe reverse para obter URLs por nome
 
 class CustomLoginView(LoginView):
     def form_invalid(self, form):
@@ -69,8 +70,14 @@ class LoginView(AuthLoginView):
 def logout_confirm(request):
     return render(request, 'core/logout_confirm.html')
 
+# Seu_app/views.py
+
+
 
 def custom_login(request):
+    # Detecta se a requisição é AJAX (enviada pelo seu JavaScript)
+    is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest'
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -78,18 +85,33 @@ def custom_login(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            print(f"Usuário encontrado: {user.username}")
+            # print(f"Usuário encontrado: {user.username}") # Mantenha para debug se quiser
             if user.is_active:
                 login(request, user)
-                return redirect('home')
+                
+                if is_ajax:
+                    # Para requisições AJAX, retorne JSON com a URL de redirecionamento
+                    return JsonResponse({'success': True, 'redirect_url': reverse('home')})
+                else:
+                    # Para requisições normais, redirecione diretamente
+                    return redirect('home')
             else:
-                messages.error(request, 'Usuário inativo. Por favor, entre em contato com o administrador.')
-                return redirect('login')
+                message_text = 'Usuário inativo. Por favor, entre em contato com o administrador.'
+                if is_ajax:
+                    return JsonResponse({'success': False, 'message': message_text}, status=400)
+                else:
+                    messages.error(request, message_text)
+                    return redirect('login') # Redireciona de volta para a página de login
         else:
-            messages.error(request, 'Usuário ou senha incorretos. Por favor, tente novamente.')
-            return redirect('login')
-
-    return render(request, 'core/login.html')
+            message_text = 'Usuário ou senha incorretos. Por favor, tente novamente.'
+            if is_ajax:
+                return JsonResponse({'success': False, 'message': message_text}, status=400)
+            else:
+                messages.error(request, message_text)
+                return redirect('login') # Redireciona de volta para a página de login
+    
+    # Se for uma requisição GET, renderiza o formulário de login
+    return render(request, 'core/login.html') # Certifique-se de que o caminho do template está correto
 
 
 # Função para alteração de senha do usuário

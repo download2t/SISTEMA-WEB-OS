@@ -31,57 +31,80 @@ def testar_envio_email():
         print(f"Erro ao enviar e-mail: {e}")
 
 
-@user_passes_test(has_permission, login_url='403')  # Redireciona para 403 se não for staff
+@user_passes_test(has_permission, login_url='403')
 @login_required
 def adm_listar_chamados(request):
-    grupos_usuario = request.user.groups.all()
+    # --- Consulta Base (para administradores): Todos os Chamados ---
+    # Para administradores, iniciamos com *todos* os chamados.
+    # As restrições de grupo/criador foram removidas conforme solicitado para esta view de ADM.
+    chamados = Chamado.objects.all()
 
-    # Filtrar chamados pelo grupo responsável ou criados pelo usuário
-    chamados = Chamado.objects.filter(
-        Q(grupo_responsavel__in=grupos_usuario) | Q(criado_por=request.user)
-    ).distinct()
+    # --- Filtro por Status Múltiplo ---
+    status_selecionados_str = request.GET.get('status', '')
+    status_selecionados = [s.strip() for s in status_selecionados_str.split(',') if s.strip()]
 
-    # Filtro por status múltiplo
-    status_selecionados = request.GET.get('status', '').split(',')
-    if status_selecionados and status_selecionados != ['']:
-        # Se "Aberto" for um dos status selecionados, vamos filtrar por todos os status exceto "Concluído"
+    if status_selecionados:
         if 'Aberto' in status_selecionados:
-            chamados = chamados.exclude(status='Concluído')  # Excluir os chamados "Concluído"
-        else:
+            chamados = chamados.exclude(status='Concluído')
+        
+        # Filtra pelos status específicos, se 'Aberto' não estiver selecionado
+        # ou se a exclusão de 'Concluído' já tiver sido aplicada.
+        # Importante: Se 'Aberto' está na lista, o `exclude` acima já agiu.
+        # Não queremos filtrar novamente se a intenção é "tudo menos Concluído".
+        # Se 'Aberto' é o único status, a exclusão já basta.
+        # Se há outros status além de 'Aberto', o `exclude` já foi feito,
+        # então filtramos pelos demais.
+        
+        # Se 'Aberto' é o único status, ele já fez o `exclude('Concluído')`.
+        # Se há outros status além de 'Aberto', filtramos por eles, mas `Concluído` já foi excluído.
+        # Se 'Aberto' NÃO está na lista, filtramos diretamente pelos selecionados.
+        
+        # Lógica ajustada para ser mais explícita:
+        if 'Aberto' in status_selecionados and len(status_selecionados) > 1:
+            # Se 'Aberto' está e há outros status, filtramos pelos OUTROS status
+            # pois 'Aberto' já implica a exclusão de 'Concluído'.
+            # Remove 'Aberto' da lista para evitar filtrar por ele explicitamente aqui
+            # já que sua semântica é "não concluído".
+            filtered_statuses = [s for s in status_selecionados if s != 'Aberto']
+            if filtered_statuses: # Garante que não está vazio
+                chamados = chamados.filter(status__in=filtered_statuses)
+        elif 'Aberto' not in status_selecionados:
+            # Se 'Aberto' não está selecionado, apenas filtra pelos status na lista
             chamados = chamados.filter(status__in=status_selecionados)
 
-        if not chamados.exists():
-            messages.info(request, 'Nenhum chamado encontrado para os status selecionados.')
-
-    # Filtro por busca (grupo ou número do chamado)
-    search = request.GET.get('search', '')
-    if search:
+    # --- Filtro por Busca (Grupo, Número do Chamado ou Criador) ---
+    search_term = request.GET.get('search', '').strip()
+    if search_term:
         chamados = chamados.filter(
-            Q(grupo_responsavel__name__icontains=search) |
-            Q(id__icontains=search)
+            Q(grupo_responsavel__name__icontains=search_term) |
+            Q(id__icontains=search_term) |
+            Q(criado_por__username__icontains=search_term) |
+            Q(criado_por__first_name__icontains=search_term) |
+            Q(criado_por__last_name__icontains=search_term)
         ).distinct()
-        if not chamados.exists():
-            messages.info(request, 'Nenhum chamado encontrado para a busca realizada.')
 
-    # Filtro por data
-    start_date = request.GET.get('start_date')
-    end_date = request.GET.get('end_date')
+    # --- Filtro por Data de Abertura ---
+    start_date_str = request.GET.get('start_date')
+    end_date_str = request.GET.get('end_date')
 
-    if start_date:
-        start_date = parse_date(start_date)
-        if start_date:
-            chamados = chamados.filter(data_abertura__date__gte=start_date)
+    start_date_obj = None
+    end_date_obj = None
 
-    if end_date:
-        end_date = parse_date(end_date)
-        if end_date:
-            chamados = chamados.filter(data_abertura__date__lte=end_date)
+    if start_date_str:
+        start_date_obj = parse_date(start_date_str)
+        if start_date_obj:
+            chamados = chamados.filter(data_abertura__date__gte=start_date_obj)
 
-    # Caso datas iguais
-    if start_date and end_date and start_date == end_date:
-        chamados = chamados.filter(data_abertura__date=start_date)
+    if end_date_str:
+        end_date_obj = parse_date(end_date_str)
+        if end_date_obj:
+            chamados = chamados.filter(data_abertura__date__lte=end_date_obj)
+    
+    # Se ambas as datas são fornecidas e são iguais, filtra para aquele dia exato.
+    if start_date_obj and end_date_obj and start_date_obj == end_date_obj:
+        chamados = chamados.filter(data_abertura__date=start_date_obj)
 
-    # Ordenação por prioridade e data de abertura
+    # --- Ordenação por Prioridade e Data de Abertura ---
     chamados = chamados.annotate(
         prioridade_order=Case(
             When(prioridade='Urgente', then=Value(1)),
@@ -93,16 +116,21 @@ def adm_listar_chamados(request):
         )
     ).order_by('prioridade_order', '-data_abertura')
 
-    # Limitação de 100 chamados se nenhuma data estiver definida
-    if not start_date and not end_date:
+    # --- Limitação de 100 Chamados (se nenhum filtro de data foi aplicado) ---
+    if not start_date_str and not end_date_str:
         chamados = chamados[:100]
 
+    # --- Mensagem de Feedback: Nenhum Chamado Encontrado ---
+    if not chamados.exists():
+        messages.info(request, 'Nenhum chamado encontrado para os filtros aplicados.')
+
+    # --- Preparação do Contexto para o Template ---
     context = {
         'chamados': chamados,
-        'status_selecionados': status_selecionados if status_selecionados != [''] else [],
-        'search': search,
-        'start_date': start_date,
-        'end_date': end_date,
+        'status_selecionados': status_selecionados,
+        'search': search_term,
+        'start_date': start_date_str,
+        'end_date': end_date_str,
     }
 
     return render(request, 'adm_ordem_servico/listar.html', context)

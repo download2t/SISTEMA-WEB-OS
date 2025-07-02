@@ -7,7 +7,6 @@
 {% endblock %}
 {% block content %}
 
-<!-- Sidebar -->
 {% include 'adm_ordem_servico/adm_menu_os.html' %}
 <div class="main-content-wrapper"> 
 
@@ -47,8 +46,8 @@
                     <div class="filter-group">
                         <label for="search">Buscar Chamados:</label>
                         <input type="text" name="search" class="form-control" id="search" 
-                                placeholder="Buscar por Grupo ou Número" value="{{ request.GET.search }}">
-                    </div>
+                                placeholder="Buscar por Grupo, Número ou Usuário" value="{{ request.GET.search }}">
+                                </div>
                     <div class="row">
                         <div class="col-6">
                             <div class="filter-group">

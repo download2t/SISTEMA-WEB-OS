@@ -1,116 +1,358 @@
-/* Layout geral */
-.container {
-    max-width: 1800px;
-    margin: auto;
-    padding: 20px;
+/* General Layout */
+.page-wrapper {
+    margin-left: 150px; 
+    padding-top: 3rem; 
+    padding-right: 15px;
+    padding-left: 15px;
+    min-height: calc(100vh - 70px - 5rem);
 }
 
-/* Cabeçalho */
+.main-content {
+    flex-grow: 1; /* Allows main content to take remaining space */
+    padding: 30px;
+    margin-left: 20px; /* Spacing from the sidebar */
+}
+
+/* Page Header */
+.page-header {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
 .page-title {
-    font-size: 1.75rem;
-    font-weight: 700;
+    font-size: 2.2rem;
+    font-weight: 600;
     color: #343a40;
-    margin-bottom: 0.5rem;
-    position: relative;
-    padding-bottom: 0.25rem;
+    margin-bottom: 0;
 }
 
-.page-title:after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 50px;
-    height: 3px;
-    background-color: #007bff;
-    border-radius: 2px;
-}
-/* Estilo do relatório */
-.table-container {
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.tooltip-icon {
+    color: #6c757d;
+    font-size: 1.2rem;
+    cursor: help;
+    margin-left: 10px;
 }
 
-/* Tabela profissional */
-.table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.table th {
-    background: #007bff;
-    color: white;
-    text-align: left;
-    padding: 12px;
-    font-size: 16px;
-}
-
-.table td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
-
-/* Melhor espaçamento das colunas */
-.table th:nth-child(1),
-.table td:nth-child(1) {
-    width: 10%;
-    text-align: center;
-}
-
-.table th:nth-child(2),
-.table td:nth-child(2) {
-    width: 30%;
-}
-
-.table th:nth-child(3),
-.table td:nth-child(3) {
-    width: 15%;
-}
-
-.table th:nth-child(4),
-.table td:nth-child(4) {
-    width: 15%;
-}
-
-.table th:nth-child(5),
-.table td:nth-child(5) {
-    width: 15%;
-}
-
-.table th:nth-child(6),
-.table td:nth-child(6) {
-    width: 15%;
-    text-align: center;
-}
-
-/* Estilo dos botões */
-.btn {
+/* Card Styling */
+.card {
+    background-color: #fff;
     border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 25px;
+    margin-bottom: 25px;
+    border: none;
+}
+
+/* Filters Section */
+.filters-section {
+    padding: 0; /* Remove default card padding as content has its own */
+    box-shadow: none; /* Filters section will have its own inner structure */
+    background-color: transparent;
+    margin-bottom: 30px;
+}
+
+.filters-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.toggle-filters-btn {
+    width: fit-content; /* Make button only as wide as its content */
     padding: 10px 20px;
-    font-size: 14px;
+    border-radius: 5px;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
 }
 
-.btn-primary {
-    background: #007bff;
+.toggle-filters-btn:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.filter-toggle-icon {
+    transition: transform 0.3s ease;
+}
+
+.toggle-filters-btn.active .filter-toggle-icon {
+    transform: rotate(180deg);
+}
+
+.filter-options-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid for filter cards */
+    gap: 20px;
+    padding: 25px; /* Padding for the filter options content */
+    border: 1px solid #e9ecef; /* Add a subtle border around the filter options area */
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.filter-options-container.d-none {
+    display: none !important;
+}
+
+.filter-card {
+    padding: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    background-color: #fdfdfd;
+}
+
+.filter-card-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 15px;
+}
+
+/* Status Filter */
+.status-options-grid {
+    display: flex; /* Changed to flex for better wrapping */
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.status-option {
+    padding: 6px 12px;
+    border-radius: 20px; /* Pill shape */
+    font-size: 0.875rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.status-option.selected {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.selected-status-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+    min-height: 24px; /* Ensure space even when empty */
+}
+
+.selected-status-tag {
+    background-color: #e0f2f7; /* Light blue background */
+    color: #007bff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.remove-tag-btn {
+    background: none;
     border: none;
+    color: #007bff;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
 }
 
-.btn-secondary {
-    background: #6c757d;
-    border: none;
+.remove-tag-btn:hover {
+    color: #0056b3;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-    .container {
-        padding: 10px;
+/* Date and Group/Responsible Filters */
+.date-filter-group,
+.group-responsible-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    margin-bottom: 0; /* Override Bootstrap default margin */
+}
+
+.form-label {
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    padding: 8px 12px;
+    font-size: 1rem;
+}
+
+.form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Filter Actions */
+.filter-actions {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+}
+
+.action-btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Report Actions (Download Button) */
+.report-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 25px;
+}
+
+.download-btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #28a745;
+    border-color: #28a745;
+    color: #fff;
+}
+
+.download-btn:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+/* Report Table */
+.report-display {
+    padding: 0; /* Table content takes care of its own padding */
+}
+
+.table-responsive {
+    overflow-x: auto; /* Ensures table is scrollable on small screens */
+    border-radius: 8px; /* Match card border-radius */
+}
+
+.report-table {
+    width: 100%;
+    margin-bottom: 0;
+    border-collapse: separate; /* Required for border-radius on cells */
+    border-spacing: 0;
+}
+
+.report-table thead th {
+    background-color: #e9ecef;
+    color: #495057;
+    font-weight: 600;
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 2px solid #dee2e6;
+    vertical-align: middle; /* Align text vertically in middle */
+}
+
+.report-table tbody td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #dee2e6;
+    vertical-align: middle;
+}
+
+.report-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.report-table tbody tr:hover {
+    background-color: #f2f6fa;
+    cursor: pointer;
+}
+
+/* Status Badges in Table */
+.status-badge {
+    display: inline-block;
+    padding: .35em .65em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .375rem;
+    color: #fff;
+}
+
+/* Specific status colors */
+.status-aberto { background-color: #007bff; }
+.status-em-andamento { background-color: #ffc107; color: #343a40; } /* Yellow for in progress */
+.status-concluido { background-color: #28a745; }
+.status-encaminhado-a-totvs { background-color: #6f42c1; } /* Purple */
+.status-aguardando-aprovacao { background-color: #fd7e14; } /* Orange */
+.status-em-analise { background-color: #17a2b8; } /* Teal */
+.status-em-desenvolvimento { background-color: #6610f2; } /* Indigo */
+.status-manutencao { background-color: #dc3545; } /* Red */
+
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .page-wrapper {
+        flex-direction: column; /* Stack sidebar and main content vertically */
     }
 
-    .table th,
-    .table td {
-        font-size: 14px;
-        padding: 8px;
+    .sidebar-menu {
+        width: 100%;
+        padding: 15px;
+        border-bottom: 1px solid #495057;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    .filter-options-container {
+        grid-template-columns: 1fr; /* Single column layout for filters on smaller screens */
+        padding: 15px;
+    }
+
+    .filter-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .action-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .report-actions {
+        justify-content: center; /* Center download button on small screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 1.8rem;
+    }
+
+    .status-options-grid {
+        flex-direction: column; /* Stack status buttons vertically */
     }
 }

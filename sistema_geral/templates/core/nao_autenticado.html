@@ -1,13 +1,33 @@
-{% extends 'core/base.html' %}
+
 {% load static %}
+
+{% block extra_css %}   
+<link rel="stylesheet" href="{% static 'css/registration/register.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+{% endblock %}
+
 {% block content %}
-<div class="d-flex justify-content-center align-items-center" style="height: 100vh; background-color: #f4f6f9;">
-    <div class="card shadow-lg border-0 rounded-4" style="max-width: 500px; width: 100%; padding: 3rem;">
-        <div class="card-body text-center">
-            <h1 class="display-4 mb-4" style="color: #4C6B8C;">Você não está logado</h1>
-            <p class="lead text-muted mb-4">Para acessar esta página, é necessário fazer login primeiro.</p>
-            <a href="{% url 'login' %}" class="btn btn-primary btn-lg px-5 py-3">Ir para Login</a>
+<div class="container">
+    <div class="recovery-card">
+        <div class="icon-container">
+            <div class="lock-icon">
+                <i class="fas fa-unlock-alt"></i>
+            </div>
+        </div>  
+
+        <h1>Você não está logado.</h1>
+        <p class="subtitle">Para acessar esta página, é necessário fazer login primeiro.</p>
+        
+        <div class="back-link">
+            <a href="{% url 'login' %}">
+                <i class="fas fa-arrow-left"></i>
+                Voltar ao login
+            </a>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/registration/register.js' %}"></script>
 {% endblock %}
