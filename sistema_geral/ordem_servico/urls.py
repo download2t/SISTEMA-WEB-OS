@@ -1,4 +1,6 @@
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 
 # Importando views específicas
 from ordem_servico.views.chamado import (
@@ -50,4 +52,4 @@ urlpatterns = [
     path('editar_contato/<int:id>/', editar_contato, name='editar_contato'),
     path('visualizar_contato/<int:id>/', visualizar_contato, name='visualizar_contato'),
     path('excluir_contato/<int:id>/', excluir_contato, name='excluir_contato'),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

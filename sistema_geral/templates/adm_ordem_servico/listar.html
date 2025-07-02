@@ -5,24 +5,15 @@
 <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
 <link rel="stylesheet" href="{% static 'css/adm_ordem_servico/listar_chamados.css' %}">
 {% endblock %}
-
 {% block content %}
 
 <!-- Sidebar -->
 {% include 'adm_ordem_servico/adm_menu_os.html' %}
-
-
-{# --- START: New Main Content Wrapper --- #}
 <div class="main-content-wrapper"> 
+
     <div class="header-section">
-        <div class="container"> 
-            <div class="row">
-                <div class="col-12">
-                    <h1 class="mb-2"><i class="fas fa-tasks me-3"></i>Ordens de Serviço Para Administradores</h1>
-                    <p class="mb-0">Gerencie e acompanhe todos os chamados de serviço com filtros avançados</p>
-                </div>
-            </div>
-        </div>
+        <h1 class="mb-2"><i class="fas fa-tasks me-3"></i>Ordens de Serviço Para Administradores</h1>
+        <p class="mb-0">Gerencie e acompanhe todos os chamados de serviço com filtros avançados</p>
     </div>
 
     <div class="filters-section container"> 
@@ -86,10 +77,10 @@
             </div>
         </form>
     </div>
-
+    {#TICKETS#}
     <div id="serviceCards" class="container"> {# Also add container here #}
         {% for chamado in chamados %}
-        <div class="service-card {{ chamado.status|slugify }}">
+        <div class="service-card prioridade-{{ chamado.prioridade|lower }} {% if chamado.status == 'Concluído' %}status-concluido{% endif %}">
             <div class="card-header">
                 <div class="ticket-number">#{{ chamado.id }}</div>
                 <span class="status-badge {{ chamado.status|slugify }}">{{ chamado.status }}</span>
@@ -130,8 +121,9 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="card-footer">
-                <a href="{% url 'adm_visualizar_chamado' chamado.id %}" class="view-ticket-btn {{ chamado.status|slugify }}">
+           <div class="card-footer">
+                <a href="{% url 'adm_visualizar_chamado' chamado.id %}" 
+                class="view-ticket-btn prioridade-{{ chamado.prioridade|lower|slugify }} {% if chamado.status == 'Concluído' %}concluido{% endif %}">
                     <i class="fas fa-eye me-1"></i> Ver Ticket
                 </a>
             </div>

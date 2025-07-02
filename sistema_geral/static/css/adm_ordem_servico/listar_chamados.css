@@ -1,12 +1,12 @@
 :root {
     /* Cores de status */
-    --status-aberto: #dc3545;
+    --status-aberto: #285f9e;
     --status-andamento: #fd7e14;
     --status-concluido: #198754;
     --status-cancelado: #6c757d;
     --status-encaminhado-a-totvs: #6610f2;
     --status-aguardando-aprovacao: #20c997;
-    --status-em-analise: #0dcaf0;
+    --status-em-analise: #be8b2a;
     --status-em-desenvolvimento: #ffc107;
     --status-manutencao: #6f42c1;
     
@@ -136,22 +136,19 @@ body.dark-mode #menu-toggle:hover {
     background: linear-gradient(135deg, #2a2a4e, #1e4e);
 }
 
-/* Main Content Wrapper (from listar_chamados.css) */
 .main-content-wrapper {
-    margin-left: 220px; /* Default for desktop with fixed sidebar */
-    padding-top: 3rem; /* Adjust according to your navbar height */
+    margin-left: 220px; 
+    padding-top: 3rem; 
     padding-right: 15px;
     padding-left: 15px;
     min-height: calc(100vh - 70px - 5rem);
 }
 
-/* Header Section (from original CSS) */
 .header-section {
-    padding: 2rem 0;
-    margin-bottom: 2rem;
+    padding: 1rem 0;
+    margin-bottom: 1rem;
 }
 
-/* Filter Section (from original CSS) */
 .filters-section {
     background: white;
     border-radius: 10px;
@@ -159,7 +156,7 @@ body.dark-mode #menu-toggle:hover {
     margin-bottom: 2rem;
     overflow: hidden;
     width: 100%;
-    padding: 1.5rem; /* Consolidated padding here */
+    padding: 1.5rem; 
 }
 
 .filters-header {
@@ -212,25 +209,6 @@ body.dark-mode #menu-toggle:hover {
     font-weight: 500;
 }
 
-/* Status Button Active/Color Classes */
-.status-btn.aberto { border-color: var(--status-aberto); color: var(--status-aberto); }
-.status-btn.aberto.active { background-color: var(--status-aberto); color: white; }
-.status-btn.andamento { border-color: var(--status-andamento); color: var(--status-andamento); }
-.status-btn.andamento.active { background-color: var(--status-andamento); color: white; }
-.status-btn.concluido { border-color: var(--status-concluido); color: var(--status-concluido); }
-.status-btn.concluido.active { background-color: var(--status-concluido); color: white; }
-.status-btn.cancelado { border-color: var(--status-cancelado); color: var(--status-cancelado); }
-.status-btn.cancelado.active { background-color: var(--status-cancelado); color: white; }
-.status-btn.encaminhado { border-color: var(--status-encaminhado-a-totvs); color: var(--status-encaminhado-a-totvs); }
-.status-btn.encaminhado.active { background-color: var(--status-encaminhado-a-totvs); color: white; }
-.status-btn.aprovacao { border-color: var(--status-aguardando-aprovacao); color: var(--status-aguardando-aprovacao); }
-.status-btn.aprovacao.active { background-color: var(--status-aguardando-aprovacao); color: white; }
-.status-btn.analise { border-color: var(--status-em-analise); color: var(--status-em-analise); }
-.status-btn.analise.active { background-color: var(--status-em-analise); color: white; }
-.status-btn.desenvolvimento { border-color: var(--status-em-desenvolvimento); color: var(--status-em-desenvolvimento); }
-.status-btn.desenvolvimento.active { background-color: var(--status-em-desenvolvimento); color: white; }
-.status-btn.manutencao { border-color: var(--status-manutencao); color: var(--status-manutencao); }
-.status-btn.manutencao.active { background-color: var(--status-manutencao); color: white; }
 
 /* Service Card Layout */
 #serviceCards {
@@ -256,16 +234,43 @@ body.dark-mode #menu-toggle:hover {
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
-/* Service Card Border Colors */
-.service-card.aberto { border-left-color: var(--status-aberto); }
-.service-card.em-andamento { border-left-color: var(--status-andamento); }
-.service-card.concluido { border-left-color: var(--status-concluido); }
-.service-card.cancelado { border-left-color: var(--status-cancelado); }
-.service-card.encaminhado-a-totvs { border-left-color: var(--status-encaminhado-a-totvs); }
-.service-card.aguardando-aprovacao { border-left-color: var(--status-aguardando-aprovacao); }
-.service-card.em-analise { border-left-color: var(--status-em-analise); }
-.service-card.em-desenvolvimento { border-left-color: var(--status-em-desenvolvimento); }
-.service-card.manutencao { border-left-color: var(--status-manutencao); }
+/* Adiciona novas classes de borda por prioridade */
+.service-card.prioridade-baixa {
+    border-left-color: var(--prioridade-baixa);
+}
+.service-card.prioridade-média {
+    border-left-color: var(--prioridade-media);
+}
+.service-card.prioridade-alta {
+    border-left-color: var(--prioridade-alta);
+}
+.service-card.prioridade-urgente {
+    border-left-color: var(--prioridade-urgente);
+}
+.service-card.status-concluido {
+    border-left-color: var(--status-concluido) !important;
+}
+
+/* Status Button Active/Color Classes usado em filtros */
+.status-btn.aberto { border-color: var(--status-aberto); color: var(--status-aberto); }
+.status-btn.aberto.active { background-color: var(--status-aberto); color: white; }
+.status-btn.andamento { border-color: var(--status-andamento); color: var(--status-andamento); }
+.status-btn.andamento.active { background-color: var(--status-andamento); color: white; }
+.status-btn.concluido { border-color: var(--status-concluido); color: var(--status-concluido); }
+.status-btn.concluido.active { background-color: var(--status-concluido); color: white; }
+.status-btn.cancelado { border-color: var(--status-cancelado); color: var(--status-cancelado); }
+.status-btn.cancelado.active { background-color: var(--status-cancelado); color: white; }
+.status-btn.encaminhado { border-color: var(--status-encaminhado-a-totvs); color: var(--status-encaminhado-a-totvs); }
+.status-btn.encaminhado.active { background-color: var(--status-encaminhado-a-totvs); color: white; }
+.status-btn.aprovacao { border-color: var(--status-aguardando-aprovacao); color: var(--status-aguardando-aprovacao); }
+.status-btn.aprovacao.active { background-color: var(--status-aguardando-aprovacao); color: white; }
+.status-btn.analise { border-color: var(--status-em-analise); color: var(--status-em-analise); }
+.status-btn.analise.active { background-color: var(--status-em-analise); color: white; }
+.status-btn.desenvolvimento { border-color: var(--status-em-desenvolvimento); color: var(--status-em-desenvolvimento); }
+.status-btn.desenvolvimento.active { background-color: var(--status-em-desenvolvimento); color: white; }
+.status-btn.manutencao { border-color: var(--status-manutencao); color: var(--status-manutencao); }
+.status-btn.manutencao.active { background-color: var(--status-manutencao); color: white; }
+
 
 .card-header {
     padding: 1rem 1.5rem;
@@ -287,18 +292,10 @@ body.dark-mode #menu-toggle:hover {
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
+    font-weight: 600;
+    font-size: 1.0em;
 }
 
-/* Status Badge Colors */
-.status-badge.aberto { background-color: var(--status-aberto); color: white; }
-.status-badge.em-andamento { background-color: var(--status-andamento); color: white; }
-.status-badge.concluido { background-color: var(--status-concluido); color: white; }
-.status-badge.cancelado { background-color: var(--status-cancelado); color: white; }
-.status-badge.encaminhado-a-totvs { background-color: var(--status-encaminhado-a-totvs); color: white; }
-.status-badge.aguardando-aprovacao { background-color: var(--status-aguardando-aprovacao); color: white; }
-.status-badge.em-analise { background-color: var(--status-em-analise); color: white; }
-.status-badge.em-desenvolvimento { background-color: var(--status-em-desenvolvimento); color: white; }
-.status-badge.manutencao { background-color: var(--status-manutencao); color: white; }
 
 .card-body {
     padding: 1.5rem;
@@ -312,14 +309,17 @@ body.dark-mode #menu-toggle:hover {
 }
 
 .description {
-    color: #6c757d;
-    margin-bottom: 1rem;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2; /* Limita a 2 linhas */
     -webkit-box-orient: vertical;
     overflow: hidden;
-    line-height: 1.5;
+    text-overflow: ellipsis;/* Adiciona "..." se ultrapassar */
+    min-height: 2.8em;  /* Altura aproximada de 2 linhas */
+    line-height: 1.4em; /* Ajusta o espaçamento das linhas */
+    font-size: 1rem;
+    color: #495057;
 }
+
 
 .info-grid {
     display: grid;
@@ -354,7 +354,7 @@ body.dark-mode #menu-toggle:hover {
 
 /* Priority Badge Colors */
 .priority-badge.baixa { background-color: var(--prioridade-baixa); color: white; }
-.priority-badge.media { background-color: var(--prioridade-media); color: white; }
+.priority-badge.média { background-color: var(--prioridade-media); color: white; }
 .priority-badge.alta { background-color: var(--prioridade-alta); color: white; }
 .priority-badge.urgente { background-color: var(--prioridade-urgente); color: white; }
 
@@ -372,13 +372,7 @@ body.dark-mode #menu-toggle:hover {
     font-size: 0.8rem;
     color: #495057;
 }
-
-.card-footer {
-    padding: 1rem 1.5rem;
-    background-color: #f8f9fa;
-    border-top: 1px solid #f1f3f4;
-}
-
+/* View Ticket Button Colors - Prioridade */
 .view-ticket-btn {
     padding: 0.5rem 1.5rem;
     border-radius: 6px;
@@ -387,18 +381,20 @@ body.dark-mode #menu-toggle:hover {
     display: inline-block;
     transition: all 0.3s;
     color: white;
+    background-color: var(--prioridade-cor); /* Nova propriedade base */
+    margin-left:10px;
+    margin-bottom: 10px;
 }
 
-/* View Ticket Button Colors */
-.view-ticket-btn.aberto { background-color: var(--status-aberto); }
-.view-ticket-btn.em-andamento { background-color: var(--status-andamento); }
-.view-ticket-btn.concluido { background-color: var(--status-concluido); }
-.view-ticket-btn.cancelado { background-color: var(--status-cancelado); }
-.view-ticket-btn.encaminhado-a-totvs { background-color: var(--status-encaminhado-a-totvs); }
-.view-ticket-btn.aguardando-aprovacao { background-color: var(--status-aguardando-aprovacao); }
-.view-ticket-btn.em-analise { background-color: var(--status-em-analise); }
-.view-ticket-btn.em-desenvolvimento { background-color: var(--status-em-desenvolvimento); }
-.view-ticket-btn.manutencao { background-color: var(--status-manutencao); }
+/* Cores por prioridade */
+.view-ticket-btn.prioridade-baixa { --prioridade-cor: var(--prioridade-baixa); }
+.view-ticket-btn.prioridade-media { --prioridade-cor: var(--prioridade-media); }
+.view-ticket-btn.prioridade-alta { --prioridade-cor: var(--prioridade-alta); }
+.view-ticket-btn.prioridade-urgente { --prioridade-cor: var(--prioridade-urgente); }
+
+.view-ticket-btn.concluido {
+    background-color: var(--status-concluido) !important;
+}
 
 .view-ticket-btn:hover {
     transform: translateY(-1px);
@@ -515,20 +511,6 @@ body.dark-mode #menu-toggle:hover {
         transform: translateX(0); /* Show sidebar when active */
     }
 
-    .main-content-wrapper {
-        margin-left: 0; /* Remove margin when sidebar is an overlay */
-        padding-top: 1rem; /* Adjust top padding for mobile navbar */
-        padding-left: 15px; /* Standard mobile padding */
-        padding-right: 15px;
-    }
-    
-    .header-section .container,
-    .filters-section.container,
-    #serviceCards.container {
-        padding-left: var(--bs-gutter-x, 0.75rem); /* Use Bootstrap's gutter variable for padding */
-        padding-right: var(--bs-gutter-x, 0.75rem);
-        max-width: 100%; /* Allow content to use full width of main-content-wrapper */
-    }
 
     /* Adjust card layout for tablet screens */
     #serviceCards {
