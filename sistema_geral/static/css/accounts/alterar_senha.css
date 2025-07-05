@@ -1,32 +1,251 @@
-    /* Adicionando animação e transições suaves */
-    .form-control:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    }
+/* Variáveis para cores e sombras (pode alinhar com suas variáveis globais) */
+:root {
+    --primary-color: #619CDB; /* Um azul mais calmo, vindo da sua paleta de gradientes profissionais */
+    --primary-hover-color: #4C82C0;
+    --input-border-color: #ced4da;
+    --input-focus-border-color: var(--primary-color);
+    --input-focus-shadow: rgba(97, 156, 219, 0.25); /* Sombra mais suave do azul primário */
+    --card-bg-color: #ffffff;
+    --card-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08); /* Sombra mais pronunciada mas suave */
+    --text-color-light: #f8f9fa; /* Para dark mode */
+    --text-color-dark: #212529; /* Para light mode */
+    --invalid-color: #dc3545;
+    --invalid-bg-color: #fcebeb;
+    --toggle-btn-color: #6c757d;
+    --toggle-btn-hover-bg: #e9ecef;
 
-    .card {
-        border-radius: 10px;
-    }
+    /* Dark Mode specific variables (ajuste conforme suas variáveis globais de dark mode) */
+    --dark-card-bg-color: #2c3e50; /* Ex: um azul marinho escuro */
+    --dark-input-border-color: #495057;
+    --dark-input-focus-shadow: rgba(97, 156, 219, 0.4);
+    --dark-text-color: #f8f9fa;
+    --dark-toggle-btn-color: #adb5bd;
+    --dark-toggle-btn-hover-bg: #495057;
+}
 
-    .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
-    }
+/* ------------------------------------------------------------- */
+/* 1. Estilos do Cartão do Formulário (Card) */
+/* ------------------------------------------------------------- */
+.custom-form-card {
+    max-width: 500px; /* Limita a largura do formulário */
+    width: 100%;
+    border: none; /* Remove a borda padrão do card */
+    border-radius: 15px; /* Bordas mais arredondadas */
+    background-color: var(--card-bg-color);
+    box-shadow: var(--card-shadow); /* Sombra moderna */
+    transition: all 0.3s ease; /* Transição para o dark mode */
+}
 
-    .btn-primary:hover {
-        background-color: #0056b3;
-        border-color: #004085;
-    }
+/* Dark Mode para o cartão */
+body.dark-mode .custom-form-card {
+    background-color: var(--dark-card-bg-color);
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.3); /* Sombra mais escura no dark mode */
+}
 
-    small.form-text {
-        font-size: 0.875rem;
-    }
+/* Título */
+.custom-form-card h2 {
+    color: var(--text-color-dark);
+    font-size: 2.2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* Linha sutil abaixo do título */
+    margin-bottom: 2rem !important; /* Espaçamento maior abaixo do título */
+}
 
-    .alert {
-        border-radius: 5px;
-    }
+body.dark-mode .custom-form-card h2 {
+    color: var(--dark-text-color);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
 
-    .alert-danger {
-        background-color: #f8d7da;
-        color: #721c24;
-    }
+/* ------------------------------------------------------------- */
+/* 2. Estilos dos Campos de Input (Form Controls) */
+/* ------------------------------------------------------------- */
+.modern-input {
+    border: 1px solid var(--input-border-color);
+    border-radius: 10px; /* Bordas mais arredondadas para os inputs */
+    padding: 1rem 1.25rem; /* Padding generoso */
+    font-size: 1.1rem; /* Fonte maior */
+    color: var(--text-color-dark);
+    transition: all 0.3s ease; /* Transição suave para foco e hover */
+}
+
+.modern-input:focus {
+    border-color: var(--input-focus-border-color);
+    box-shadow: 0 0 0 0.25rem var(--input-focus-shadow); /* Sombra de foco mais suave e bonita */
+    outline: none; /* Remove o outline padrão do navegador */
+    background-color: var(--card-bg-color); /* Garante fundo consistente no foco */
+}
+
+/* Estilo para validação */
+.modern-input:invalid {
+    border-color: var(--invalid-color) !important;
+}
+
+.modern-input.is-invalid,
+.was-validated .modern-input:invalid {
+    border-color: var(--invalid-color);
+    background-image: none !important; /* Remove ícone de validação padrão do Bootstrap para melhor controle */
+}
+
+
+/* Dark Mode para inputs */
+body.dark-mode .modern-input {
+    background-color: var(--dark-card-bg-color); /* Fundo do input igual ao card */
+    border-color: var(--dark-input-border-color);
+    color: var(--dark-text-color);
+}
+
+body.dark-mode .modern-input:focus {
+    border-color: var(--input-focus-border-color);
+    box-shadow: 0 0 0 0.25rem var(--dark-input-focus-shadow);
+    background-color: var(--dark-card-bg-color);
+}
+
+/* Labels */
+.form-label {
+    color: var(--text-color-dark);
+    font-weight: 600; /* Um pouco mais de peso */
+    margin-bottom: 0.75rem; /* Espaçamento da label */
+}
+
+body.dark-mode .form-label {
+    color: var(--dark-text-color);
+}
+
+/* Small text (dicas de senha) */
+small.form-text {
+    color: #6c757d !important; /* Cor mais neutra */
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+body.dark-mode small.form-text {
+    color: #adb5bd !important;
+}
+
+/* Mensagens de feedback de validação */
+.invalid-feedback {
+    font-size: 0.9rem;
+    color: var(--invalid-color);
+    margin-top: 0.5rem;
+}
+
+/* ------------------------------------------------------------- */
+/* 3. Estilos do Botão "Alterar Senha" */
+/* ------------------------------------------------------------- */
+.modern-btn {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    border-radius: 10px; /* Bordas arredondadas */
+    padding: 1rem 2rem; /* Padding generoso */
+    font-size: 1.2rem; /* Fonte maior */
+    font-weight: 600; /* Peso da fonte */
+    transition: all 0.3s ease; /* Transição suave */
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1); /* Sombra para o botão */
+}
+
+.modern-btn:hover {
+    background-color: var(--primary-hover-color);
+    border-color: var(--primary-hover-color);
+    transform: translateY(-2px); /* Pequeno efeito de elevação */
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); /* Sombra mais pronunciada no hover */
+}
+
+.modern-btn:active,
+.modern-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.25rem var(--input-focus-shadow) !important;
+}
+
+/* Dark Mode para o botão */
+body.dark-mode .modern-btn {
+    background-color: var(--primary-color); /* Pode manter a cor primária ou escurecer */
+    border-color: var(--primary-color);
+    color: var(--text-color-light);
+}
+
+body.dark-mode .modern-btn:hover {
+    background-color: var(--primary-hover-color);
+    border-color: var(--primary-hover-color);
+}
+
+/* ------------------------------------------------------------- */
+/* 4. Estilos para Mensagens de Alerta */
+/* ------------------------------------------------------------- */
+.alert {
+    border-radius: 10px; /* Bordas arredondadas para alertas */
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.alert-danger {
+    background-color: var(--invalid-bg-color);
+    color: var(--invalid-color);
+    border: 1px solid var(--invalid-color);
+}
+
+body.dark-mode .alert-danger {
+    background-color: #3d1b1d; /* Fundo escuro para alerta de erro */
+    color: #f7a9af; /* Texto claro para alerta de erro */
+    border-color: #f7a9af;
+}
+
+/* ------------------------------------------------------------- */
+/* 5. Toggle de Visibilidade de Senha */
+/* ------------------------------------------------------------- */
+.input-group .toggle-password {
+    background-color: transparent;
+    border: 1px solid var(--input-border-color);
+    border-left: none; /* Remove a borda esquerda para integrar */
+    border-top-right-radius: 10px; /* Arredonda apenas o canto superior direito */
+    border-bottom-right-radius: 10px; /* Arredonda apenas o canto inferior direito */
+    color: var(--toggle-btn-color);
+    transition: all 0.3s ease;
+    padding: 0.75rem 1rem; /* Ajusta o padding do botão */
+}
+
+.input-group .toggle-password:hover {
+    background-color: var(--toggle-btn-hover-bg);
+    color: var(--text-color-dark);
+}
+
+/* Foco no input-group: Adiciona borda colorida e sombra ao grupo inteiro */
+.input-group:focus-within .modern-input,
+.input-group:focus-within .toggle-password {
+    border-color: var(--input-focus-border-color);
+    box-shadow: 0 0 0 0.25rem var(--input-focus-shadow);
+    z-index: 2; /* Garante que a borda do foco não seja cortada */
+    position: relative; /* Necessário para z-index */
+}
+
+/* Ajustes para o input-group quando focado para garantir bordas arredondadas e sombra corretas */
+.input-group:focus-within .modern-input {
+    border-right-color: transparent; /* Remove borda entre input e botão */
+}
+
+/* Arredonda o input da esquerda se ele for o único ou primeiro no input-group */
+.input-group > .modern-input:not(:last-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.input-group > .modern-input:not(:first-child) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+/* Re-aplica borda arredondada se for o único elemento no grupo (menos comum) */
+.input-group > .modern-input:first-child:last-child {
+    border-radius: 10px;
+}
+
+
+/* Dark Mode para o toggle de senha */
+body.dark-mode .input-group .toggle-password {
+    background-color: var(--dark-card-bg-color);
+    border-color: var(--dark-input-border-color);
+    color: var(--dark-toggle-btn-color);
+}
+
+body.dark-mode .input-group .toggle-password:hover {
+    background-color: var(--dark-toggle-btn-hover-bg);
+    color: var(--dark-text-color);
+}

@@ -1,17 +1,3 @@
-/* No seu arquivo CSS principal ou de layout (ex: base.css, layout.css) */
-
-/* 1. Estilos Base do Sidebar (do que já discutimos) */
-#sidebar {
-    /* ... seus estilos existentes para o sidebar ... */
-    position: fixed;
-    left: 0;
-    top: 80px; /* Ajuste conforme a altura da sua navbar */
-    height: calc(100vh - 70px);
-    width: 220px; /* Largura padrão para desktop */
-    z-index: 800;
-    transition: all 0.3s ease;
-    /* ... outros estilos ... */
-}
 
 /* 2. Estilos do Conteúdo Principal */
 .main-content-wrapper {
@@ -23,25 +9,6 @@
     transition: margin-left 0.3s ease; /* Transição suave para o recuo */
 }
 
-/* 3. Estilos para o Overlay do Sidebar (se você estiver usando um) */
-.sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1039; /* Abaixo do sidebar, mas acima do conteúdo */
-    display: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.sidebar-overlay.active {
-    display: block; /* Torna visível */
-    opacity: 1;
-}
-
 /* 4. Prevenir Scroll no Body quando o Sidebar está aberto */
 body.no-scroll {
     overflow: hidden;
@@ -50,25 +17,6 @@ body.no-scroll {
 /* --- Media Queries para Responsividade --- */
 
 @media (max-width: 991.98px) { /* Para telas de tablet e menores */
-    /* Sidebar */
-    .sidebar-toggle {
-        display: block; /* Mostra o botão de toggle */
-    }
-
-    #sidebar {
-        width: 250px; /* Largura do sidebar quando overlay */
-        transform: translateX(-100%); /* Esconde por padrão */
-        top: 60px; /* Ajuste para navbar menor, se aplicável */
-        height: calc(100vh - 60px);
-        box-shadow: 2px 0 15px rgba(0, 0, 0, 0.4); /* Sombra mais pronunciada */
-        border-right: none; /* Remove borda fixa */
-        z-index: 1040; /* Garante que ele fique acima de tudo */
-    }
-
-    #sidebar.active {
-        transform: translateX(0); /* Mostra o sidebar quando .active */
-    }
-
     /* Conteúdo Principal */
     .main-content-wrapper {
         margin-left: 0; /* Remove o recuo quando o sidebar é um overlay */
@@ -143,9 +91,6 @@ body.dark-mode .filters-header {
     color: var(--text-dark); /* Cor do texto no dark mode */
 }
 
-.filters-header:hover {
-    background-color: #e9ecef; /* Um pouco mais escuro no hover */
-}
 
 body.dark-mode .filters-header:hover {
     background-color: var(--background-dark-hover); /* Dark mode hover */

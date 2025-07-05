@@ -125,8 +125,10 @@ def criar_chamado(request):
             data_hora = timezone.now().strftime('%Y-%m-%d %H:%M:%S')  # Data e hora atual formatada
             enviar_mensagem_whatsapp(assunto, nome_usuario, data_hora, prioridade, grupo)  # Envia a mensagem
 
-            # Redireciona para a lista de chamados
-            return redirect('listar_chamados')
+            if request.user.is_staff:
+                return redirect('adm_listar_chamados') # Redireciona para a lista de chamados de ADM
+            else:
+                return redirect('listar_chamados') # Redireciona para a lista de chamados normal
 
         except Group.DoesNotExist:
             messages.error(request, 'Grupo selecionado não existe.')

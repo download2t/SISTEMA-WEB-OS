@@ -115,6 +115,7 @@ def custom_login(request):
 
 
 # Função para alteração de senha do usuário
+# Função para alteração de senha do usuário
 @login_required
 def alterar_senha(request):
     if request.method == 'POST':
@@ -123,7 +124,8 @@ def alterar_senha(request):
             user = form.save()
             update_session_auth_hash(request, user)  # Mantém o usuário logado após a alteração da senha
             messages.success(request, 'A senha foi alterada com sucesso!')
-            return redirect('alterar_senha')
+            # ALTERAÇÃO AQUI: Redireciona para a página 'home'
+            return redirect('home')  # Certifique-se de que 'home' é o nome da sua URL de destino
         else:
             messages.error(request, 'Por favor, corrija os erros abaixo.')
     else:

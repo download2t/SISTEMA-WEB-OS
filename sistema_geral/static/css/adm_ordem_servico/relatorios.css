@@ -28,7 +28,10 @@
     color: #343a40;
     margin-bottom: 0;
 }
-
+body.dark-mode .page-title,
+body.dark-theme .page-title { /* Use a classe que você aplica para o tema escuro */
+    color: white; /* Cor branca para o tema escuro */
+}
 .tooltip-icon {
     color: #6c757d;
     font-size: 1.2rem;

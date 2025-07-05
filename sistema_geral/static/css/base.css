@@ -1,19 +1,30 @@
+:root {
+  --painel: linear-gradient(135deg, #7A6F62 0%, #5E5349 50%, #443B33 100%);
+  --body-bg: linear-gradient(135deg, #f8f8f6 0%, #eeeae5 50%, #dad2c5 100%);
+  --nav-hover: linear-gradient(135deg, #7A6F62 0%, #5E5349 50%, #443B33 100%);
+  --body-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  --nav-dark: rgba(26, 26, 46, 0.95);
+  --sidebar:linear-gradient(135deg, #7A6F62 0%, #5E5349 50%, #4b331e 100%);
+  /*como chamar a variavel: background: var(--painel);*/
+}
+
+
 /*============= BODY ==============*/
 body {
     background: linear-gradient(135deg, #ffffff 0%, #f7fafd 100%);
     color: #333;
 }/* ============= BODY ============= */
 body {
-    background: linear-gradient(135deg, #ffffff 0%, #f7fafd 100%);
-    color: #333;
+    background: var(--body-bg);
+    color: #333; /* Cor do texto padrão para o modo claro */
     transition: background 0.5s ease, color 0.5s ease;
     min-height: 100vh;
     padding-bottom: 60px; /* Espaço para o footer fixo */
 }
-
 /* ============= FOOTER ============= */
 footer {
-    background: linear-gradient(135deg, #395873, #6888aa);
+    /*background: linear-gradient(135deg, #395873, #6888aa);*/
+    background: var(--painel);
     color: white;
     position: fixed;
     width: 100%;
@@ -30,7 +41,7 @@ footer {
 
 /* Dark Mode - Footer */
 body.dark-mode footer {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+   background: var(--body-dark);
     color: #f8f9fa;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
 }
@@ -43,7 +54,7 @@ footer small {
 
 /* ============ NAVBAR ============ */
 .navbar {
-    background: linear-gradient(135deg, #6888aa, #395873); /* transição suave */
+    background: var(--painel);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -113,7 +124,7 @@ footer small {
 }
 
 .nav-link:hover {
-    background: linear-gradient(135deg, #5a85aa, #2e4d67);
+    background: var(--nav-hover);
     color: white;
     transform: translateY(-2px);
 }
@@ -125,7 +136,6 @@ footer small {
     left: 50%;
     width: 0;
     height: 2px;
-    background: linear-gradient(90deg, #667eea, #764ba2);
     transform: translateX(-50%);
     transition: width 0.3s ease;
 }
@@ -153,7 +163,7 @@ footer small {
 }
 
 .dropdown-item:hover {
-    background: linear-gradient(135deg, #4C6B8C, #395873); 
+    background: var(--nav-hover);
     color: white;
     transform: translateX(5px);
 }
@@ -179,12 +189,12 @@ footer small {
 
 /* ============ TEMA ESCURO ============ */
 body.dark-mode {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: var(--body-dark);
     color: #f8f9fa;
 }
 
 body.dark-mode .navbar {
-    background: rgba(26, 26, 46, 0.95);
+    background: var(--nav-dark);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -192,7 +202,7 @@ body.dark-mode .nav-link {
     color: #f7f7f7;
 }
 body.dark-mode .dropdown-item:hover {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: var(--body-dark);
     color: #f8f9fa;
     transform: translateX(5px);
 }

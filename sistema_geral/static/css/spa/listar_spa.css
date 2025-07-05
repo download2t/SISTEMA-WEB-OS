@@ -72,7 +72,7 @@ select:not([value=""]) {
 
 
 .room-number {
-    background: linear-gradient(135deg, #6888aa, #395873); 
+    background: var(--nav-hover); 
     color: white;
     padding: 4px 12px;
     border-radius: 20px;
@@ -159,10 +159,10 @@ select:not([value=""]) {
 
 .new-reservation-btn {
     text-decoration: none;
-    
+
     bottom: 30px;
     right: 30px;
-    background: linear-gradient(135deg, #395873, #6888aa); 
+    background: var(--nav-hover);
     color: white;
     border: none;
     border-radius: 50px;
@@ -170,7 +170,7 @@ select:not([value=""]) {
     font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 1px 1px wheat;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
@@ -181,8 +181,8 @@ select:not([value=""]) {
 }
 
 .new-reservation-btn:hover {
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 12px 35px wheat;
 }
 
 .new-reservation-btn:active {
@@ -280,7 +280,6 @@ select:not([value=""]) {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     padding: 12px 24px;
     border: none;
@@ -391,7 +390,7 @@ select:not([value=""]) {
 }
 
 .toggle-filters {
-    background: linear-gradient(135deg, #6888aa, #395873); 
+    background: var(--nav-hover);
     color: white;
     border: none;
     padding: 10px 20px;

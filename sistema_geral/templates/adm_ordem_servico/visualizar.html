@@ -3,10 +3,13 @@
 {% load static %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
 <link rel="stylesheet" href="{% static 'css/adm_ordem_servico/listar_chamados.css' %}">
 {% endblock %}
 
 {% block content %}
+
+{% include 'adm_ordem_servico/adm_menu_os.html' %}
 <div class="container mt-5">
 <!-- Header do Chamado -->
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -164,7 +167,6 @@
                 </div>
             </div>
 
-
             <!-- Formulário de Mensagem -->
             {% if chamado.status != 'Concluído' %}
             <form method="POST" enctype="multipart/form-data" action="{% url 'adm_enviar_mensagem' chamado.id %}">
@@ -184,36 +186,6 @@
 </div>        
 {% endblock %}
 
-{% block scripts %}
+{% block extra_js %}
 <script src="{% static 'js/adm_ordem_servico/visualizar_chamado.js' %}"></script>
-<script>
-    // Script para botão de evidencias
-document.addEventListener('DOMContentLoaded', function() {
-    const toggleEvidenciasBtn = document.getElementById('toggle-evidencias-btn');
-    const evidenciasContainer = document.getElementById('evidencias-container');
-    toggleEvidenciasBtn.addEventListener('click', function() {
-        evidenciasContainer.classList.toggle('d-none');
-        toggleEvidenciasBtn.querySelector('i').classList.toggle('fa-chevron-down');
-        toggleEvidenciasBtn.querySelector('i').classList.toggle('fa-chevron-up');
-    });
-});
-// Função para exibir ou ocultar o campo do número do ticket
-document.addEventListener('DOMContentLoaded', function () {
-    const statusSelect = document.getElementById('status');
-    const numeroTicketContainer = document.getElementById('numero-ticket-container');
-    const numeroTicketInput = document.getElementById('numero_ticket');
-    const toggleNumeroTicket = () => {
-        if (statusSelect.value === 'Encaminhado a TOTVS') {
-            numeroTicketContainer.style.display = 'block';
-            numeroTicketInput.setAttribute('required', 'required');
-        } else {
-            numeroTicketContainer.style.display = 'none';
-            numeroTicketInput.removeAttribute('required');
-            numeroTicketInput.value = ''; 
-        }
-    };
-    statusSelect.addEventListener('change', toggleNumeroTicket);
-    toggleNumeroTicket();
-});
-</script>
 {% endblock %}

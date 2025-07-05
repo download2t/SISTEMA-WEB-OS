@@ -16,132 +16,15 @@
     --prioridade-alta: #fd7e14;
     --prioridade-urgente: #dc3545;
 }
-
-body {
-    background-color: #f8f9fa;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overflow-x: hidden; /* Prevent horizontal scrollbar from sidebar overlay */
-}
-
-/* Base Sidebar Toggle (from sidebar.css) */
-.sidebar-toggle {
-    display: none; /* Hidden by default, shown on smaller screens */
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 4px;
-    transition: background 0.3s ease;
-    color: #333;
-}
-
-.sidebar-toggle:hover {
-    background: rgba(0, 0, 0, 0.05);
-}
-
-body.dark-theme .sidebar-toggle {
-    color: #e0e0e0;
-}
-
-body.dark-theme .sidebar-toggle:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-/* Sidebar Layout (from sidebar.css) */
-#sidebar {
-    background: linear-gradient(135deg, #4C6B8C, #395873);
-    backdrop-filter: blur(8px);
-    color: #f2f4f8;
-    position: fixed;
-    left: 0;
-    top: 80px; /* Adjust to sit below your navbar */
-    height: calc(100vh - 70px); /* Total viewport height minus top space */
-    width: 220px; /* Fixed width for desktop */
-    z-index: 800;
-    transition: all 0.3s ease;
-    overflow-y: auto;
-    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
-    padding: 1.5rem 0;
-    border-right: 1px solid rgba(255, 255, 255, 0.08);
-    border-bottom-right-radius: 0px;
-    border-top-right-radius: 12px;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-}
-
-.sidebar-header {
-    padding: 20px;
-    border-bottom: 1px solid #eee;
-}
-
-.sidebar-header h3 {
-    color: White;
-    font-size: 18px;
-    margin-bottom: 5px;
-}
-
-.sidebar-header p {
-    color: white;
-    font-size: 14px;
-}
-
-.sidebar-menu {
-    padding: 0;
-    list-style: none;
-    margin: 0;
-}
-
-.sidebar-menu li {
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.sidebar-menu a {
-    display: flex;
-    align-items: center;
-    padding: 15px 20px;
-    color: White;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    gap: 12px;
-}
-
-.sidebar-menu a:hover {
-    background: #f8f9fa;
-    color: #009ee3;
-    padding-left: 25px;
-}
-
-.sidebar-menu .icon {
-    width: 20px;
-    text-align: center;
-    font-size: 18px;
-}
-
-/* Dark Theme for Sidebar */
-body.dark-mode #sidebar {
-    background: linear-gradient(135deg, #1a1a2e, #16213e);
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-body.dark-mode #sidebar .nav-link:hover {
-    background: linear-gradient(135deg, #2a2a4e, #1e2a4e);
-}
-
-body.dark-mode #menu-toggle {
-    background: linear-gradient(135deg, #1a1a2e, #16213e);
-}
-
-body.dark-mode #menu-toggle:hover {
-    background: linear-gradient(135deg, #2a2a4e, #1e4e);
-}
-
+/* --- Conteúdo Principal (Main Content Wrapper) --- */
 .main-content-wrapper {
-    margin-left: 220px; 
-    padding-top: 3rem; 
+    margin-left: 220px; /* Por padrão, para desktop, empurra o conteúdo para a direita da sidebar */
     padding-right: 15px;
     padding-left: 15px;
     min-height: calc(100vh - 70px - 5rem);
+    transition: margin-left 0.3s ease; /* Adiciona transição para a margem */
+    box-sizing: border-box; /* Garante que padding e border sejam incluídos na largura/altura */
+    width: auto; /* Permite que o width se ajuste com a margem */
 }
 
 .header-section {
@@ -149,6 +32,7 @@ body.dark-mode #menu-toggle:hover {
     margin-bottom: 1rem;
 }
 
+/* --- Seção de Filtros --- */
 .filters-section {
     background: white;
     border-radius: 10px;
@@ -166,6 +50,9 @@ body.dark-mode #menu-toggle:hover {
     cursor: pointer;
     transition: background-color 0.3s;
     color: Black;
+    display: flex; /* Para alinhar o ícone de toggle */
+    justify-content: space-between;
+    align-items: center;
 }
 
 .filters-header:hover {
@@ -173,13 +60,13 @@ body.dark-mode #menu-toggle:hover {
 }
 
 .filters-content {
-    display: none;
+    display: none; /* Escondido por padrão, será mostrado com JS */
     transition: all 0.3s ease;
-    padding-top: 1rem; /* Specific padding for content */
+    padding-top: 1rem; /* Padding específico para o conteúdo */
 }
 
 .filters-content.show {
-    display: block;
+    display: block; /* Mostra o conteúdo dos filtros */
 }
 
 .filter-group {
@@ -209,16 +96,16 @@ body.dark-mode #menu-toggle:hover {
     font-weight: 500;
 }
 
-
-/* Service Card Layout */
+/* --- Layout dos Cards de Serviço --- */
 #serviceCards {
     display: grid;
+    /* Padrão para telas maiores: 300px mínimo, auto-fit para preencher o espaço */
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-    gap: 1.5rem; /* Space between cards */
-    margin-top: 2rem; /* Space below filters */
+    gap: 1.5rem; /* Espaço entre os cards */
+    margin-top: 2rem; /* Espaço abaixo dos filtros */
 }
 
-/* Service Card General Styles */
+/* Estilos Gerais do Card de Serviço */
 .service-card {
     background: white;
     border-radius: 12px;
@@ -226,7 +113,7 @@ body.dark-mode #menu-toggle:hover {
     margin-bottom: 1.5rem;
     transition: all 0.3s ease;
     border-left: 4px solid transparent;
-    width: 100%;
+    width: 100%; /* Garante que o card ocupe 100% da sua coluna na grid */
 }
 
 .service-card:hover {
@@ -234,24 +121,14 @@ body.dark-mode #menu-toggle:hover {
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
-/* Adiciona novas classes de borda por prioridade */
-.service-card.prioridade-baixa {
-    border-left-color: var(--prioridade-baixa);
-}
-.service-card.prioridade-média {
-    border-left-color: var(--prioridade-media);
-}
-.service-card.prioridade-alta {
-    border-left-color: var(--prioridade-alta);
-}
-.service-card.prioridade-urgente {
-    border-left-color: var(--prioridade-urgente);
-}
-.service-card.status-concluido {
-    border-left-color: var(--status-concluido) !important;
-}
+/* Classes de Borda por Prioridade */
+.service-card.prioridade-baixa { border-left-color: var(--prioridade-baixa); }
+.service-card.prioridade-media { border-left-color: var(--prioridade-media); }
+.service-card.prioridade-alta { border-left-color: var(--prioridade-alta); }
+.service-card.prioridade-urgente { border-left-color: var(--prioridade-urgente); }
+.service-card.status-concluido { border-left-color: var(--status-concluido) !important; }
 
-/* Status Button Active/Color Classes usado em filtros */
+/* Classes Ativas/Cores dos Botões de Status (usado em filtros) */
 .status-btn.aberto { border-color: var(--status-aberto); color: var(--status-aberto); }
 .status-btn.aberto.active { background-color: var(--status-aberto); color: white; }
 .status-btn.andamento { border-color: var(--status-andamento); color: var(--status-andamento); }
@@ -270,7 +147,6 @@ body.dark-mode #menu-toggle:hover {
 .status-btn.desenvolvimento.active { background-color: var(--status-em-desenvolvimento); color: white; }
 .status-btn.manutencao { border-color: var(--status-manutencao); color: var(--status-manutencao); }
 .status-btn.manutencao.active { background-color: var(--status-manutencao); color: white; }
-
 
 .card-header {
     padding: 1rem 1.5rem;
@@ -292,10 +168,8 @@ body.dark-mode #menu-toggle:hover {
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
-    font-weight: 600;
     font-size: 1.0em;
 }
-
 
 .card-body {
     padding: 1.5rem;
@@ -306,6 +180,9 @@ body.dark-mode #menu-toggle:hover {
     font-weight: 600;
     color: #212529;
     margin-bottom: 0.75rem;
+    overflow: hidden; 
+    text-overflow: ellipsis;
+    white-space: nowrap; /* Garante que o texto do assunto fique em uma única linha */
 }
 
 .description {
@@ -314,12 +191,11 @@ body.dark-mode #menu-toggle:hover {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;/* Adiciona "..." se ultrapassar */
-    min-height: 2.8em;  /* Altura aproximada de 2 linhas */
+    min-height: 2.8em;  /* Altura aproximada de 2 linhas (1.4em * 2) */
     line-height: 1.4em; /* Ajusta o espaçamento das linhas */
     font-size: 1rem;
     color: #495057;
 }
-
 
 .info-grid {
     display: grid;
@@ -352,9 +228,9 @@ body.dark-mode #menu-toggle:hover {
     text-transform: uppercase;
 }
 
-/* Priority Badge Colors */
+/* Cores do Badge de Prioridade */
 .priority-badge.baixa { background-color: var(--prioridade-baixa); color: white; }
-.priority-badge.média { background-color: var(--prioridade-media); color: white; }
+.priority-badge.media { background-color: var(--prioridade-media); color: white; }
 .priority-badge.alta { background-color: var(--prioridade-alta); color: white; }
 .priority-badge.urgente { background-color: var(--prioridade-urgente); color: white; }
 
@@ -372,7 +248,8 @@ body.dark-mode #menu-toggle:hover {
     font-size: 0.8rem;
     color: #495057;
 }
-/* View Ticket Button Colors - Prioridade */
+
+/* Cores do Botão "Ver Ticket" por Prioridade */
 .view-ticket-btn {
     padding: 0.5rem 1.5rem;
     border-radius: 6px;
@@ -381,12 +258,12 @@ body.dark-mode #menu-toggle:hover {
     display: inline-block;
     transition: all 0.3s;
     color: white;
-    background-color: var(--prioridade-cor); /* Nova propriedade base */
+    background-color: var(--prioridade-cor); /* Propriedade base para a cor */
     margin-left:10px;
     margin-bottom: 10px;
 }
 
-/* Cores por prioridade */
+/* Mapeamento das cores de prioridade para o botão */
 .view-ticket-btn.prioridade-baixa { --prioridade-cor: var(--prioridade-baixa); }
 .view-ticket-btn.prioridade-media { --prioridade-cor: var(--prioridade-media); }
 .view-ticket-btn.prioridade-alta { --prioridade-cor: var(--prioridade-alta); }
@@ -404,6 +281,7 @@ body.dark-mode #menu-toggle:hover {
     opacity: 0.9;
 }
 
+/* --- Estados Vazios / Mensagens --- */
 .empty-state {
     text-align: center;
     padding: 3rem;
@@ -416,16 +294,24 @@ body.dark-mode #menu-toggle:hover {
     opacity: 0.5;
 }
 
+/* --- Informações de Resultados e Paginação --- */
 .results-info {
     background: white;
     padding: 1rem;
     border-radius: 8px;
     margin-bottom: 1rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    flex-wrap: wrap; 
+    gap: 1rem; 
 }
 
 .pagination-container {
     margin: 2rem 0;
+    display: flex; 
+    justify-content: center; 
 }
 
 .pagination .page-link {
@@ -449,6 +335,7 @@ body.dark-mode #menu-toggle:hover {
     gap: 0.5rem;
 }
 
+/* --- Spinner de Carregamento --- */
 .loading-spinner {
     display: inline-block;
     width: 1rem;
@@ -465,6 +352,7 @@ body.dark-mode #menu-toggle:hover {
     100% { transform: rotate(360deg); }
 }
 
+/* --- Notificações Toast --- */
 .notification {
     position: fixed;
     top: 20px;
@@ -488,71 +376,55 @@ body.dark-mode #menu-toggle:hover {
 .notification.error { background-color: #dc3545; }
 .notification.warning { background-color: #fd7e14; }
 
-/* --- Responsive Adjustments --- */
-@media (max-width: 991.98px) { /* Breakpoint for Tablets and smaller */
-    .sidebar-toggle {
-        display: block; /* Show the toggle button on smaller screens */
+/* --- Ajustes Responsivos --- */
+@media (max-width: 991.98px) { /* Breakpoint para Tablets e celulares */
+
+    .main-content-wrapper {
+        margin-left: 0 !important; /* Força a margem zero em telas menores, importante para depuração */
+        padding-top: 2rem; /* Ajusta o padding superior para o conteúdo principal em mobile */
+        width: 100%; /* Garante que o wrapper ocupe a largura total disponível */
     }
 
-    #sidebar {
-        width: 250px; /* Defined width for the sidebar when it's an overlay */
-        transform: translateX(-100%); /* Hide sidebar by default */
-        left: 0;
-        top: 60px; /* Adjust if your navbar height changes on mobile */
-        height: calc(100vh - 60px);
-        box-shadow: 2px 0 15px rgba(0, 0, 0, 0.4);
-        border-right: none;
-        border-bottom-right-radius: 0;
-        border-top-right-radius: 0;
-        z-index: 1040; /* Ensure it overlays content */
-    }
-
-    #sidebar.active {
-        transform: translateX(0); /* Show sidebar when active */
-    }
-
-
-    /* Adjust card layout for tablet screens */
+    /* **Aqui está a principal mudança para o layout de card:** */
+    /* Força uma única coluna para os cards em tablets e celulares */
     #serviceCards {
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Increased min-width for better look */
-        gap: 1rem;
+        grid-template-columns: 1fr; /* Coluna única para todos os cards */
+        gap: 1.5rem; /* Mantém o espaçamento */
     }
 }
 
-@media (max-width: 767.98px) { /* Breakpoint for smaller phones */
+@media (max-width: 767.98px) { /* Breakpoint para celulares menores */
     .status-buttons {
-        justify-content: center;
+        justify-content: center; /* Centraliza os botões de status */
     }
     
     .info-grid {
-        grid-template-columns: 1fr; /* Stack info items vertically on small screens */
+        grid-template-columns: 1fr; /* Empilha itens de informação verticalmente */
     }
     
     .card-header {
-        flex-direction: column;
+        flex-direction: column; /* Empilha o número do ticket e o badge de status */
         gap: 0.5rem;
         text-align: center;
     }
 
-    .results-info > div { /* This rule seems to apply to the content inside results-info, assuming it's flex */
-        flex-direction: column;
-        gap: 1rem;
+    .results-info {
+        flex-direction: column; /* Empilha os itens de resultado (ex: contador e botões de exportação) */
+        align-items: stretch; /* Estica os itens para preencher a largura */
     }
 
     .export-buttons {
-        justify-content: center;
+        flex-direction: column; /* Empilha os botões de exportação */
+        width: 100%; /* Ocupa a largura total */
+    }
+    .export-buttons .btn {
+        width: 100%; /* Botões de exportação ocupam a largura total */
     }
 
-    /* Always show one card per row on very small screens */
-    #serviceCards {
-        grid-template-columns: 1fr; /* Single column */
-        gap: 1rem;
-    }
-
-    /* Ensure card content isn't too squished on very small screens */
+    /* Garante que o conteúdo do card não fique muito apertado */
     .service-card .card-body,
     .service-card .card-header,
     .service-card .card-footer {
-        padding: 1rem; /* Reduce padding slightly if needed */
+        padding: 1rem; /* Reduz o padding ligeiramente se necessário */
     }
 }

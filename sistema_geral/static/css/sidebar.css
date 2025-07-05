@@ -9,6 +9,8 @@
     border-radius: 4px;
     transition: background 0.3s ease;
     color: #333;
+    z-index: 1050; /* Garante que o botão esteja acima de outros elementos */
+    position: relative; /* Para garantir que o z-index funcione */
 }
 
 /* Light Theme */
@@ -27,13 +29,13 @@ body.dark-theme .sidebar-toggle:hover {
 
 /* ===== Sidebar Layout ===== */
 #sidebar {
-    background: linear-gradient(135deg, #4C6B8C, #395873);
+    background: var(--sidebar); /*ROOT BASE*/
     backdrop-filter: blur(8px);
     color: #f2f4f8;
     position: fixed;
     left: 0;
-    top: 80px;
-    height: calc(100vh - 70px);
+    top: 80px; /* Seu top atual */
+    height: calc(100vh - 82px - 52px); /* 100vh - top (80px) - altura do footer (60px) */
     width: 220px;
     z-index: 800;
     transition: all 0.3s ease;
@@ -41,11 +43,13 @@ body.dark-theme .sidebar-toggle:hover {
     box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
     padding: 1.5rem 0;
     border-right: 1px solid rgba(255, 255, 255, 0.08);
-    /* Adicione estas propriedades para borda arredondada apenas no canto inferior direito */
-    border-bottom-right-radius: 0px;
+   
+    /* Propriedades de border-radius (já estão corretas para arredondar os cantos inferiores) */
+    border-bottom-right-radius: 12px;
     border-top-right-radius: 12px;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    margin-left: 2px;
 }
 
 /* Sidebar Header */
@@ -76,7 +80,9 @@ body.dark-theme .sidebar-toggle:hover {
     border-bottom: 1px solid #f0f0f0;
 }
 
-.sidebar-menu a {
+/* Alterações AQUI: Padronizando o seletor para os links do menu */
+.sidebar-menu .nav-link,
+.sidebar-menu a { /* Garante que todos os links dentro de .sidebar-menu recebam esses estilos */
     display: flex;
     align-items: center;
     padding: 15px 20px;
@@ -86,9 +92,10 @@ body.dark-theme .sidebar-toggle:hover {
     gap: 12px;
 }
 
-.sidebar-menu a:hover {
-    background: #f8f9fa;
-    color: #009ee3;
+.sidebar-menu .nav-link:hover,
+.sidebar-menu a:hover { /* Aplica o hover para ambos os casos, para Light Mode */
+    background: #f8f9fa; /* Cor de fundo do hover para Light Mode (cinza muito claro/quase branco) */
+    color: #795935; /* Cor do texto do hover para Light Mode (o marrom que você vê no Contratos) */
     padding-left: 25px;
 }
 
@@ -101,20 +108,30 @@ body.dark-theme .sidebar-toggle:hover {
 
 /* ============ TEMA ESCURO ============ */
 body.dark-mode #sidebar {
-    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    background: var(--body-dark); /*ROOT BAASE*/
     border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-body.dark-mode #sidebar .nav-link:hover {
-    background: linear-gradient(135deg, #2a2a4e, #1e2a4e);
+/* Alterações AQUI: Padronizando o hover para o Tema Escuro */
+body.dark-mode .sidebar-menu .nav-link,
+body.dark-mode .sidebar-menu a {
+    color: #f2f4f8; /* Garante que a cor padrão do link no dark mode seja clara */
 }
 
+body.dark-mode .sidebar-menu .nav-link:hover,
+body.dark-mode .sidebar-menu a:hover {
+    background: rgba(255, 255, 255, 0.1); /* Um cinza translúcido claro para o hover no dark mode */
+    color: #f2f4f8; /* Mantém a cor do texto clara no hover do dark mode */
+    padding-left: 25px; /* Mantém o efeito de padding-left no hover */
+}
+
+
 body.dark-mode #menu-toggle {
-    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    background: var(--body-dark); /*ROOT BAASE*/
 }
 
 body.dark-mode #menu-toggle:hover {
-    background: linear-gradient(135deg, #2a2a4e, #1e2a4e);
+    background: var(--body-dark); /*ROOT BAASE*/
 }
 
 #serviceCards {
