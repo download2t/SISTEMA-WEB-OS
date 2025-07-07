@@ -1,0 +1,236 @@
+/* static/css/theme.css */
+
+/* --- Default Theme (could be a base light theme, e.g., the Blue/Grey one) --- */
+:root {
+    --painel: linear-gradient(135deg, #37517E 0%, #273A5E 50%, #1A243D 100%);
+    --body-bg: #f4f6f8;
+    --nav-hover: linear-gradient(135deg, #37517E 0%, #273A5E 50%, #1A243D 100%);
+    --body-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); /* Dark Mode base */
+    --nav-dark: rgba(26, 26, 46, 0.95); /* Dark Mode base */
+    --sidebar: linear-gradient(135deg, #37517E 0%, #273A5E 50%, #1A243D 100%);
+
+    /* General light theme text/component colors */
+    --text-color-light: #333;
+    --heading-color-light: #222;
+    --border-color-light: #e0e0e0;
+    --card-bg-light: #ffffff;
+    --dropdown-bg-light: #ffffff;
+    --dropdown-border-light: #dee2e6;
+    --dropdown-text-light: #212529;
+    --dropdown-hover-bg-light: #f8f9fa;
+}
+
+/* --- Theme: Modern Dark Blue & Crisp White (Default from your last request) --- */
+.theme-modern-blue {
+    --painel: linear-gradient(135deg, #2C3E50 0%, #233140 50%, #1A242E 100%);
+    --body-bg: #FFFFFF;
+    --nav-hover: linear-gradient(135deg, #3498DB 0%, #2980B9 50%, #1F6A9F 100%);
+    --sidebar: linear-gradient(135deg, #273747 0%, #1D2A3A 50%, #141F29 100%);
+
+    /* Adjust general colors for this theme's light mode if needed */
+    --text-color-light: #444;
+    --heading-color-light: #333;
+}
+
+/* --- Theme: Muted Green & Warm Grey --- */
+.theme-muted-green {
+    --painel: linear-gradient(135deg, #5B7B7A 0%, #4D6968 50%, #405757 100%);
+    --body-bg: #F7F7F5;
+    --nav-hover: linear-gradient(135deg, #5B7B7A 0%, #4D6968 50%, #405757 100%);
+    --sidebar: linear-gradient(135deg, #4D5E5E 0%, #405050 50%, #334040 100%);
+
+    /* Adjust general colors for this theme's light mode if needed */
+    --text-color-light: #3a3a3a;
+    --heading-color-light: #2d2d2d;
+}
+
+/* --- Theme: Cool Grey & Blue Accents --- */
+.theme-cool-grey {
+    --painel: linear-gradient(135deg, #4A5568 0%, #3B4554 50%, #2C343D 100%);
+    --body-bg: #F0F2F5;
+    --nav-hover: linear-gradient(135deg, #375A7F 0%, #2A4C6F 50%, #1E3D5C 100%);
+    --sidebar: linear-gradient(135deg, #3A475A 0%, #2E3A4B 50%, #232C37 100%);
+
+    /* Adjust general colors for this theme's light mode if needed */
+    --text-color-light: #555;
+    --heading-color-light: #444;
+}
+
+/* --- Old Theme: Classic Brown --- */
+.theme-classic-brown {
+    --painel: linear-gradient(135deg, #7A5C4F 0%, #6B4E43 50%, #5E4237 100%);
+    --body-bg: #F5EFE6;
+    --nav-hover: linear-gradient(135deg, #8C6D61 0%, #7B5C51 50%, #6C4F44 100%);
+    --sidebar: linear-gradient(135deg, #604F47 0%, #51423B 50%, #453831 100%);
+    --text-color-light: #4A3C32;
+    --heading-color-light: #3B2E24;
+}
+
+/* --- New Theme 1: Emerald Forest --- */
+.theme-emerald-forest {
+    --painel: linear-gradient(135deg, #2C5F2D 0%, #204C21 50%, #153A16 100%);
+    --body-bg: #F3FCF3;
+    --nav-hover: linear-gradient(135deg, #4CAF50 0%, #3D8C40 50%, #306F33 100%);
+    --sidebar: linear-gradient(135deg, #245025 0%, #1B401C 50%, #123013 100%);
+    --text-color-light: #283C29;
+    --heading-color-light: #1F3020;
+}
+
+/* --- New Theme 2: Ocean Breeze --- */
+.theme-ocean-breeze {
+    --painel: linear-gradient(135deg, #5DADE2 0%, #4592C1 50%, #3077A0 100%);
+    --body-bg: #EAF7FD;
+    --nav-hover: linear-gradient(135deg, #6BB9EC 0%, #50A4D5 50%, #3A8EC0 100%);
+    --sidebar: linear-gradient(135deg, #4A8BB9 0%, #3C77A0 50%, #2F6387 100%);
+    --text-color-light: #2C3E50;
+    --heading-color-light: #213040;
+}
+
+/* --- New Theme 3: Royal Purple --- */
+.theme-royal-purple {
+    --painel: linear-gradient(135deg, #6A1B9A 0%, #56157F 50%, #421064 100%);
+    --body-bg: #F8F0FC;
+    --nav-hover: linear-gradient(135deg, #8E24AA 0%, #7A1FA2 50%, #681A8D 100%);
+    --sidebar: linear-gradient(135deg, #5C1980 0%, #4B1469 50%, #3A1052 100%);
+    --text-color-light: #4A148C;
+    --heading-color-light: #380D6B;
+}
+
+/* --- New Theme 4: Sunset Orange --- */
+.theme-sunset-orange {
+    --painel: linear-gradient(135deg, #FF7043 0%, #FB5B3A 50%, #E64A19 100%);
+    --body-bg: #FFF7EE;
+    --nav-hover: linear-gradient(135deg, #FF8A65 0%, #FF7043 50%, #F4511E 100%);
+    --sidebar: linear-gradient(135deg, #E65100 0%, #CD4700 50%, #B33D00 100%);
+    --text-color-light: #BF360C;
+    --heading-color-light: #A12C09;
+}
+
+/* --- New Theme 5: Midnight Blue --- */
+.theme-midnight-blue {
+    --painel: linear-gradient(135deg, #1A237E 0%, #151D6B 50%, #0F165A 100%);
+    --body-bg: #ECF0F1;
+    --nav-hover: linear-gradient(135deg, #283593 0%, #1A237E 50%, #141C6A 100%);
+    --sidebar: linear-gradient(135deg, #181E67 0%, #121852 50%, #0C123D 100%);
+    --text-color-light: #1A237E;
+    --heading-color-light: #151D6B;
+}
+
+/* --- New Theme 6: Forest Green --- */
+.theme-forest-green {
+    --painel: linear-gradient(135deg, #388E3C 0%, #2E7D32 50%, #266B29 100%);
+    --body-bg: #F0FAF0;
+    --nav-hover: linear-gradient(135deg, #4CAF50 0%, #388E3C 50%, #2E7D32 100%);
+    --sidebar: linear-gradient(135deg, #2E7D32 0%, #266B29 50%, #1F5A21 100%);
+    --text-color-light: #1B5E20;
+    --heading-color-light: #154C19;
+}
+
+/* --- New Theme 7: Deep Red --- */
+.theme-deep-red {
+    --painel: linear-gradient(135deg, #C62828 0%, #B71C1C 50%, #A31515 100%);
+    --body-bg: #FCEAEA;
+    --nav-hover: linear-gradient(135deg, #D32F2F 0%, #C62828 50%, #B71C1C 100%);
+    --sidebar: linear-gradient(135deg, #B71C1C 0%, #A31515 50%, #8D1010 100%);
+    --text-color-light: #B71C1C;
+    --heading-color-light: #A31515;
+}
+
+/* --- New Theme 8: Sunny Yellow --- */
+.theme-sunny-yellow {
+    --painel: linear-gradient(135deg, #d3b418 0%, #9e8025 50%, #f1c14f 100%);
+    --body-bg: #FFFDF5;
+    --nav-hover: linear-gradient(135deg, #FFEE58 0%, #c4ab31 50%, #FFC107 100%);
+    --sidebar: linear-gradient(135deg, #be930f 0%, #b48d30 50%, #f0b042 100%);
+    --text-color-light: #FF8F00;
+    --heading-color-light: #FF6F00;
+}
+
+/* --- New Theme 9: Aqua Blue --- */
+.theme-aqua-blue {
+    --painel: linear-gradient(135deg, #00BCD4 0%, #00ACC1 50%, #0097A7 100%);
+    --body-bg: #E0F7FA;
+    --nav-hover: linear-gradient(135deg, #26C6DA 0%, #00BCD4 50%, #00ACC1 100%);
+    --sidebar: linear-gradient(135deg, #00ACC1 0%, #0097A7 50%, #00838F 100%);
+    --text-color-light: #00838F;
+    --heading-color-light: #006064;
+}
+
+/* --- New Theme 10: Charcoal Grey --- */
+.theme-charcoal-grey {
+    --painel: linear-gradient(135deg, #34495E 0%, #2C3E50 50%, #212B36 100%);
+    --body-bg: #F2F4F7;
+    --nav-hover: linear-gradient(135deg, #4A6078 0%, #34495E 50%, #2C3E50 100%);
+    --sidebar: linear-gradient(135deg, #2C3E50 0%, #212B36 50%, #1A242E 100%);
+    --text-color-light: #4F637A;
+    --heading-color-light: #3D5065;
+}
+
+/* --- Dark Mode Overrides (these apply regardless of the light theme selected) --- */
+body.dark-mode {
+    --painel: var(--body-dark); /* Usually dark mode panels match dark body */
+    --body-bg: var(--body-dark);
+    --nav-hover: linear-gradient(135deg, #3a3a5e 0%, #303e6e 100%); /* Darker hover for navigation in dark mode */
+    --sidebar: var(--body-dark); /* Sidebar in dark mode, matching body-dark */
+
+    /* Text/component colors for dark mode */
+    --text-color-dark: #e0e0e0;
+    --heading-color-dark: #f0f0f0;
+    --border-color-dark: #4a4a5c;
+    --card-bg-dark: #2d3748;
+    --dropdown-bg-dark: #2c3e50;
+    --dropdown-border-dark: #3b4c5a;
+    --dropdown-text-dark: #e0e0e0;
+    --dropdown-hover-bg-dark: #34495e;
+}
+
+/* Base styles for elements that use these variables */
+body {
+    background: var(--body-bg);
+    color: var(--text-color-light);
+    transition: background 0.3s ease, color 0.3s ease; /* Smooth transition for theme changes */
+}
+body.dark-mode {
+    color: var(--text-color-dark);
+}
+
+.navbar {
+    background: var(--painel);
+    transition: background 0.3s ease;
+}
+
+#sidebar {
+    background: var(--sidebar);
+    border-right: 1px solid var(--border-color-light); /* Assuming border-color is defined for light/dark */
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+body.dark-mode #sidebar {
+    border-color: var(--border-color-dark);
+}
+
+.sidebar-menu a:hover {
+    background: var(--nav-hover); /* Apply the nav-hover gradient on sidebar links */
+}
+
+/* Card styling */
+.card {
+    background: var(--card-bg-light);
+    color: var(--text-color-light);
+    transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+body.dark-mode .card {
+    background: var(--card-bg-dark);
+    color: var(--text-color-dark);
+}
+.card h2 {
+    color: var(--heading-color-light);
+}
+body.dark-mode .card h2 {
+    color: var(--heading-color-dark);
+}
+.card p {
+    color: var(--text-color-light);
+}
+body.dark-mode .card p {
+    color: var(--text-color-dark);
+}

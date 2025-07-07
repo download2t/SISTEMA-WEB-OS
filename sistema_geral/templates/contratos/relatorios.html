@@ -2,94 +2,91 @@
 {% load static %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
 <link rel="stylesheet" href="{% static 'css/contratos/relatorios.css' %}">
-<link rel="stylesheet" href="{% static 'css/contratos/menu_contratos.css' %}">
+
 {% endblock %}
 
 {% block content %}<div class="container-fluid mt-4"> <!-- Usa mais espaço -->
-    <div class="row">
-        <!-- Menu lateral -->
-        <div class="col-lg-2 col-md-3">
-            {% include 'contratos/menu_contratos.html' %}
-        </div>
-        
-        <div class="col-lg-10 col-md-9">
-            <div class="card p-4 shadow-lg border-0 rounded">
-                <h1 class="fw-bold text-center theme-title">Relatórios de Contratos</h1>
+{% include 'contratos/menu_contratos.html' %}
+<div class="main-content-wrapper"> 
+    <div class="col-lg-10 col-md-9">
+        <div class="card p-4 shadow-lg border-0 rounded">
+            <h1 class="fw-bold text-center theme-title">Relatórios de Contratos</h1>
 
-                <!-- Botão de filtros -->
-                <button type="button" id="toggle-filters" class="btn theme-button d-block mx-auto my-3">
-                    <i class="fas fa-filter"></i> Filtrar Relatórios
-                </button>
+            <!-- Botão de filtros -->
+            <button type="button" id="toggle-filters" class="btn theme-button d-block mx-auto my-3">
+                <i class="fas fa-filter"></i> Filtrar Relatórios
+            </button>
 
-                <!-- Filtros -->
-                <div id="filter-options" class="d-none">
-                    <div class="row g-3">
-                        <div class="col-lg-4 col-md-6">
-                            <div class="card p-3">
-                                <h5 class="fw-bold">Razão Social</h5>
-                                <input type="text" name="razao_social" class="form-control">
-                            </div>
+            <!-- Filtros -->
+            <div id="filter-options" class="d-none">
+                <div class="row g-3">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card p-3">
+                            <h5 class="fw-bold">Razão Social</h5>
+                            <input type="text" name="razao_social" class="form-control">
                         </div>
-                        <div class="col-lg-4 col-md-6">
-                            <div class="card p-3">
-                                <h5 class="fw-bold">Grupo</h5>
-                                <select name="grupo" class="form-select">
-                                    <option value="">Todos</option>
-                                </select>
-                            </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card p-3">
+                            <h5 class="fw-bold">Grupo</h5>
+                            <select name="grupo" class="form-select">
+                                <option value="">Todos</option>
+                            </select>
                         </div>
-                        <div class="col-lg-4 col-md-6">
-                            <div class="card p-3">
-                                <h5 class="fw-bold">Data</h5>
-                                <input type="date" name="data_inicio" class="form-control">
-                            </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card p-3">
+                            <h5 class="fw-bold">Data</h5>
+                            <input type="date" name="data_inicio" class="form-control">
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Tabela -->
-                <div class="table-responsive">
-                    <table class="table theme-table align-middle">
-                        <thead>
-                            <tr>
-                                <th>Razão Social</th>
-                                <th>Nome Fantasia</th>
-                                <th>Documento</th>
-                                <th>Telefone</th>
-                                <th>E-mail</th>
-                                <th>Data Assinatura</th>
-                                <th>Data Validade</th>
-                                <th>Grupo</th>
-                                <th>Valor</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for contrato in contratos %}
-                            <tr>
-                                <td>{{ contrato.razao_social }}</td>
-                                <td>{{ contrato.nome_fantasia }}</td>
-                                <td>{{ contrato.documento }}</td>
-                                <td>{{ contrato.telefone }}</td>
-                                <td>{{ contrato.email }}</td>
-                                <td>{{ contrato.data_assinatura|date:"d/m/Y" }}</td>
-                                <td>{{ contrato.data_validade|date:"d/m/Y" }}</td>
-                                <td>{{ contrato.grupo_responsavel.name }}</td>
-                                <td>{{ contrato.valor }}</td>
-                                <td>{% if contrato.ativo %}Sim{% else %}Não{% endif %}</td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="10" class="text-center text-muted">Nenhum contrato encontrado.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+            <!-- Tabela -->
+            <div class="table-responsive">
+                <table class="table theme-table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Razão Social</th>
+                            <th>Nome Fantasia</th>
+                            <th>Documento</th>
+                            <th>Telefone</th>
+                            <th>E-mail</th>
+                            <th>Data Assinatura</th>
+                            <th>Data Validade</th>
+                            <th>Grupo</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for contrato in contratos %}
+                        <tr>
+                            <td>{{ contrato.razao_social }}</td>
+                            <td>{{ contrato.nome_fantasia }}</td>
+                            <td>{{ contrato.documento }}</td>
+                            <td>{{ contrato.telefone }}</td>
+                            <td>{{ contrato.email }}</td>
+                            <td>{{ contrato.data_assinatura|date:"d/m/Y" }}</td>
+                            <td>{{ contrato.data_validade|date:"d/m/Y" }}</td>
+                            <td>{{ contrato.grupo_responsavel.name }}</td>
+                            <td>{{ contrato.valor }}</td>
+                            <td>{% if contrato.ativo %}Sim{% else %}Não{% endif %}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="10" class="text-center text-muted">Nenhum contrato encontrado.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+ 
 </div>
 {% endblock %}
 

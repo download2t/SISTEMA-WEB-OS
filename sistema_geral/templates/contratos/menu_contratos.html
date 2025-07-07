@@ -3,50 +3,35 @@
         <h3>Menu</h3>
     </div>
     <ul class="sidebar-menu">
-        <li><form action="{% url 'criar_contrato' %}" method="get" class="sidebar-form"> 
-                <input type="hidden" name="status" value="">
-                <button type="submit" class="nav-link">
-                    <i class="fas fa-file-signature me-2"></i> Novo Contrato
-                </button>
-            </form>
-        </li>
-        <li> <form action="{% url 'listar_contratos_rel' %}" method="get" class="sidebar-form">
-                <input type="hidden" name="status" value="">
-                <button type="submit" class="nav-link">
-                    <i class="fas fa-chart-bar me-2"></i> Relatórios
-                </button>
-            </form>
-        </li>
-        <li><form action="{% url 'listar_contratos' %}" method="get" class="sidebar-form">
-                <input type="hidden" name="status" value="todos">
-                <button type="submit" class="nav-link">
-                    <i class="fas fa-folder me-2"></i> Todos os Contratos
-                </button>
-            </form>
-        </li>
-        <li><form action="{% url 'listar_contratos' %}" method="get" class="sidebar-form">
-                <input type="hidden" name="status" value="ativo">
-                <button type="submit" class="nav-link">
-                    <i class="fas fa-folder-open me-2"></i> Contratos Ativos
-                </button>
-            </form>
-        </li>
-        <li> <form action="{% url 'listar_contratos' %}" method="get" class="sidebar-form">
-                <input type="hidden" name="status" value="inativo">
-                <button type="submit" class="nav-link">
-                    <i class="fas fa-folder-minus me-2"></i> Contratos Inativos
-                </button>
-            </form>
-        </li>
-        {# You had "Vencendo (60 Dias)"#}
         <li>
-            <form action="{% url 'listar_contratos' %}" method="get" class="sidebar-form">
-                <input type="hidden" name="status" value="vencendo_60_dias"> {# Example status #}
-                <button type="submit" class="nav-link">
-                    <i class="fas fa-exclamation-triangle me-2"></i> Vencendo (60 Dias)
-                </button>
-            </form>
+            <a href="{% url 'criar_contrato' %}" class="nav-link">
+                <i class="fas fa-file-signature me-2"></i> Novo Contrato
+            </a>
         </li>
-
-    </ul> {# <--- IMPORTANT: This closing </ul> tag was misplaced in your original snippet #}
+        <li>
+            <a href="{% url 'listar_contratos_rel' %}" class="nav-link">
+                <i class="fas fa-chart-bar me-2"></i> Relatórios
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'listar_contratos' %}?status=todos" class="nav-link">
+                <i class="fas fa-folder me-2"></i> Todos os Contratos
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'listar_contratos' %}?status=ativo" class="nav-link">
+                <i class="fas fa-folder-open me-2"></i> Contratos Ativos
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'listar_contratos' %}?status=inativo" class="nav-link">
+                <i class="fas fa-folder-minus me-2"></i> Contratos Inativos
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'listar_contratos' %}?status=vencendo_60_dias" class="nav-link">
+                <i class="fas fa-exclamation-triangle me-2"></i> Vencendo (60 Dias)
+            </a>
+        </li>
+    </ul>
 </aside>

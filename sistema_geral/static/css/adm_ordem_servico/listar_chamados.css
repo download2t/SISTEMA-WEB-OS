@@ -16,16 +16,6 @@
     --prioridade-alta: #fd7e14;
     --prioridade-urgente: #dc3545;
 }
-/* --- Conteúdo Principal (Main Content Wrapper) --- */
-.main-content-wrapper {
-    margin-left: 220px; /* Por padrão, para desktop, empurra o conteúdo para a direita da sidebar */
-    padding-right: 15px;
-    padding-left: 15px;
-    min-height: calc(100vh - 70px - 5rem);
-    transition: margin-left 0.3s ease; /* Adiciona transição para a margem */
-    box-sizing: border-box; /* Garante que padding e border sejam incluídos na largura/altura */
-    width: auto; /* Permite que o width se ajuste com a margem */
-}
 
 .header-section {
     padding: 1rem 0;
@@ -378,15 +368,6 @@
 
 /* --- Ajustes Responsivos --- */
 @media (max-width: 991.98px) { /* Breakpoint para Tablets e celulares */
-
-    .main-content-wrapper {
-        margin-left: 0 !important; /* Força a margem zero em telas menores, importante para depuração */
-        padding-top: 2rem; /* Ajusta o padding superior para o conteúdo principal em mobile */
-        width: 100%; /* Garante que o wrapper ocupe a largura total disponível */
-    }
-
-    /* **Aqui está a principal mudança para o layout de card:** */
-    /* Força uma única coluna para os cards em tablets e celulares */
     #serviceCards {
         grid-template-columns: 1fr; /* Coluna única para todos os cards */
         gap: 1.5rem; /* Mantém o espaçamento */

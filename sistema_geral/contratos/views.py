@@ -27,13 +27,12 @@ import openpyxl # type: ignore
 from openpyxl.utils import get_column_letter # type: ignore
 from django.http import HttpResponse
 
-
 @login_required
 def listar_contratos(request):
     contratos = Contrato.objects.all()
 
     # Obtendo parâmetros da requisição
-    tipo_data = request.GET.get("tipo_data", "assinatura")  # "assinatura" por padrão
+    tipo_data = request.GET.get("tipo_data", "assinatura")
     data_inicio = request.GET.get("data_inicio")
     data_fim = request.GET.get("data_fim")
     razao_social = request.GET.get("razao_social", "").strip()
@@ -49,14 +48,13 @@ def listar_contratos(request):
 
     # Filtro por Razão Social, Nome Fantasia ou Documento (busca parcial)
     if razao_social:
+        # Usando Q objects para combinar ORs de forma mais limpa
+        from django.db.models import Q
         contratos = contratos.filter(
-            nome_fantasia__icontains=razao_social
-        ) | contratos.filter(
-            razao_social__icontains=razao_social
-        ) | contratos.filter(
-            documento__icontains=razao_social  # Adiciona a busca por documento
+            Q(nome_fantasia__icontains=razao_social) |
+            Q(razao_social__icontains=razao_social) |
+            Q(documento__icontains=razao_social)
         )
-
 
     # Filtro por Grupo
     if grupo_id:
@@ -65,14 +63,17 @@ def listar_contratos(request):
     # Filtro por Status (ativo, inativo, vencido ou vencendo)
     hoje = now().date()
     if status == "ativo":
-        contratos = contratos.filter(ativo=True)  # Alterado de "status" para "ativo"
+        contratos = contratos.filter(ativo=True)
     elif status == "inativo":
-        contratos = contratos.filter(ativo=False)  # Alterado de "status" para "ativo"
+        contratos = contratos.filter(ativo=False)
     elif status == "vencido":
         contratos = contratos.filter(data_validade__lt=hoje)
-    elif status == "vencendo":
+    elif status == "vencendo_60_dias": # <--- CORREÇÃO AQUI: Corresponde ao parâmetro da URL
         data_limite = hoje + timedelta(days=60)
-        contratos = contratos.filter(data_validade__range=[hoje, data_limite], ativo=True)  # Apenas ativos
+        # Filtra contratos que vencem entre hoje e os próximos 60 dias, e que estão ativos
+        contratos = contratos.filter(data_validade__range=[hoje, data_limite], ativo=True)
+    # Se 'status' for 'todos' ou outro valor não mapeado, nenhum filtro de status será aplicado,
+    # e todos os contratos (filtrados por outras condições) serão exibidos.
 
     # Pegando todos os grupos para exibir no filtro
     grupos = Group.objects.all()
@@ -85,7 +86,7 @@ def listar_contratos(request):
         "data_fim": data_fim,
         "razao_social": razao_social,
         "grupo": grupo_id,
-        "status": status,
+        "status": status, # Mantém o status atual para que o template possa marcar a opção selecionada
     }
 
     return render(request, "contratos/listar_contratos.html", context)

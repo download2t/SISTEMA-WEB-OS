@@ -1,26 +1,125 @@
 {% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
 
 {% block content %}
-<div class="text-center mt-5">
+<div class="container-fluid"> {# Use Bootstrap container-fluid for full width, and py-4 for padding #}
     {% if user.is_authenticated %}
-        <!-- Área para usuários autenticados -->
+        <div class="text-center mb-4"> {# Centering and bottom margin for greeting #}
             <h1 class="display-4 fw-bold theme-title">Bem-vindo de volta, {{ user.first_name }}!</h1>
-            <p class="lead theme-subtitle mb-4 ">Estamos felizes em vê-lo novamente. Aqui está um resumo da sua conta.</p>
-            
-            <!-- Informações adicionais sobre a conta -->
-            <div class="my-4 text-start mx-auto" style="max-width: 700px;">
-                <div class="row">
-                    <div class="col-12 col-md-6 mb-3">
-                        <p><strong>Status da conta:</strong> 
-                            <span class="badge bg-success">{{ user.is_active|yesno:"Ativo,Inativo" }}</span>
-                        </p>
-                        <p><strong>Email:</strong> {{ user.email }}</p>
-                    </div>
-                    <div class="col-12 col-md-6 mb-3">
-                        <p><strong>Data de cadastro:</strong> {{ user.date_joined|date:"d/m/Y" }}</p>
+            <p class="lead theme-subtitle">Estamos felizes em vê-lo novamente. Aqui está um resumo da sua conta.</p>
+        </div>
+
+        {# Theme Selection Buttons #}
+        <div class="row justify-content-center mb-5">
+            <div class="col-12 col-md-8 col-lg-8"> {# Increased column width to accommodate more buttons #}
+                <div class="card text-center p-4">
+                    <h3 class="mb-3">Escolha seu Tema:</h3>
+                    <div class="d-flex justify-content-center flex-wrap gap-2">
+                        <button class="btn btn-outline-primary" data-theme="theme-default" title="Tema Padrão">
+                            <i class="fas fa-palette me-1"></i> Padrão
+                        </button>
+                        <button class="btn btn-outline-info" data-theme="theme-modern-blue" title="Azul Moderno">
+                            <i class="fas fa-palette me-1"></i> Azul Moderno
+                        </button>
+                        <button class="btn btn-outline-success" data-theme="theme-muted-green" title="Verde Suave">
+                            <i class="fas fa-palette me-1"></i> Verde Suave
+                        </button>
+                        <button class="btn btn-outline-secondary" data-theme="theme-cool-grey" title="Cinza Frio">
+                            <i class="fas fa-palette me-1"></i> Cinza Frio
+                        </button>
+                        <button class="btn btn-outline-dark" data-theme="theme-classic-brown" title="Marrom Clássico">
+                            <i class="fas fa-palette me-1"></i> Marrom Clássico
+                        </button>
+                        <button class="btn btn-outline-success" data-theme="theme-emerald-forest" title="Floresta Esmeralda">
+                            <i class="fas fa-palette me-1"></i> Esmeralda
+                        </button>
+                        <button class="btn btn-outline-info" data-theme="theme-ocean-breeze" title="Brisa do Oceano">
+                            <i class="fas fa-palette me-1"></i> Oceano
+                        </button>
+                        <button class="btn btn-outline-dark" data-theme="theme-royal-purple" title="Roxo Real">
+                            <i class="fas fa-palette me-1"></i> Roxo Real
+                        </button>
+                        <button class="btn btn-outline-warning" data-theme="theme-sunset-orange" title="Laranja Pôr do Sol">
+                            <i class="fas fa-palette me-1"></i> Pôr do Sol
+                        </button>
+                        <button class="btn btn-outline-primary" data-theme="theme-midnight-blue" title="Azul Meia-Noite">
+                            <i class="fas fa-palette me-1"></i> Meia-Noite
+                        </button>
+                        <button class="btn btn-outline-success" data-theme="theme-forest-green" title="Verde Floresta">
+                            <i class="fas fa-palette me-1"></i> Floresta
+                        </button>
+                        <button class="btn btn-outline-danger" data-theme="theme-deep-red" title="Vermelho Profundo">
+                            <i class="fas fa-palette me-1"></i> Vermelho
+                        </button>
+                        <button class="btn btn-outline-warning" data-theme="theme-sunny-yellow" title="Amarelo Ensolarado">
+                            <i class="fas fa-palette me-1"></i> Amarelo
+                        </button>
+                        <button class="btn btn-outline-info" data-theme="theme-aqua-blue" title="Azul Água">
+                            <i class="fas fa-palette me-1"></i> Água
+                        </button>
+                        <button class="btn btn-outline-dark" data-theme="theme-charcoal-grey" title="Cinza Carvão">
+                            <i class="fas fa-palette me-1"></i> Carvão
+                        </button>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="row justify-content-center"> {# Centering the row of cards #}
+            {# Card 1: Account Status and Email #}
+            <div class="col-12 col-md-6 col-lg-4 mb-4"> {# Responsive column sizing for cards #}
+                <div class="card h-100"> {# h-100 makes cards in a row the same height #}
+                    <h2>Status da Conta</h2>
+                    <p>
+                        <strong>Status:</strong>
+                        <span class="badge bg-success">{{ user.is_active|yesno:"Ativo,Inativo" }}</span>
+                    </p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                </div>
+            </div>
+
+            {# Card 2: Registration Date and Last Login #}
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <h2>Detalhes do Cadastro</h2>
+                    <p><strong>Data de cadastro:</strong> {{ user.date_joined|date:"d/m/Y" }}</p>
+                    {% if user.last_login %}
+                        <p><strong>Último Login:</strong> {{ user.last_login|date:"d/m/Y H:i" }}</p>
+                    {% else %}
+                        <p><strong>Último Login:</strong> Nunca</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# Optional: Card for quick actions/links #}
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 d-flex flex-column justify-content-between">
+                    <h2>Ações Rápidas</h2>
+                    <p>Gerencie sua conta ou acesse funcionalidades essenciais.</p>
+                    <div class="mt-auto"> {# Push buttons to the bottom of the card if content is short #}
+                        <a href="{% url 'alterar_senha' %}" class="btn btn-primary w-100 mb-2">Alterar Senha</a>
+                        {% if request.user.is_staff %}
+                               <a href="{% url 'adm_chamados_abertos' %}" class="btn btn-secondary w-100">Meus Chamados (Admin)</a>
+                        {% else %}
+                            <a href="{% url 'chamados_abertos' %}" class="btn btn-secondary w-100">Meus Chamados</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div> {# End of row #}
+
+    {% else %}
+        {# Content for non-authenticated users #}
+        <div class="text-center mt-5">
+            <h1 class="display-4 fw-bold theme-title">Bem-vindo ao SANMA!</h1>
+            <p class="lead theme-subtitle">Por favor, faça login para acessar o sistema.</p>
+            <a href="{% url 'login' %}" class="btn btn-primary btn-lg mt-3">Fazer Login</a>
         </div>
     {% endif %}
 </div>

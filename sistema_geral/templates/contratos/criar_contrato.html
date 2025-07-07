@@ -1,107 +1,96 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+{% endblock %}
 {% block content %}
+{% include 'contratos/menu_contratos.html' %}
+<div class="main-content-wrapper"> 
+    <div class="container mt-4">
+        <h1 class="mb-4">Cadastrar novo Contrato</h1>
+        <!-- Formulário -->
+        <form method="post" enctype="multipart/form-data" class="card p-4 shadow-sm">
+            {% csrf_token %}
 
-{% if form.errors %}
-    <div class="alert alert-danger">
-        <strong>Erro ao enviar o formulário:</strong>
-        <ul>
-            {% for field in form %}
-                {% for error in field.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            {% endfor %}
-        </ul>
+            <!-- Linha para CNPJ, Razão Social e Nome Fantasia -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="documento">CNPJ/CPF <span class="text-danger">*</span></label>
+                    {{ form.documento }}
+                </div>
+
+                <div class="col-md-4">
+                    <label for="razao_social">Razão Social <span class="text-danger">*</span></label>
+                    {{ form.razao_social }}
+                </div>
+
+                <div class="col-md-4">
+                    <label for="nome_fantasia">Nome Fantasia</label>
+                    {{ form.nome_fantasia }}
+                </div>
+            </div>
+
+            <!-- Linha para Telefone e Email -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="telefone">Telefone  </label>
+                    {{ form.telefone }}
+                </div>
+
+                <div class="col-md-6">
+                    <label for="email">E-mail </label>
+                    {{ form.email }}
+                </div>
+            </div>
+
+            <!-- Linha para Descrição, Data de Assinatura e Data de Validade -->
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label for="descricao">Descrição</label>
+                    {{ form.descricao }}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="data_assinatura">Data de Assinatura <span class="text-danger">*</span></label>
+                    {{ form.data_assinatura }}
+                </div>
+
+                <div class="col-md-4">
+                    <label for="data_validade">Data de Validade <span class="text-danger">*</span></label>
+                    {{ form.data_validade }}
+                </div>
+
+                <div class="col-md-4">
+                    <label for="{{ form.grupo_responsavel.id_for_label }}">Setor de contratação: <span class="text-danger">*</span></label>
+                        {{ form.grupo_responsavel }}
+
+                        {% if form.grupo.errors %}
+                            <div class="alert alert-danger">
+                                {{ form.grupo.errors|join:", " }}
+                            </div>
+                        {% endif %}
+                </div>
+            </div>
+
+                <!-- Linha para Valor -->
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label for="valor">Valor do Contrato <span class="text-danger">*</span></label>
+                    {{ form.valor }}
+                </div>
+            </div>
+
+            <!-- Botões -->
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+                <a href="{% url 'listar_contratos' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
     </div>
-{% endif %}
-
-
-<div class="container mt-4">
-    <h1 class="mb-4">Cadastrar novo Contrato</h1>
-    <!-- Formulário -->
-    <form method="post" enctype="multipart/form-data" class="card p-4 shadow-sm">
-        {% csrf_token %}
-
-        <!-- Linha para CNPJ, Razão Social e Nome Fantasia -->
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <label for="documento">CNPJ/CPF <span class="text-danger">*</span></label>
-                {{ form.documento }}
-            </div>
-
-            <div class="col-md-4">
-                <label for="razao_social">Razão Social <span class="text-danger">*</span></label>
-                {{ form.razao_social }}
-            </div>
-
-            <div class="col-md-4">
-                <label for="nome_fantasia">Nome Fantasia</label>
-                {{ form.nome_fantasia }}
-            </div>
-        </div>
-
-        <!-- Linha para Telefone e Email -->
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="telefone">Telefone  </label>
-                {{ form.telefone }}
-            </div>
-
-            <div class="col-md-6">
-                <label for="email">E-mail </label>
-                {{ form.email }}
-            </div>
-        </div>
-
-        <!-- Linha para Descrição, Data de Assinatura e Data de Validade -->
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <label for="descricao">Descrição</label>
-                {{ form.descricao }}
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <label for="data_assinatura">Data de Assinatura <span class="text-danger">*</span></label>
-                {{ form.data_assinatura }}
-            </div>
-
-            <div class="col-md-4">
-                <label for="data_validade">Data de Validade <span class="text-danger">*</span></label>
-                {{ form.data_validade }}
-            </div>
-
-             <div class="col-md-4">
-                  <label for="{{ form.grupo_responsavel.id_for_label }}">Setor de contratação: <span class="text-danger">*</span></label>
-                    {{ form.grupo_responsavel }}
-
-                    {% if form.grupo.errors %}
-                        <div class="alert alert-danger">
-                            {{ form.grupo.errors|join:", " }}
-                        </div>
-                    {% endif %}
-            </div>
-        </div>
-
-             <!-- Linha para Valor -->
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <label for="valor">Valor do Contrato <span class="text-danger">*</span></label>
-                {{ form.valor }}
-            </div>
-        </div>
-
-        <!-- Botões -->
-        <div class="d-flex justify-content-between">
-            <button type="submit" class="btn btn-primary">Salvar</button>
-            <a href="{% url 'listar_contratos' %}" class="btn btn-secondary">Cancelar</a>
-        </div>
-    </form>
 </div>
 {% endblock %}
-
-<!-- Script para formatação do valor -->
 <script>
     // Função para formatar o valor em formato de moeda
     function formatarValor(event) {

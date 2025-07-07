@@ -1,25 +1,33 @@
-:root {
-  --painel: linear-gradient(135deg, #7A6F62 0%, #5E5349 50%, #443B33 100%);
-  --body-bg: linear-gradient(135deg, #f8f8f6 0%, #eeeae5 50%, #dad2c5 100%);
-  --nav-hover: linear-gradient(135deg, #7A6F62 0%, #5E5349 50%, #443B33 100%);
-  --body-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  --nav-dark: rgba(26, 26, 46, 0.95);
-  --sidebar:linear-gradient(135deg, #7A6F62 0%, #5E5349 50%, #4b331e 100%);
-  /*como chamar a variavel: background: var(--painel);*/
-}
-
 
 /*============= BODY ==============*/
 body {
     background: var(--body-bg);
-    color: #333; /* Cor do texto padrão para o modo claro */
+    color: var(--text-color-light); /* Use var for consistency */
     transition: background 0.5s ease, color 0.5s ease;
     min-height: 100vh;
     padding-bottom: 60px; /* Espaço para o footer fixo */
 }
+/* --- Conteúdo Principal (Main Content Wrapper) --- */
+.main-content-wrapper {
+    margin-left: 220px; /* Por padrão, para desktop, empurra o conteúdo para a direita da sidebar */
+    padding-right: 15px;
+    padding-left: 15px;
+    min-height: calc(100vh - 70px - 5rem);
+    transition: margin-left 0.3s ease; /* Adiciona transição para a margem */
+    box-sizing: border-box; /* Garante que padding e border sejam incluídos na largura/altura */
+    width: auto; /* Permite que o width se ajuste com a margem */
+}
+/* --- Ajustes Responsivos --- */
+@media (max-width: 991.98px) { /* Breakpoint para Tablets e celulares */
+
+    .main-content-wrapper {
+        margin-left: 0 !important; /* Força a margem zero em telas menores, importante para depuração */
+        padding-top: 2rem; /* Ajusta o padding superior para o conteúdo principal em mobile */
+        width: 100%; /* Garante que o wrapper ocupe a largura total disponível */
+    }
+}
 /* ============= FOOTER ============= */
 footer {
-    /*background: linear-gradient(135deg, #395873, #6888aa);*/
     background: var(--painel);
     color: white;
     position: fixed;
@@ -57,7 +65,12 @@ footer small {
     padding: 0.75rem 1.5rem;
     border-radius: 0 0 12px 12px;
 }
-
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 10px;
+}
 
 .navbar-nav {
     margin-right: 3%;
@@ -140,6 +153,7 @@ footer small {
     width: 80%;
 }
 
+
 /* ============ DROPDOWN MENUS ============ */
 .dropdown-menu {
     background: rgba(255, 255, 255, 0.95);
@@ -186,18 +200,29 @@ footer small {
 /* ============ TEMA ESCURO ============ */
 body.dark-mode {
     background: var(--body-dark);
-    color: #f8f9fa;
+    color: var(--text-color-dark); /* Use variable */
 }
 body.dark-mode .navbar {
     background: var(--nav-dark);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
+body.dark-mode .nav-link {
+    color: #f8f9fa; /* Keep light text on dark nav links */
+}
 body.dark-mode .nav-link:hover {
-    background: var(--body-dark);
+    background: var(--nav-hover); /* Nav hover in dark mode also uses var */
+    color: #f8f9fa;
+}
+body.dark-mode .dropdown-menu {
+    background: var(--dropdown-bg-dark); /* Use variable */
+    border: 1px solid var(--dropdown-border-dark); /* Use variable */
+}
+body.dark-mode .dropdown-item {
+    color: var(--dropdown-text-dark); /* Use variable */
 }
 body.dark-mode .dropdown-item:hover {
-    background: var(--body-dark);
-    color: #f8f9fa;
+    background: var(--dropdown-hover-bg-dark); /* Use variable */
+    color: var(--dropdown-text-dark); /* Keep text color consistent for hover */
     transform: translateX(5px);
 }
 
@@ -236,18 +261,17 @@ body.dark-mode .dropdown-item:hover {
 /* Mensagens de alerta */
 .messages-container {
     position: fixed;
-    top: 20px;
+    top: 70px; /* Adjusted to be below the fixed navbar */
     left: 50%;
     transform: translateX(-50%);
     z-index: 9999;
-    width: 90%;
-    max-width: 800px;
-    padding: 0 10px;
+    width: auto;
+    min-width: 300px;
 }
 
 .alert {
     position: relative;
-    background-color: white;
+    /* Removed fixed background-color/color here as Bootstrap handles it */
     padding: 12px 40px 12px 16px;
     margin-bottom: 10px;
     border-radius: 5px;
@@ -257,7 +281,7 @@ body.dark-mode .dropdown-item:hover {
     opacity: 1;
 }
 
-/* Cores das mensagens */
+/* Cores das mensagens (Bootstrap classes should handle this, but keeping if custom) */
 .alert-success {
     background-color: #d4edda;
     color: #155724;
@@ -295,15 +319,6 @@ body.dark-mode .dropdown-item:hover {
     color: inherit;
     cursor: pointer;
 }
-.messages-container {
-    position: fixed;
-    top: 70px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 9999;
-    width: auto;
-    min-width: 300px;
-}
 
 .alert {
     opacity: 1 !important;
@@ -317,49 +332,44 @@ body.dark-mode .dropdown-item:hover {
 }
 
 
-
-/* No seu arquivo base.css */
-
-/*CONTAINER BASE*/ /*CONTAINER BASE*/ /*CONTAINER BASE*/ /*CONTAINER BASE*/ /*CONTAINER BASE*/
+/*CONTAINER BASE*/
 .container-base {
     margin-top: 3rem !important;
     padding-top: 3rem !important;
     width: 100%;
-    /* Remova ou aumente o max-width inicial para que comece mais largo em telas menores */
-    max-width: 95%; /* Por exemplo, 95% da largura da viewport, ou um valor maior em px */
+    max-width: 95%;
     padding-right: 15px;
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
 }
 
-/* Ajuste os breakpoints conforme sua necessidade para expandir o container */
 @media (min-width: 576px) {
     .container-base {
-        max-width: 90%; /* Exemplo: 90% da largura em telas SM */
+        max-width: 90%;
     }
 }
 
 @media (min-width: 768px) {
     .container-base {
-        max-width: 90%; /* Exemplo: 90% da largura em telas MD */
+        max-width: 90%;
     }
 }
 
 @media (min-width: 992px) {
     .container-base {
-        max-width: 1200px; /* Ou um valor fixo maior, como 1200px ou 1400px */
+        max-width: 1200px;
     }
 }
 
 @media (min-width: 1200px) {
     .container-base {
-        max-width: 1400px; /* Ou um valor ainda maior, ou 90% da tela */
+        max-width: 1400px;
     }
 }
 
-@media (min-width: 1400px) { /* Adicione um novo breakpoint para telas muito grandes */
+@media (min-width: 1400px) {
     .container-base {
-        max-width: 1600px; /* Ou 85% para não colar nas bordas */
+        max-width: 1600px;
     }
 }

@@ -29,7 +29,7 @@ body.dark-theme .sidebar-toggle:hover {
 
 /* ===== Sidebar Layout ===== */
 #sidebar {
-    background: var(--sidebar); /*ROOT BASE*/
+    background: var(--sidebar); /*ROOT theme*/
     backdrop-filter: blur(8px);
     color: #f2f4f8;
     position: fixed;
@@ -93,9 +93,9 @@ body.dark-theme .sidebar-toggle:hover {
 }
 
 .sidebar-menu .nav-link:hover,
-.sidebar-menu a:hover { /* Aplica o hover para ambos os casos, para Light Mode */
-    background: #f8f9fa; /* Cor de fundo do hover para Light Mode (cinza muito claro/quase branco) */
-    color: #795935; /* Cor do texto do hover para Light Mode (o marrom que você vê no Contratos) */
+.sidebar-menu a:hover { 
+    background:var(--nav-hover); 
+    color: var(--nav-hover); 
     padding-left: 25px;
 }
 

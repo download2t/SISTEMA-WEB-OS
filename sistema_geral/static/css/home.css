@@ -1,0 +1,58 @@
+.content {
+    padding: 30px;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+}
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card h2 {
+    color: #3a3a3a;
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+.card p {
+    color: #414141;
+    margin-bottom: 15px;
+}
+
+/* ===== Dark Theme ===== */
+
+body.dark-theme .card {
+    background: #2d3748;
+    color: #e0e0e0;
+}
+
+body.dark-theme .card h2 {
+    color: #e0e0e0;
+}
+
+body.dark-theme .card p {
+    color: #d1d1d1;
+}
+
+.btn-outline-purple {
+    --bs-btn-color: var(--royal-purple-text); /* Define a cor do texto para o botão */
+    --bs-btn-border-color: var(--royal-purple-border); /* Define a cor da borda */
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--royal-purple-hover-bg);
+    --bs-btn-hover-border-color: var(--royal-purple-hover-border);
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: var(--royal-purple-active-bg);
+    --bs-btn-active-border-color: var(--royal-purple-active-border);
+    --bs-btn-disabled-color: var(--royal-purple-text);
+    --bs-btn-disabled-border-color: var(--royal-purple-border);
+}
