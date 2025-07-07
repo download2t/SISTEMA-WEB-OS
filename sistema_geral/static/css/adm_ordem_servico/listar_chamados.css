@@ -113,7 +113,7 @@
 
 /* Classes de Borda por Prioridade */
 .service-card.prioridade-baixa { border-left-color: var(--prioridade-baixa); }
-.service-card.prioridade-media { border-left-color: var(--prioridade-media); }
+.service-card.prioridade-média { border-left-color: var(--prioridade-media); }
 .service-card.prioridade-alta { border-left-color: var(--prioridade-alta); }
 .service-card.prioridade-urgente { border-left-color: var(--prioridade-urgente); }
 .service-card.status-concluido { border-left-color: var(--status-concluido) !important; }
