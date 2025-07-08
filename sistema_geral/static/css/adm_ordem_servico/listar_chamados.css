@@ -220,7 +220,7 @@
 
 /* Cores do Badge de Prioridade */
 .priority-badge.baixa { background-color: var(--prioridade-baixa); color: white; }
-.priority-badge.media { background-color: var(--prioridade-media); color: white; }
+.priority-badge.média { background-color: var(--prioridade-media); color: white; }
 .priority-badge.alta { background-color: var(--prioridade-alta); color: white; }
 .priority-badge.urgente { background-color: var(--prioridade-urgente); color: white; }
 

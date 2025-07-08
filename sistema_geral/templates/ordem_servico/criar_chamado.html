@@ -8,6 +8,9 @@
 
 
 {% block content %}
+<button class="sidebar-toggle" id="sidebarToggle">
+    <i class="fas fa-bars"></i>
+</button>
 {% if request.user.is_staff %}
     {% include 'adm_ordem_servico/adm_menu_os.html' %}
 {% else %}

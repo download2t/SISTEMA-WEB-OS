@@ -1,41 +1,50 @@
 /* ===== Base Sidebar Toggle ===== */
 .sidebar-toggle {
-    display: none;
+    display: none; /* Oculta em todas as telas por padrão */
     background: none;
     border: none;
     font-size: 24px;
     cursor: pointer;
     padding: 8px;
     border-radius: 4px;
-    transition: background 0.3s ease;
+    transition: all 0.3s ease;
     color: #333;
-    z-index: 1050; /* Garante que o botão esteja acima de outros elementos */
-    position: relative; /* Para garantir que o z-index funcione */
+    z-index: 1060;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    margin: 0;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    color : white;
 }
 
+/* Garante que os itens do menu não afetem o toggle */
+.sidebar-menu, .sidebar-menu * {
+    pointer-events: auto;
+}
+/* Remove highlight no mobile */
+.sidebar-toggle:active, .sidebar-toggle:focus {
+    outline: none;
+}
 /* Light Theme */
 .sidebar-toggle:hover {
     background: rgba(0, 0, 0, 0.05);
 }
-
-/* Dark Theme */
-body.dark-theme .sidebar-toggle {
-    color: #e0e0e0;
-}
-
-body.dark-theme .sidebar-toggle:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
 /* ===== Sidebar Layout ===== */
 #sidebar {
-    background: var(--sidebar); /*ROOT theme*/
+    background: var(--sidebar);
     backdrop-filter: blur(8px);
     color: #f2f4f8;
     position: fixed;
     left: 0;
-    top: 80px; /* Seu top atual */
-    height: calc(100vh - 82px - 52px); /* 100vh - top (80px) - altura do footer (60px) */
+    top: 80px;
+    height: calc(100vh - 80px - 55px);
     width: 220px;
     z-index: 800;
     transition: all 0.3s ease;
@@ -43,30 +52,15 @@ body.dark-theme .sidebar-toggle:hover {
     box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
     padding: 1.5rem 0;
     border-right: 1px solid rgba(255, 255, 255, 0.08);
-   
-    /* Propriedades de border-radius (já estão corretas para arredondar os cantos inferiores) */
-    border-bottom-right-radius: 12px;
-    border-top-right-radius: 12px;
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
+    border-radius: 12px;
     margin-left: 2px;
 }
 
-/* Sidebar Header */
-.sidebar-header {
+/* Main Content Wrapper */
+.main-content-wrapper {
+    margin-left: 220px;
     padding: 20px;
-    border-bottom: 1px solid #eee;
-}
-
-.sidebar-header h3 {
-    color: White;
-    font-size: 18px;
-    margin-bottom: 5px;
-}
-
-.sidebar-header p {
-    color: white;
-    font-size: 14px;
+    transition: margin-left 0.3s ease;
 }
 
 /* Sidebar Menu */
@@ -80,9 +74,8 @@ body.dark-theme .sidebar-toggle:hover {
     border-bottom: 1px solid #f0f0f0;
 }
 
-/* Alterações AQUI: Padronizando o seletor para os links do menu */
 .sidebar-menu .nav-link,
-.sidebar-menu a { /* Garante que todos os links dentro de .sidebar-menu recebam esses estilos */
+.sidebar-menu a {
     display: flex;
     align-items: center;
     padding: 15px 20px;
@@ -93,9 +86,9 @@ body.dark-theme .sidebar-toggle:hover {
 }
 
 .sidebar-menu .nav-link:hover,
-.sidebar-menu a:hover { 
-    background:var(--nav-hover); 
-    color: var(--nav-hover); 
+.sidebar-menu a:hover {
+    background: var(--nav-hover);
+    color: var(--nav-hover);
     padding-left: 25px;
 }
 
@@ -105,97 +98,103 @@ body.dark-theme .sidebar-toggle:hover {
     font-size: 18px;
 }
 
-
 /* ============ TEMA ESCURO ============ */
 body.dark-mode #sidebar {
-    background: var(--body-dark); /*ROOT BAASE*/
+    background: var(--body-dark);
     border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Alterações AQUI: Padronizando o hover para o Tema Escuro */
 body.dark-mode .sidebar-menu .nav-link,
 body.dark-mode .sidebar-menu a {
-    color: #f2f4f8; /* Garante que a cor padrão do link no dark mode seja clara */
+    color: #f2f4f8;
 }
 
 body.dark-mode .sidebar-menu .nav-link:hover,
 body.dark-mode .sidebar-menu a:hover {
-    background: rgba(255, 255, 255, 0.1); /* Um cinza translúcido claro para o hover no dark mode */
-    color: #f2f4f8; /* Mantém a cor do texto clara no hover do dark mode */
-    padding-left: 25px; /* Mantém o efeito de padding-left no hover */
+    background: rgba(255, 255, 255, 0.1);
+    color: #f2f4f8;
+    padding-left: 25px;
+}
+/* Dark Theme */
+body.dark-theme .sidebar-toggle {
+    color: #e0e0e0;
 }
 
-
-body.dark-mode #menu-toggle {
-    background: var(--body-dark); /*ROOT BAASE*/
+body.dark-theme .sidebar-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
-body.dark-mode #menu-toggle:hover {
-    background: var(--body-dark); /*ROOT BAASE*/
-}
+.sidebar-header h3 {
+        margin-left: 15px;
+        margin-top: 10px; 
+    }
 
-#serviceCards {
-    display: grid;
-    /* This will automatically adjust columns based on available space */
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-    gap: 1.5rem; /* Space between cards */
-    margin-top: 2rem; /* Space below filters */
-}
-
-
-/* Adjust filters-section for better spacing within the new wrapper */
-.filters-section {
-    padding: 1.5rem; /* Add internal padding to the filter section */
-}
-/* ===== Responsividade: Ajustes para Telas Menores (Tablets e Celulares) ===== */
-
-/* Este é o breakpoint crítico para tablets. Sugiro 992px, que é o breakpoint de 'lg' do Bootstrap */
-@media (max-width: 991.98px) { /* Este é o breakpoint para telas menores que large (lg) */
+    
+/* ===== Responsividade ===== */
+@media (max-width: 991.98px) {
+    
     .sidebar-toggle {
-        display: block; /* Mostra o botão de toggle em telas menores */
+        display: flex; /* Mostra apenas em mobile */
+    }
+
+    body.sidebar-open .sidebar-toggle {
+        left: 210px;
+        color: #f2f4f8;
+        z-index: 1070;
     }
 
     #sidebar {
-        /* *** CRITICAL FIX HERE *** */
-        width: 250px; /* Give it a definite width, even when hidden */
-        transform: translateX(-100%); /* Hides the sidebar by default */
-        left: 0; /* Ensures it's anchored to the left */
-        top: 60px; /* Adjust to sit below your navbar on mobile */
-        height: calc(100vh - 60px); /* Full viewport height minus navbar */
-        box-shadow: 2px 0 15px rgba(0, 0, 0, 0.4); /* More pronounced shadow for overlay */
-        border-right: none; /* Remove right border as it's not fixed alongside content */
-        border-bottom-right-radius: 0;
-        border-top-right-radius: 0;
-        /* Ensure z-index is higher than main content but lower than modal if any */
-        z-index: 1040; /* Standard for off-canvas menus, just below Bootstrap modals */
+        width: 250px;
+        top: 80px;
+        height: calc(100vh - 80px - 55px);
+        z-index: 1040;
+        transform: translateX(-100%);
+        display: none;
+        transition: transform 0.3s ease, display 0.3s step-end;
+        margin-left: 0;
     }
+
 
     #sidebar.active {
-        transform: translateX(0); /* Shows the sidebar when active */
+        transform: translateX(0);
+        display: block;
+        transition: transform 0.3s ease, display 0.3s step-start;
     }
-}
 
-/* If you have a class `sidebar-overlay` for darkening the background, adjust it here */
-.sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1039; /* Just below the sidebar */
-    display: none;
-    transition: opacity 0.3s ease;
-    opacity: 0;
-}
+    .sidebar-header h3 {
+        display: none;
+        margin-left: 5px; /* Adiciona uma margem de 5px à esquerda */
+    }
 
-.sidebar-overlay.active {
-    display: block;
-    opacity: 1;
-}
+    .sidebar-header {
+        padding: 0;
+        border-bottom: none;
+    }
 
-/* Prevenção de overflow horizontal no body */
-body {
-    overflow-x: hidden; /* Add this line to prevent horizontal scrolling if content overflows */
-    /* ... your other body styles ... */
+    body {
+        overflow-x: hidden;
+    }
+
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1039;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: auto;
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+        opacity: 1;
+    }
+
+    .main-content-wrapper {
+        margin-left: 0;
+    }
 }

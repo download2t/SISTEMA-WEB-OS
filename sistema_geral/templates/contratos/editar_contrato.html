@@ -2,6 +2,10 @@
 {% load static %}
 
 {% block content %}
+<button class="sidebar-toggle" id="sidebarToggle">
+    <i class="fas fa-bars"></i>
+</button>
+{% include 'contratos/menu_contratos.html' %}
 {% if form.errors %}
     <div class="alert alert-danger">
         <strong>Erro ao enviar o formulário:</strong>

@@ -1,18 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Menu Toggle (se necessário)
-  const menuToggle = document.getElementById("menu-toggle");
-  if (menuToggle) {
-    const sidebar = document.getElementById("sidebar-container");
-    const mainContent = document.querySelector("main");
-    menuToggle.addEventListener("click", function () {
-      sidebar.classList.toggle("collapsed");
-      if (mainContent) {
-        mainContent.classList.toggle("full-width");
-      }
-      document.body.classList.toggle("menu-open");
-    });
-  }
-
   // Toggle dos Filtros Avançados
   function toggleFilters() {
     const filtersContent = document.getElementById("filtersContent");

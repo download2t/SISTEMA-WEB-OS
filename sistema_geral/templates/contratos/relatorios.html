@@ -7,7 +7,11 @@
 
 {% endblock %}
 
-{% block content %}<div class="container-fluid mt-4"> <!-- Usa mais espaço -->
+{% block content %}
+<div class="container-fluid mt-4">
+    <button class="sidebar-toggle" id="sidebarToggle">
+    <i class="fas fa-bars"></i>
+</button>
 {% include 'contratos/menu_contratos.html' %}
 <div class="main-content-wrapper"> 
     <div class="col-lg-10 col-md-9">
