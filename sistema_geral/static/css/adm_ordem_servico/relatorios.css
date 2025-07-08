@@ -1,361 +1,431 @@
-/* General Layout */
-.page-wrapper {
-    margin-left: 150px; 
-    padding-top: 3rem; 
-    padding-right: 15px;
-    padding-left: 15px;
-    min-height: calc(100vh - 70px - 5rem);
-}
+ /* Base styles for Inter font */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa; /* Light background for the page */
+        }
+        /* Ensure all elements include padding and border in their total width and height */
+        * {
+            box-sizing: border-box;
+        }
 
-.main-content {
-    flex-grow: 1; /* Allows main content to take remaining space */
-    padding: 30px;
-    margin-left: 20px; /* Spacing from the sidebar */
-}
+        /* General Layout */
+        .page-wrapper {
+            margin-left: 150px; /* Default for desktop with sidebar */
+            padding-top: 3rem;
+            padding-right: 15px;
+            padding-left: 15px;
+            min-height: calc(100vh - 70px - 5rem); /* Adjust height for header/footer */
+            /* Removed transition as sidebar is external */
+        }
 
-/* Page Header */
-.page-header {
-    margin-bottom: 30px;
-    border-bottom: 1px solid #e9ecef;
-    padding-bottom: 15px;
-    display: flex;
-    align-items: center;
-}
+        .main-content {
+            flex-grow: 1; /* Allows main content to take remaining space */
+            padding: 30px;
+            margin-left: 20px; /* Spacing from the sidebar, as per your original CSS */
+        }
 
-.page-title {
-    font-size: 2.2rem;
-    font-weight: 600;
-    color: #343a40;
-    margin-bottom: 0;
-}
-body.dark-mode .page-title,
-body.dark-theme .page-title { /* Use a classe que você aplica para o tema escuro */
-    color: white; /* Cor branca para o tema escuro */
-}
-.tooltip-icon {
-    color: #6c757d;
-    font-size: 1.2rem;
-    cursor: help;
-    margin-left: 10px;
-}
+        /* Page Header */
+        .page-header {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
 
-/* Card Styling */
-.card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    padding: 25px;
-    margin-bottom: 25px;
-    border: none;
-}
+        .page-title {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #343a40;
+            margin-bottom: 0;
+        }
+        body.dark-mode .page-title,
+        body.dark-theme .page-title { /* Use a classe que você aplica para o tema escuro */
+            color: white; /* Cor branca para o tema escuro */
+        }
+        .tooltip-icon {
+            color: #6c757d;
+            font-size: 1.2rem;
+            cursor: help;
+            margin-left: 10px;
+        }
 
-/* Filters Section */
-.filters-section {
-    padding: 0; /* Remove default card padding as content has its own */
-    box-shadow: none; /* Filters section will have its own inner structure */
-    background-color: transparent;
-    margin-bottom: 30px;
-}
+        /* Card Styling */
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 25px;
+            border: none;
+        }
 
-.filters-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
+        /* Filters Section */
+        .filters-section {
+            padding: 0; /* Remove default card padding as content has its own */
+            box-shadow: none; /* Filters section will have its own inner structure */
+            background-color: transparent;
+            margin-bottom: 30px;
+        }
 
-.toggle-filters-btn {
-    width: fit-content; /* Make button only as wide as its content */
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    background-color: #007bff;
-    border-color: #007bff;
-    color: #fff;
-}
+        .filters-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
 
-.toggle-filters-btn:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
-}
+        .toggle-filters-btn {
+            width: fit-content; /* Make button only as wide as its content */
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: #007bff;
+            border-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            border: none; /* Ensure no default button border */
+        }
 
-.filter-toggle-icon {
-    transition: transform 0.3s ease;
-}
+        .toggle-filters-btn:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
 
-.toggle-filters-btn.active .filter-toggle-icon {
-    transform: rotate(180deg);
-}
+        .filter-toggle-icon {
+            transition: transform 0.3s ease;
+        }
 
-.filter-options-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid for filter cards */
-    gap: 20px;
-    padding: 25px; /* Padding for the filter options content */
-    border: 1px solid #e9ecef; /* Add a subtle border around the filter options area */
-    border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-}
+        .toggle-filters-btn.active .filter-toggle-icon {
+            transform: rotate(180deg);
+        }
 
-.filter-options-container.d-none {
-    display: none !important;
-}
+        .filter-options-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid for filter cards */
+            gap: 20px;
+            padding: 25px; /* Padding for the filter options content */
+            border: 1px solid #e9ecef; /* Add a subtle border around the filter options area */
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease-in-out; /* Smooth transition for display */
+            opacity: 1; /* Default visible state */
+            height: auto; /* Default visible state */
+            overflow: visible; /* Default visible state */
+            transform: translateY(0);
+        }
 
-.filter-card {
-    padding: 20px;
-    border: 1px solid #dee2e6;
-    border-radius: 6px;
-    background-color: #fdfdfd;
-}
+        .filter-options-container.d-none {
+            display: grid !important; /* Keep grid for transition */
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: 0;
+            margin-bottom: 0;
+            transform: translateY(-10px); /* Slight movement for effect */
+            pointer-events: none; /* Prevent interaction when hidden */
+        }
 
-.filter-card-title {
-    font-size: 1.15rem;
-    font-weight: 600;
-    color: #495057;
-    margin-bottom: 15px;
-}
+        .filter-card {
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            background-color: #fdfdfd;
+        }
 
-/* Status Filter */
-.status-options-grid {
-    display: flex; /* Changed to flex for better wrapping */
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 10px;
-}
+        .filter-card-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 15px;
+        }
 
-.status-option {
-    padding: 6px 12px;
-    border-radius: 20px; /* Pill shape */
-    font-size: 0.875rem;
-    transition: all 0.2s ease-in-out;
-}
+        /* Status Filter */
+        .status-options-grid {
+            display: flex; /* Changed to flex for better wrapping */
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
 
-.status-option.selected {
-    background-color: #007bff;
-    color: #fff;
-    border-color: #007bff;
-}
+        .status-option {
+            padding: 6px 12px;
+            border-radius: 20px; /* Pill shape */
+            font-size: 0.875rem;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer; /* Indicate it's clickable */
+            border: 1px solid #007bff; /* Add default border for outline buttons */
+            background-color: transparent;
+            color: #007bff;
+        }
 
-.selected-status-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 15px;
-    min-height: 24px; /* Ensure space even when empty */
-}
+        .status-option:hover {
+            background-color: #e0f2f7; /* Light background on hover */
+        }
 
-.selected-status-tag {
-    background-color: #e0f2f7; /* Light blue background */
-    color: #007bff;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 0.85rem;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
+        .status-option.selected {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
 
-.remove-tag-btn {
-    background: none;
-    border: none;
-    color: #007bff;
-    font-size: 0.9rem;
-    cursor: pointer;
-    padding: 0;
-    line-height: 1;
-}
+        .selected-status-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+            min-height: 24px; /* Ensure space even when empty */
+        }
 
-.remove-tag-btn:hover {
-    color: #0056b3;
-}
+        .selected-status-tag {
+            background-color: #e0f2f7; /* Light blue background */
+            color: #007bff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
 
-/* Date and Group/Responsible Filters */
-.date-filter-group,
-.group-responsible-filter-group {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
+        .remove-tag-btn {
+            background: none;
+            border: none;
+            color: #007bff;
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
 
-.form-group {
-    margin-bottom: 0; /* Override Bootstrap default margin */
-}
+        .remove-tag-btn:hover {
+            color: #0056b3;
+        }
 
-.form-label {
-    font-weight: 500;
-    color: #555;
-    margin-bottom: 5px;
-}
+        /* Date and Group/Responsible Filters */
+        .date-filter-group,
+        .group-responsible-filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
 
-.form-control {
-    border-radius: 5px;
-    border: 1px solid #ced4da;
-    padding: 8px 12px;
-    font-size: 1rem;
-}
+        .form-group {
+            margin-bottom: 0; /* Override Bootstrap default margin */
+        }
 
-.form-control:focus {
-    border-color: #80bdff;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
+        .form-label {
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 5px;
+        }
 
-/* Filter Actions */
-.filter-actions {
-    display: flex;
-    justify-content: flex-end; /* Align buttons to the right */
-    gap: 10px;
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid #e9ecef;
-}
+        .form-control {
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            padding: 8px 12px;
+            font-size: 1rem;
+            width: 100%; /* Ensure full width */
+            box-sizing: border-box; /* Include padding in width */
+        }
 
-.action-btn {
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
+        .form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            outline: none; /* Remove default outline */
+        }
 
-/* Report Actions (Download Button) */
-.report-actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 25px;
-}
+        /* Filter Actions */
+        .filter-actions {
+            display: flex;
+            justify-content: flex-end; /* Align buttons to the right */
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
 
-.download-btn {
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background-color: #28a745;
-    border-color: #28a745;
-    color: #fff;
-}
-
-.download-btn:hover {
-    background-color: #218838;
-    border-color: #1e7e34;
-}
-
-/* Report Table */
-.report-display {
-    padding: 0; /* Table content takes care of its own padding */
-}
-
-.table-responsive {
-    overflow-x: auto; /* Ensures table is scrollable on small screens */
-    border-radius: 8px; /* Match card border-radius */
-}
-
-.report-table {
-    width: 100%;
-    margin-bottom: 0;
-    border-collapse: separate; /* Required for border-radius on cells */
-    border-spacing: 0;
-}
-
-.report-table thead th {
-    background-color: #e9ecef;
-    color: #495057;
-    font-weight: 600;
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 2px solid #dee2e6;
-    vertical-align: middle; /* Align text vertically in middle */
-}
-
-.report-table tbody td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #dee2e6;
-    vertical-align: middle;
-}
-
-.report-table tbody tr:last-child td {
-    border-bottom: none;
-}
-
-.report-table tbody tr:hover {
-    background-color: #f2f6fa;
-    cursor: pointer;
-}
-
-/* Status Badges in Table */
-.status-badge {
-    display: inline-block;
-    padding: .35em .65em;
-    font-size: 75%;
-    font-weight: 700;
-    line-height: 1;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: baseline;
-    border-radius: .375rem;
-    color: #fff;
-}
-
-/* Specific status colors */
-.status-aberto { background-color: #007bff; }
-.status-em-andamento { background-color: #ffc107; color: #343a40; } /* Yellow for in progress */
-.status-concluido { background-color: #28a745; }
-.status-encaminhado-a-totvs { background-color: #6f42c1; } /* Purple */
-.status-aguardando-aprovacao { background-color: #fd7e14; } /* Orange */
-.status-em-analise { background-color: #17a2b8; } /* Teal */
-.status-em-desenvolvimento { background-color: #6610f2; } /* Indigo */
-.status-manutencao { background-color: #dc3545; } /* Red */
+        .action-btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            border: none; /* Remove default button border */
+        }
+        .action-btn.btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: #fff;
+        }
+        .action-btn.btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        .action-btn.btn-outline-secondary {
+            background-color: transparent;
+            border: 1px solid #6c757d;
+            color: #6c757d;
+        }
+        .action-btn.btn-outline-secondary:hover {
+            background-color: #6c757d;
+            color: #fff;
+        }
 
 
-/* Responsive adjustments */
-@media (max-width: 992px) {
-    .page-wrapper {
-        flex-direction: column; /* Stack sidebar and main content vertically */
-    }
+        /* Report Actions (Download Button) */
+        .report-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 25px;
+        }
 
-    .sidebar-menu {
-        width: 100%;
-        padding: 15px;
-        border-bottom: 1px solid #495057;
-    }
+        .download-btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #28a745;
+            border-color: #28a745;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+        }
 
-    .main-content {
-        margin-left: 0;
-        padding: 20px;
-    }
+        .download-btn:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
 
-    .filter-options-container {
-        grid-template-columns: 1fr; /* Single column layout for filters on smaller screens */
-        padding: 15px;
-    }
+        /* Report Table */
+        .report-display {
+            padding: 0; /* Table content takes care of its own padding */
+        }
 
-    .filter-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
+        .table-responsive {
+            overflow-x: auto; /* Ensures table is scrollable on small screens */
+            border-radius: 8px; /* Match card border-radius */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Add shadow to table container */
+        }
 
-    .action-btn {
-        width: 100%;
-        justify-content: center;
-    }
+        .report-table {
+            width: 100%;
+            margin-bottom: 0;
+            border-collapse: separate; /* Required for border-radius on cells */
+            border-spacing: 0;
+            background-color: #fff; /* Ensure table background is white */
+        }
 
-    .report-actions {
-        justify-content: center; /* Center download button on small screens */
-    }
-}
+        .report-table thead th {
+            background-color: #e9ecef;
+            color: #495057;
+            font-weight: 600;
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 2px solid #dee2e6;
+            vertical-align: middle; /* Align text vertically in middle */
+            /* Rounded corners for the first/last header cells */
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .report-table thead tr:first-child th:first-child {
+            border-top-left-radius: 8px;
+        }
+        .report-table thead tr:first-child th:last-child {
+            border-top-right-radius: 8px;
+        }
 
-@media (max-width: 768px) {
-    .page-title {
-        font-size: 1.8rem;
-    }
+        .report-table tbody td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #dee2e6;
+            vertical-align: middle;
+        }
 
-    .status-options-grid {
-        flex-direction: column; /* Stack status buttons vertically */
-    }
-}
+        .report-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .report-table tbody tr:hover {
+            background-color: #f2f6fa;
+            cursor: pointer;
+        }
+
+        /* Status Badges in Table */
+        .status-badge {
+            display: inline-block;
+            padding: .35em .65em;
+            font-size: 75%;
+            font-weight: 700;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: .375rem;
+            color: #fff;
+        }
+
+        /* Specific status colors */
+        .status-aberto { background-color: #007bff; }
+        .status-em-andamento { background-color: #ffc107; color: #343a40; } /* Yellow for in progress */
+        .status-concluido { background-color: #28a745; }
+        .status-encaminhado-a-totvs { background-color: #6f42c1; } /* Purple */
+        .status-aguardando-aprovacao { background-color: #fd7e14; } /* Orange */
+        .status-em-analise { background-color: #17a2b8; } /* Teal */
+        .status-em-desenvolvimento { background-color: #6610f2; } /* Indigo */
+        .status-manutencao { background-color: #dc3545; } /* Red */
+
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .page-wrapper {
+                margin-left: 0; /* Remove fixed margin on smaller screens */
+                padding-left: 15px; /* Keep general padding */
+                padding-right: 15px;
+            }
+
+            .main-content {
+                margin-left: 0; /* Ensure no left margin */
+                padding: 20px;
+            }
+
+            .filter-options-container {
+                grid-template-columns: 1fr; /* Single column layout for filters on smaller screens */
+                padding: 15px;
+            }
+
+            .filter-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .report-actions {
+                justify-content: center; /* Center download button on small screens */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .status-options-grid {
+                flex-direction: column; /* Stack status buttons vertically */
+            }
+        }
