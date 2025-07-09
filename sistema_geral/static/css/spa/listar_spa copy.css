@@ -380,6 +380,14 @@ select:not([value=""]) {
     color: #2d3748;
 }
 
+.filters-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #2d3748;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
 .toggle-filters {
     background: var(--nav-hover);
@@ -452,6 +460,3 @@ select:not([value=""]) {
 }
 
 
-.hidden {
-  display: none !important;
-}

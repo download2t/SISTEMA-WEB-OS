@@ -1,6 +1,5 @@
-// static/js/spa/listar_spa.js
-
 document.addEventListener("DOMContentLoaded", function () {
+
   // --- Lógica do Toggle de Filtros ---
   const filtersContent = document.getElementById("filters-content");
   const filterToggleText = document.getElementById("filter-toggle-text");
