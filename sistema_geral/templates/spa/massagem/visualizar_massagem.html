@@ -1,0 +1,154 @@
+{# spa/massagem/visualizar_massagem.html #}
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}{{ titulo_pagina }} - SPA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/spa/forms.css' %}"> {# Reutilizando o CSS de formulários #}
+<style>
+    /* Estilos específicos para visualização se necessário */
+    .detail-section {
+        background-color: #f9f9f9;
+        border-left: 5px solid #007bff;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    .detail-item {
+        margin-bottom: 10px;
+        font-size: 1.1em;
+    }
+    .detail-item strong {
+        color: #333;
+        display: inline-block;
+        width: 120px; /* Alinha os dois pontos */
+    }
+    .detail-item span {
+        color: #555;
+    }
+    .detail-description {
+        margin-top: 15px;
+        border-top: 1px solid #eee;
+        padding-top: 15px;
+    }
+    .detail-description p {
+        white-space: pre-wrap; /* Para preservar quebras de linha da descrição */
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<button class="sidebar-toggle" id="sidebarToggle">
+    <i class="fas fa-bars"></i>
+</button>
+{% include 'spa/sidebar_spa.html' %}
+
+<div class="container">
+    <div class="form-container"> {# Reutilizando o layout do form-container #}
+        <div class="header-section">
+            <h1><i class="fas fa-eye"></i> {{ titulo_pagina }}</h1>
+            <p class="subtitle">{{ subtitulo_pagina }}</p>
+        </div>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="detail-section">
+            <div class="detail-item">
+                <strong>Nome:</strong> <span>{{ massagem.nome }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>Duração:</strong> <span>{{ massagem.duracao_minutos }} minutos</span>
+            </div>
+            <div class="detail-item">
+                <strong>Preço:</strong> <span>R$ {{ massagem.preco|stringformat:".2f" }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>Status:</strong> 
+                <span class="status-badge {% if massagem.ativo %}status-active{% else %}status-inactive{% endif %}">
+                    {{ massagem.get_ativo_display }}
+                </span>
+            </div>
+            {% if massagem.descricao %}
+            <div class="detail-description">
+                <strong>Descrição:</strong>
+                <p>{{ massagem.descricao }}</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-actions">
+            <a href="{% url 'listar_massagens' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+            <a href="{% url 'editar_massagem' massagem.pk %}" class="btn btn-info">
+                <i class="fas fa-edit"></i> Editar Massagem
+            </a>
+            {# Você pode adicionar o botão de inativar/ativar aqui também, se desejar #}
+            {% if massagem.ativo %}
+            <form action="{% url 'inativar_massagem' massagem.pk %}" method="post" class="d-inline confirm-inactivate">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning" title="Inativar">
+                    <i class="fas fa-minus-circle"></i> Inativar
+                </button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> {# Para o SweetAlert #}
+<script>
+$(document).ready(function() {
+    // Sidebar Toggle
+    const sidebarToggle = document.getElementById("sidebarToggle");
+    const sidebar = document.querySelector(".sidebar");
+    if (sidebarToggle && sidebar) {
+        sidebarToggle.addEventListener("click", function () {
+            sidebar.classList.toggle("active");
+        });
+    }
+
+    // Lógica para esconder mensagens de alerta após X segundos (opcional)
+    setTimeout(function() {
+        $('.messages .alert').fadeOut('slow', function() {
+            $(this).remove();
+        });
+    }, 5000); // 5 segundos
+
+    // Confirmação para Inativação de Massagem (reutilizado do listar)
+    $('.confirm-inactivate').on('submit', function(e) {
+        e.preventDefault();
+        const form = $(this);
+        const massagemNome = "{{ massagem.nome|escapejs }}"; // Passa o nome da massagem com escape para JS
+        
+        Swal.fire({
+            title: 'Tem certeza?',
+            html: `Você realmente deseja **inativar** a massagem: <strong>${massagemNome}</strong>? <br> Isso impedirá novos agendamentos para ela.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sim, inativar!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.off('submit').submit();
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,370 @@
+/* static/css/spa/massagem/listar_massagem.css */
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.header-section h1 {
+    color: #333;
+    font-size: 2em;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.header-section h1 .fas {
+    margin-right: 10px;
+    color: #007bff; /* Ou a cor do seu tema */
+}
+
+.subtitle {
+    color: #666;
+    font-size: 1em;
+    margin-top: 5px;
+    margin-left: 40px; /* Alinha com o h1 */
+}
+
+.add-button {
+    background-color: #28a745; /* Verde para adicionar */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.add-button:hover {
+    background-color: #218838;
+    color: white; /* Garante que a cor do texto permaneça branca no hover */
+}
+
+.table-responsive {
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+.massagens-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0; /* Remove margem inferior padrão da tabela */
+}
+
+.massagens-table th,
+.massagens-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+.massagens-table th {
+    background-color: #f8f9fa;
+    color: #333;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+.massagens-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.actions-column {
+    white-space: nowrap; /* Impede que os botões quebrem linha */
+}
+
+.actions-column .btn {
+    margin-right: 5px;
+    font-size: 0.85em;
+    padding: 6px 10px;
+}
+
+.actions-column .btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: white;
+}
+.actions-column .btn-info:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+}
+
+.actions-column .btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #212529; /* Texto escuro para contraste */
+}
+.actions-column .btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+}
+
+.actions-column .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+.actions-column .btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8em;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: white;
+}
+
+.status-active {
+    background-color: #28a745; /* Verde para Ativo */
+}
+
+.status-inactive {
+    background-color: #6c757d; /* Cinza para Inativo */
+}
+
+.inactive-row {
+    opacity: 0.7; /* Massagens inativas um pouco mais claras */
+    font-style: italic;
+    background-color: #f5f5f5; /* Fundo levemente diferente */
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.messages {
+    margin-top: -10px; /* Ajusta para ficar mais próximo do cabeçalho */
+    margin-bottom: 20px;
+}
+
+/* Reusable form styles for create/edit massagem */
+/* static/css/spa/forms.css (create this new file or add to an existing one) */
+.form-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.form-container h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.form-container .subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Single column for simpler forms */
+    gap: 20px;
+}
+
+.form-section {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #fcfcfc;
+}
+
+.form-section .section-title {
+    color: #007bff; /* Primary brand color */
+    font-size: 1.3em;
+    margin-top: 0;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 1em;
+    color: #495057;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    box-sizing: border-box; /* Garante que padding e border não aumentem a largura total */
+}
+
+.form-control:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+textarea.form-control {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.form-check-input {
+    margin-right: 10px;
+    transform: scale(1.2); /* Aumenta um pouco o tamanho do checkbox */
+}
+
+.form-check-label {
+    margin-bottom: 0;
+    font-weight: normal;
+    color: #333;
+}
+
+.form-text {
+    font-size: 0.875em;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+.invalid-feedback {
+    color: #dc3545;
+    font-size: 0.875em;
+    margin-top: 0.25rem;
+    display: none; /* Oculto por padrão, mostrado com d-block */
+}
+
+.form-control.is-invalid {
+    border-color: #dc3545;
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.form-control.is-invalid ~ .invalid-feedback {
+    display: block;
+}
+
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end; /* Alinha os botões à direita */
+    gap: 10px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    text-decoration: none; /* Para links que agem como botões */
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: 1px solid #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    border: 1px solid #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+    color: white;
+}
+
+/* Responsividade básica para formulários */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}

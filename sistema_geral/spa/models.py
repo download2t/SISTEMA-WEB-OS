@@ -34,7 +34,6 @@ class Agendamento(models.Model):
         ('confirmado', 'Confirmado'),
         ('cancelado', 'Cancelado'),
         ('realizado', 'Realizado'),
-        ('nao_compareceu', 'Não Compareceu'),
         ('em_andamento', 'Em Andamento'),
     ]
 
@@ -53,7 +52,6 @@ class Agendamento(models.Model):
     # Dados do agendamento
     data = models.DateField()
     horario = models.TimeField(verbose_name='Horário')
-    duracao = models.PositiveIntegerField(verbose_name='Duração (minutos)', default=60)
     tipo_massagem = models.ForeignKey(TipoMassagem, on_delete=models.PROTECT, verbose_name='Tipo de Massagem')
     
     # Status e controle

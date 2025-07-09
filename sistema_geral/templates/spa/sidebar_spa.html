@@ -1,0 +1,18 @@
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h3>SPA</h3>
+    </div>
+    <ul class="sidebar-menu">
+        <li><a href="{% url 'listar_spa' %}" class="nav-link"><i class="fas fa-home"></i> HOME</a></li>
+        <li><a href="{% url 'cadastro_spa' %}" class="nav-link"><i class="fas fa-plus-circle"></i> Novo Agendamento</a></li>
+        <li><a href="{% url 'agendados_hoje' %}" class="nav-link"> <i class="fas fa-user-tag"></i> Agendados Hoje </a></li>
+        <li><a href="{% url 'cancelados_spa' %}" class="nav-link"> <i class="fas fa-folder-open"></i> Cancelados</a></li>
+        <li><a href="{% url 'encerrados_spa' %}" class="nav-link"><i class="fas fa-archive"></i>Realizados </a></li> {# ATUALIZADO #}
+        <li><a href="{% url 'relatorio_spa' %}" class="nav-link"> <i class="fas fa-file-alt"></i> Relatórios </a></li>
+           <div class="sidebar-header">
+               <h3>Massagens</h3>
+           </div>
+           <li><a href="{% url 'criar_massagem' %}" class="nav-link"><i class="fas fa-plus-circle"></i> Nova Massagem</a></li> {# Supondo que seja para massagens #}
+         <li><a href="{% url 'listar_massagens' %}" class="nav-link"><i class="fas fa-archive"></i>Massagens</a></li> {# Este link ainda está usando encerrados_spa, verifique se é o correto para "Massagens" #}
+    </ul>
+</aside>

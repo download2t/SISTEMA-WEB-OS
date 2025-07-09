@@ -1,9 +1,17 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+{% endblock %}
+
 {% block title %}Cancelar Agendamento - SPA{% endblock %}
 
 {% block content %}
+<button class="sidebar-toggle" id="sidebarToggle">
+    <i class="fas fa-bars"></i>
+</button>
+{% include 'spa/sidebar_spa.html' %}
 <div class="container mt-4">
     <div class="card border-warning">
         <div class="card-header bg-warning text-white">

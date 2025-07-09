@@ -4,10 +4,15 @@
 {% block title %}Editar Agendamento - SPA{% endblock %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
 <link rel="stylesheet" href="{% static 'css/spa/editar_spa.css' %}">
 {% endblock %}
 
 {% block content %}
+<button class="sidebar-toggle" id="sidebarToggle">
+    <i class="fas fa-bars"></i>
+</button>
+{% include 'spa/sidebar_spa.html' %}
 <div class="container">
     <div class="form-container">
         <div class="current-status">
@@ -24,7 +29,6 @@
             {% csrf_token %}
             
             <div class="form-grid">
-                <!-- Seção 1: Dados do Hóspede -->
                 <div class="form-section">
                     <h3 class="section-title"><i class="fas fa-user"></i> Dados do Hóspede</h3>
                     
@@ -43,7 +47,6 @@
                     {% endfor %}
                 </div>
 
-                <!-- Seção 2: Data/Horário -->
                 <div class="form-section">
                     <h3 class="section-title"><i class="fas fa-calendar-alt"></i> Data e Horário</h3>
                     
@@ -60,53 +63,45 @@
                             </div>
                         {% endif %}
                     {% endfor %}
-                </div>
-            </div>
 
-            <!-- Seção 3: Status -->
-            <div class="form-section status-section">
-                <h3 class="section-title"><i class="fas fa-exchange-alt"></i> Alterar Status</h3>
-                <div class="form-group">
-                    {{ form.status.label_tag }}
-                    {{ form.status }}
-                    <small class="form-text text-muted">
-                        Selecione o novo status desejado para este agendamento
-                    </small>
-                </div>
-            </div>
+                    <h3 class="section-title"><i class="fas fa-spa"></i> Tratamento</h3>
+                    <div class="form-group">
+                        {{ form.tipo_massagem.label_tag }}
+                        {{ form.tipo_massagem }}
+                    </div>
 
-            <!-- Seção 4: Tratamento -->
-            <div class="form-section">
-                <h3 class="section-title"><i class="fas fa-spa"></i> Tratamento</h3>
-                <div class="form-group">
-                    {{ form.tipo_massagem.label_tag }}
-                    {{ form.tipo_massagem }}
+                    <h3 class="section-title"><i class="fas fa-exchange-alt"></i> Alterar Status</h3>
+                        <div class="form-group">
+                            {{ form.status.label_tag }}
+                            {{ form.status }}
+                            <small class="form-text text-muted">
+                                Selecione o novo status desejado para este agendamento
+                            </small>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Seção 5: Observações -->
-            <div class="form-section">
-                <h3 class="section-title"><i class="fas fa-sticky-note"></i> Observações</h3>
-                <div class="form-group">
-                    {{ form.observacoes.label_tag }}
-                    {{ form.observacoes }}
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-sticky-note"></i> Observações</h3>
+                    <div class="form-group">
+                        {{ form.observacoes.label_tag }}
+                        {{ form.observacoes }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.primeira_vez }}
+                        <label class="form-check-label" for="{{ form.primeira_vez.id_for_label }}">
+                            {{ form.primeira_vez.label }}
+                        </label>
+                    </div>
                 </div>
-                <div class="form-group">
-                    {{ form.primeira_vez }}
-                    <label class="form-check-label" for="{{ form.primeira_vez.id_for_label }}">
-                        {{ form.primeira_vez.label }}
-                    </label>
+                <div class="form-actions">
+                    <a href="{% url 'listar_spa' %}" class="btn2 btn2-secondary">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </a>
+                    <button type="submit" class="btn2 btn2-primary">
+                        <i class="fas fa-save"></i> Salvar Alterações
+                    </button>
                 </div>
-            </div>
-
-            <!-- Ações -->
-            <div class="form-actions">
-                <a href="{% url 'listar_spa' %}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Voltar
-                </a>
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Salvar Alterações
-                </button>
             </div>
         </form>
     </div>
@@ -123,12 +118,38 @@ $(document).ready(function() {
                 $('#{{ field.id_for_label }}').addClass('is-invalid');
             {% endif %}
         {% endfor %}
+        // Se o erro for no motivo_cancelamento, garante que ele seja visível
+        {% if form.motivo_cancelamento.errors %}
+            $('#motivo-cancelamento-group').show();
+        {% endif %}
     {% endif %}
 
     // Remove a classe quando o usuário começa a editar
     $('input, select, textarea').on('input change', function() {
         $(this).removeClass('is-invalid');
     });
+
+    // Lógica para mostrar/ocultar o campo motivo_cancelamento
+    const statusSelect = $('#id_status'); // Assumindo que o ID do campo status é 'id_status'
+    const motivoCancelamentoGroup = $('#motivo-cancelamento-group');
+    const motivoCancelamentoInput = $('#id_motivo_cancelamento'); // O input do motivo de cancelamento
+
+    function toggleMotivoCancelamento() {
+        if (statusSelect.val() === 'cancelado') { // Use o valor do status 'cancelado' do seu model
+            motivoCancelamentoGroup.slideDown(); // Mostra o campo
+            motivoCancelamentoInput.prop('required', true); // Torna o campo obrigatório
+        } else {
+            motivoCancelamentoGroup.slideUp(); // Oculta o campo
+            motivoCancelamentoInput.prop('required', false); // Remove a obrigatoriedade
+            motivoCancelamentoInput.val(''); // Limpa o valor quando ocultado
+        }
+    }
+
+    // Chama a função ao carregar a página para definir o estado inicial
+    toggleMotivoCancelamento();
+
+    // Adiciona um listener para quando o valor do select de status mudar
+    statusSelect.on('change', toggleMotivoCancelamento);
 });
 </script>
 {% endblock %}

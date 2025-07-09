@@ -107,17 +107,32 @@
                         </div>
                         {% endif %}
                     </div>
-                    <h3 class="section-title"><i class="fas fa-leaf"></i> Escolha seu Tratamento</h3>
-                    <div class="form-group">
-                        {{ form.tipo_massagem.label_tag }}
-                        {{ form.tipo_massagem }}
-                        {% if form.tipo_massagem.errors %}
-                        <div class="invalid-feedback">
-                            {{ form.tipo_massagem.errors }}
-                        </div>
-                        {% endif %}
-                        <small class="form-text text-muted">Apenas tratamentos ativos são exibidos</small>
+
+                
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="section-title"><i class="fas fa-leaf"></i> Escolha seu Tratamento</h3>
+                <div class="form-group">
+                    {{ form.tipo_massagem.label_tag }}
+                    {{ form.tipo_massagem }}
+                    {% if form.tipo_massagem.errors %}
+                    <div class="invalid-feedback">
+                        {{ form.tipo_massagem.errors }}
                     </div>
+                    {% endif %}
+                    <small class="form-text text-muted">Apenas tratamentos ativos são exibidos</small>
+                </div>
+                <h3 class="section-title"><i class="fas fa-sticky-note"></i> Informações Adicionais</h3>
+                 {{ form.observacoes.label_tag }}
+                    {{ form.observacoes }}
+                    <small class="form-text text-muted">Informe sobre alergias, preferências de pressão, áreas específicas, etc.</small>
+                    {% if form.observacoes.errors %}
+                    <div class="invalid-feedback">
+                        {{ form.observacoes.errors }}
+                    </div>
+                    {% endif %}
 
                     {{ form.primeira_vez }}
                     <label class="form-check-label" for="{{ form.primeira_vez.id_for_label }}">
@@ -129,30 +144,16 @@
                     </div>
                     {% endif %}
 
-                </div>
+
+            <!-- Ações do Formulário -->
+            <div class="form-actions">
+                <a href="{% url 'listar_spa' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-calendar-check"></i> {% if editar %}Atualizar{% else %}Confirmar{% endif %}
+                </button>
             </div>
-
-            <div class="form-section">
-              
-                <h3 class="section-title"><i class="fas fa-sticky-note"></i> Informações Adicionais</h3>
-                 {{ form.observacoes.label_tag }}
-                    {{ form.observacoes }}
-                    <small class="form-text text-muted">Informe sobre alergias, preferências de pressão, áreas específicas, etc.</small>
-                    {% if form.observacoes.errors %}
-                    <div class="invalid-feedback">
-                        {{ form.observacoes.errors }}
-                    </div>
-                    {% endif %}
-
-                <!-- Ações do Formulário -->
-                <div class="form-actions">
-                    <a href="{% url 'listar_spa' %}" class="btn2 btn2-secondary">
-                        <i class="fas fa-arrow-left"></i> Cancelar
-                    </a>
-                    <button type="submit" class="btn2 btn2-primary">
-                        <i class="fas fa-calendar-check"></i> {% if editar %}Atualizar{% else %}Confirmar{% endif %}
-                    </button>
-                </div>
         </form>
     </div>
 </div>

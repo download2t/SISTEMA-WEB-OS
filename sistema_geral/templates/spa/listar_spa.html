@@ -4,10 +4,16 @@
 {% block title %}Agendamentos - SPA{% endblock %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
 <link rel="stylesheet" href="{% static 'css/spa/listar_spa.css' %}">
 {% endblock %}
 
 {% block content %}
+<button class="sidebar-toggle" id="sidebarToggle">
+    <i class="fas fa-bars"></i>
+</button>
+{% include 'spa/sidebar_spa.html' %}
+
 <div class="container">
     
         <!-- Filtros -->
@@ -120,12 +126,6 @@
                 {% endif %}
 
                 <div class="appointment-actions">
-                    {% if agendamento.status == 'em_andamento' %}
-                    <a href="{% url 'finalizar_servico' agendamento.id %}" class="btn btn-complete">
-                        <i class="fas fa-check-circle"></i> Finalizar
-                    </a>
-                    {% endif %}
-
                     <a href="{% url 'editar_spa' agendamento.id %}" class="btn btn-edit">
                         <i class="fas fa-edit"></i> Editar
                     </a>
@@ -141,10 +141,6 @@
     </section>
 </div>
 
-<!-- Botão Nova Reserva -->
-<a href="{% url 'cadastro_spa' %}" class="new-reservation-btn">
-    <i class="fas fa-plus"></i> Nova Reserva
-</a>
 {% endblock %}
 
 {% block extra_js %}

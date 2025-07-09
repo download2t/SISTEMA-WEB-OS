@@ -1,0 +1,175 @@
+/* spa/forms.css */
+
+/* Basic container for forms to centralize and add padding */
+.form-container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    max-width: 800px; /* Adjust as needed */
+    margin: 30px auto; /* Center the form container */
+    box-sizing: border-box;
+}
+
+/* Header section within the form container */
+.header-section {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.header-section h1 {
+    color: #343a40; /* Darker text for headings */
+    font-size: 2.2em;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Space between icon and text */
+}
+
+.header-section h1 .fas {
+    color: #007bff; /* Primary color for icons */
+    font-size: 1.2em;
+}
+
+.header-section .subtitle {
+    color: #6c757d; /* Muted text for subtitles */
+    font-size: 1.1em;
+    margin-top: 0;
+}
+
+/* Styles for Bootstrap form controls to ensure consistency */
+.form-control {
+    border-radius: 0.25rem; /* Standard Bootstrap border-radius */
+    border: 1px solid #ced4da;
+    padding: 0.75rem 1rem; /* Adjust padding for better look */
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Specific styling for Textarea */
+textarea.form-control {
+    resize: vertical; /* Allow vertical resizing */
+    min-height: 80px; /* Minimum height for textareas */
+}
+
+/* Checkbox styling */
+.form-check {
+    padding-left: 1.5em; /* Space for the checkbox itself */
+    margin-bottom: 1rem;
+}
+
+.form-check-input {
+    float: left;
+    margin-left: -1.5em; /* Position the checkbox */
+    margin-top: 0.3em; /* Align with text */
+}
+
+.form-check-label {
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+/* Invalid feedback for validation errors */
+.invalid-feedback {
+    display: none; /* Hidden by default, Bootstrap handles showing it with .is-invalid */
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+    color: #dc3545; /* Bootstrap danger color */
+}
+
+/* Ensure invalid feedback is displayed when needed */
+.form-control.is-invalid ~ .invalid-feedback,
+.form-check-input.is-invalid ~ .invalid-feedback,
+.invalid-feedback.d-block { /* Use d-block for manual display */
+    display: block;
+}
+
+/* Styles for action buttons at the bottom of the form */
+.form-actions {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eeeeee;
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 10px; /* Space between buttons */
+}
+
+.form-actions .btn {
+    min-width: 120px; /* Give buttons a consistent minimum width */
+    text-align: center;
+}
+
+/* Custom styles for messages (alerts) */
+.messages {
+    margin-bottom: 20px;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-danger, .alert-error { /* Added .alert-error for consistency */
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .form-container {
+        margin: 20px 15px; /* More margin on smaller screens */
+        padding: 20px;
+    }
+
+    .header-section h1 {
+        font-size: 1.8em;
+    }
+
+    .form-actions {
+        flex-direction: column; /* Stack buttons vertically on small screens */
+        align-items: stretch; /* Stretch buttons to full width */
+    }
+
+    .form-actions .btn {
+        min-width: unset; /* Remove min-width when stacked */
+        width: 100%; /* Full width for stacked buttons */
+    }
+}
