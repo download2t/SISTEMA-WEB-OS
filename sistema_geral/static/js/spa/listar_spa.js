@@ -1,16 +1,6 @@
 // static/js/spa/listar_spa.js
 
 document.addEventListener("DOMContentLoaded", function () {
-  // --- Lógica do Sidebar Toggle ---
-  const sidebarToggle = document.getElementById("sidebarToggle");
-  const sidebar = document.querySelector(".sidebar"); // Supondo que seu sidebar tenha essa classe ou ID
-
-  if (sidebarToggle && sidebar) {
-    sidebarToggle.addEventListener("click", function () {
-      sidebar.classList.toggle("active");
-    });
-  }
-
   // --- Lógica do Toggle de Filtros ---
   const filtersContent = document.getElementById("filters-content");
   const filterToggleText = document.getElementById("filter-toggle-text");
