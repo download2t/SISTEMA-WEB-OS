@@ -1,0 +1,187 @@
+/* static/css/ramais/criar_ramal.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Main container for the form */
+.col-lg-6.col-md-8.col-sm-12 {
+    width: 100%; /* Ensure it takes full width within its flex context */
+    max-width: 600px; /* Limit max width for better readability on large screens */
+    margin: 0 auto; /* Center horizontally */
+}
+
+.card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0; /* border-gray-200 */
+    border-radius: 1.5rem; /* rounded-3xl */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); /* shadow-xl */
+    padding: 2.5rem; /* p-10 */
+    box-sizing: border-box;
+}
+
+h2 {
+    font-size: 2.2rem; /* text-3xl */
+    font-weight: 700; /* font-bold */
+    color: #2d3748; /* text-gray-800 */
+    margin-bottom: 2rem; /* mb-8 */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+/* Form Labels and Inputs */
+.form-label {
+    display: block;
+    font-weight: 500;
+    color: #4a5568; /* text-gray-700 */
+    margin-bottom: 0.5rem;
+}
+
+.form-control,
+.form-select {
+    width: 100%;
+    padding: 0.75rem 1rem; /* p-3 */
+    border: 1px solid #e2e8f0; /* border-gray-300 */
+    border-radius: 0.5rem; /* rounded-lg */
+    font-size: 1rem;
+    color: #2d3748; /* text-gray-800 */
+    transition: all 0.2s ease-in-out;
+}
+
+.form-control:focus,
+.form-select:focus {
+    outline: none;
+    border-color: #667eea; /* border-indigo-500 */
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2); /* ring-4 ring-indigo-200 */
+}
+
+/* Input Group Styling */
+.input-group .input-group-text {
+    background-color: #e2e8f0; /* bg-gray-200 */
+    border: 1px solid #e2e8f0; /* border-gray-200 */
+    border-right: none; /* Remove right border to blend with input */
+    border-radius: 0.5rem 0 0 0.5rem; /* Rounded left corners */
+    padding: 0.75rem 1rem;
+    color: #718096; /* text-gray-600 */
+}
+
+.input-group .form-control,
+.input-group .form-select {
+    border-left: none; /* Remove left border to blend with text */
+    border-radius: 0 0.5rem 0.5rem 0; /* Rounded right corners */
+}
+
+/* Error Messages */
+.alert.alert-danger {
+    background-color: #fee2e2; /* bg-red-100 */
+    color: #c53030; /* text-red-700 */
+    border: 1px solid #fc8181; /* border-red-400 */
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+}
+
+/* Switch (Checkbox) Styling */
+.form-check.form-switch {
+    display: flex;
+    align-items: center; /* Vertically align items */
+    /* Removed gap to allow more precise control with margin-right */
+    margin-bottom: 1.5rem; /* mb-6 */
+}
+
+.form-check-label {
+    margin-bottom: 0; /* Remove default label margin */
+    font-weight: 500;
+    color: #4a5568;
+    margin-right: 0.75rem; /* Add margin to the right of the label */
+    white-space: nowrap; /* Prevent label text from wrapping */
+}
+
+.form-check-input {
+    min-width: 2.5rem; /* Ensure switch has enough width */
+    height: 1.5rem; /* Adjust height */
+    margin-left: 0; /* Remove default margin */
+    background-color: #cbd5e0; /* bg-gray-300 for unchecked */
+    border-color: #a0aec0; /* border-gray-400 */
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    flex-shrink: 0; /* Prevent the switch from shrinking */
+}
+
+.form-check-input:checked {
+    background-color: #48bb78; /* bg-green-500 for checked */
+    border-color: #38a169; /* border-green-600 */
+}
+
+/* Submit Button */
+.btn2 {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem; /* px-6 py-3 */
+    border-radius: 0.75rem; /* rounded-xl */
+    font-weight: 600; /* font-semibold */
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    white-space: nowrap; /* Prevent text wrapping */
+    border: none; /* Remove default button border */
+}
+
+.btn2-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    .col-lg-6.col-md-8.col-sm-12 {
+        padding: 0; /* Remove padding from col classes on small screens */
+    }
+    .card {
+        padding: 1.5rem;
+        border-radius: 1rem;
+    }
+    h2 {
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+    }
+    .btn2-primary {
+        width: 100%; /* Full width button on small screens */
+    }
+    .input-group .input-group-text,
+    .input-group .form-control,
+    .input-group .form-select {
+        border-radius: 0.5rem; /* Re-apply full border-radius for stacked elements */
+        border: 1px solid #e2e8f0; /* Ensure border is present */
+    }
+    .input-group .input-group-text {
+        border-bottom: none; /* Remove bottom border if stacking */
+        border-radius: 0.5rem 0.5rem 0 0; /* Rounded top corners */
+    }
+    .input-group .form-control,
+    .input-group .form-select {
+        border-top: none; /* Remove top border if stacking */
+        border-radius: 0 0 0.5rem 0.5rem; /* Rounded bottom corners */
+    }
+    .input-group {
+        flex-direction: column; /* Stack input group elements vertically */
+    }
+    .form-check.form-switch {
+        flex-direction: row; /* Keep label and switch in a row */
+        justify-content: flex-start; /* Align to start */
+        align-items: center; /* Center vertically */
+    }
+    .form-check-label {
+        margin-right: 0.75rem; /* Ensure space between label and switch */
+        white-space: nowrap; /* Prevent wrapping */
+    }
+}

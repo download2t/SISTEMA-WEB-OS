@@ -4,7 +4,7 @@
 :root {
     --painel: linear-gradient(135deg, #37517E 0%, #273A5E 50%, #1A243D 100%);
     --body-bg: #f4f6f8;
-    --nav-hover: linear-gradient(135deg, #37517E 0%, #273A5E 50%, #1A243D 100%);
+    --nav-hover: linear-gradient(135deg, #3d4a61 0%, #30405f 50%, #2f3850 100%);
     --body-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); /* Dark Mode base */
     --nav-dark: rgba(26, 26, 46, 0.95); /* Dark Mode base */
     --sidebar: linear-gradient(135deg, #37517E 0%, #273A5E 50%, #1A243D 100%);

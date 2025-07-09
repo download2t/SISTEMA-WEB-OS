@@ -6,25 +6,22 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <!-- Texto explicativo -->
-    <div class="text-center mb-4">
-        <h2 class="display-4 ">GOVERNANÇA - SANMA</h2>
-    </div>
+<div class="main-content-wrapper">
+        <div class="grid">
+            <h2 class="display-4">GOVERNANÇA - SANMA</h2>
 
-    <div class="d-flex justify-content-center align-items-center" style="height: 60vh; background-color: #f8f9fa;">
-        <div class="d-flex justify-content-between align-items-center w-75">
-            <!-- Botão PESSOAL -->
-            <a href="{% url 'listar_relatorios' %}" class="btn modern-btn senha-pessoal d-flex flex-column align-items-center justify-content-center shadow-lg">
-                <i class="fas fa-user" style="font-size: 50px;"></i>  <!-- Ícone acima -->
-                <span class="mt-2">RELATÓRIO LAVANDERIA</span>  <!-- Texto abaixo -->
-            </a>
-            <!-- Botão SANMA -->
-            <a href="{% url 'item_lavanderia_list' %}" class="btn modern-btn senha-sanma d-flex flex-column align-items-center justify-content-center shadow-lg">
-                <i class="fas fa-users" style="font-size: 50px;"></i>  <!-- Ícone acima -->
-                <span class="mt-2">ITENS LAVANDERIA</span>  <!-- Texto abaixo -->
-            </a>
+            <div class="button-grid">
+                <!-- Botão RELATÓRIO LAVANDERIA -->
+                <a href="{% url 'listar_relatorios' %}" class="action-button">
+                    <i class="fas fa-chart-bar"></i> <!-- Ícone mais relevante para relatório -->
+                    <span>RELATÓRIO LAVANDERIA</span>
+                </a>
+                <!-- Botão ITENS LAVANDERIA -->
+                <a href="{% url 'item_lavanderia_list' %}" class="action-button">
+                    <i class="fas fa-tshirt"></i> <!-- Ícone mais relevante para itens de lavanderia -->
+                    <span>ITENS LAVANDERIA</span>
+                </a>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}

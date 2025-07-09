@@ -1,5 +1,8 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/ramais/criar_ramal.css' %}">
+{% endblock %}
 
 {% block content %}
 <!-- Adicionando um padding no topo para o formulário ficar abaixo do menu -->
@@ -67,7 +70,7 @@
                 </div>
 
                 <div class="form-check form-switch mb-4">
-                    <label class="form-check-label" for="ativo">Ativo?</label>
+                    <label class="form-check-label" for="ativo">Atv</label>
                     <input class="form-check-input" type="checkbox" id="ativo" name="ativo" {% if ramal.ativo %}checked{% endif %}>
                 </div>
 

@@ -6,9 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const toggleFiltersButton = document.querySelector(".toggle-filters"); // Seleciona o botão de toggle
 
   if (toggleFiltersButton && filtersContent && filterToggleText) {
-    // Inicializa o texto do botão com base no estado inicial do filtro (se hidden por CSS)
-    // Isso assume que 'hidden' é definida no CSS para o estado padrão oculto,
-    // ou você pode definir um estado inicial aqui.
+
     if (filtersContent.classList.contains("hidden")) {
       filterToggleText.textContent = "Mostrar Filtros";
     } else {

@@ -1,0 +1,258 @@
+/* static/css/governanca/item_lavanderia_list.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f2f5;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align content to the top */
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 1.5rem; /* rounded-3xl */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); /* shadow-xl */
+    padding: 2.5rem; /* p-10 */
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 2.5rem; /* text-4xl */
+    font-weight: 700; /* font-bold */
+    color: #2d3748; /* text-gray-800 */
+    margin-bottom: 2.5rem; /* mb-10 */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+h1 i {
+    color: #667eea; /* Icon color */
+}
+
+/* Filter and Search Form Styling */
+.form-control {
+    width: 100%;
+    padding: 0.75rem 1rem; /* p-3 */
+    border: 1px solid #e2e8f0; /* border-gray-300 */
+    border-radius: 0.5rem; /* rounded-lg */
+    font-size: 1rem;
+    color: #2d3748; /* text-gray-800 */
+    transition: all 0.2s ease-in-out;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #667eea; /* border-indigo-500 */
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2); /* ring-4 ring-indigo-200 */
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem; /* px-6 py-3 */
+    border-radius: 0.75rem; /* rounded-xl */
+    font-weight: 600; /* font-semibold */
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    white-space: nowrap; /* Prevent text wrapping */
+    border: none; /* Remove default button border */
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    color: white;
+    box-shadow: 0 4px 10px rgba(72, 187, 120, 0.3);
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(72, 187, 120, 0.4);
+    background: linear-gradient(135deg, #38a169 0%, #48bb78 100%);
+}
+
+/* Table Styling */
+.table {
+    width: 100%;
+    margin-bottom: 0; /* Remove default Bootstrap margin */
+    border-collapse: separate; /* Allows border-radius on table cells */
+    border-spacing: 0; /* Remove space between cells */
+    border-radius: 1rem; /* Apply rounded corners to the table */
+    overflow: hidden; /* Ensures content respects border-radius */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08); /* Soft shadow for the table */
+}
+
+.table thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Primary gradient for header */
+    color: white;
+    font-weight: 600;
+}
+
+.table th,
+.table td {
+    padding: 1rem 1.5rem; /* py-4 px-6 */
+    vertical-align: middle;
+    border-bottom: 1px solid #e2e8f0; /* border-gray-200 */
+}
+
+.table th {
+    text-align: left;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.table th:first-child {
+    border-top-left-radius: 1rem; /* Rounded top-left corner */
+}
+
+.table th:last-child {
+    border-top-right-radius: 1rem; /* Rounded top-right corner */
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none; /* No border on the last row */
+}
+
+.table tbody tr:hover {
+    background-color: #f7fafc; /* bg-gray-50 */
+    transition: background-color 0.2s ease-in-out;
+}
+
+.table-primary { /* Overrides Bootstrap's table-primary for thead */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+/* Action Buttons within Table */
+.btn-sm {
+    padding: 0.5rem 1rem; /* py-2 px-4 */
+    font-size: 0.875rem; /* text-sm */
+    border-radius: 0.5rem; /* rounded-lg */
+    margin-left: 0.5rem; /* Space between buttons */
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%); /* Orange gradient */
+    color: white;
+    box-shadow: 0 2px 5px rgba(246, 173, 85, 0.3);
+}
+.btn-warning:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(246, 173, 85, 0.4);
+    background: linear-gradient(135deg, #ed8936 0%, #f6ad55 100%);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #fc8181 0%, #e53e3e 100%); /* Red gradient */
+    color: white;
+    box-shadow: 0 2px 5px rgba(252, 129, 129, 0.3);
+}
+.btn-danger:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(252, 129, 129, 0.4);
+    background: linear-gradient(135deg, #e53e3e 0%, #fc8181 100%);
+}
+
+/* No items message */
+.text-center {
+    padding: 2rem;
+    background-color: #f7fafc;
+    border-radius: 1rem;
+    border: 1px dashed #e2e8f0;
+    color: #718096;
+    font-size: 1.1rem;
+    margin-top: 2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    .container {
+        padding: 1.5rem;
+        border-radius: 1rem;
+    }
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        flex-direction: column; /* Stack icon and text */
+        align-items: flex-start;
+        gap: 5px;
+    }
+    h1 i {
+        font-size: 2.5rem;
+    }
+
+    /* Adjust form layout for small screens */
+    form.d-flex.flex-wrap {
+        flex-direction: column;
+        align-items: stretch !important; /* Stretch items to fill width */
+        gap: 1rem; /* Add gap between stacked items */
+    }
+
+    form .d-flex.align-items-center {
+        flex-direction: column;
+        align-items: stretch !important; /* Stretch search input and button */
+        width: 100%; /* Ensure it takes full width */
+        gap: 0.75rem; /* Gap between input and search button */
+    }
+
+    form .form-control {
+        width: 100%; /* Full width for search input */
+        margin-right: 0 !important; /* Remove me-2 */
+    }
+
+    form .btn-primary,
+    form .btn-success {
+        width: 100%; /* Full width for buttons */
+        margin-left: 0 !important; /* Remove me-2 */
+    }
+
+    /* Table responsiveness for small screens */
+    .table-responsive {
+        border: 1px solid #e2e8f0; /* Add border to responsive wrapper */
+        border-radius: 1rem; /* Match table border-radius */
+        overflow-x: auto; /* Enable horizontal scrolling */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    }
+
+    .table {
+        min-width: 600px; /* Ensure table content doesn't get too squished */
+        border-radius: 0; /* Remove border-radius on table itself when responsive */
+        box-shadow: none; /* Remove shadow when responsive */
+    }
+
+    .table th,
+    .table td {
+        padding: 0.75rem 1rem; /* Smaller padding for table cells */
+    }
+
+    .table th:first-child,
+    .table th:last-child {
+        border-radius: 0; /* Remove rounded corners on table header cells */
+    }
+}
