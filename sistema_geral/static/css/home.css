@@ -56,3 +56,20 @@ body.dark-theme .card p {
     --bs-btn-disabled-color: var(--royal-purple-text);
     --bs-btn-disabled-border-color: var(--royal-purple-border);
 }
+
+.btn-primary {
+    background: var(--painel); /* Assuming --painel is defined elsewhere */
+    color: white; /* White text for contrast */
+    box-shadow: 0 4px 10px rgba(55, 81, 126, 0.3); /* Custom shadow based on painel colors */
+    border: none; /* Ensure no conflicting borders */
+    transition: all 0.3s ease-in-out; /* Smooth transition for hover effects */
+    padding: 0.75rem 1.5rem; /* Consistent padding */
+    border-radius: 0.75rem; /* Consistent border-radius */
+    font-weight: 400; /* Consistent font-weight */
+}
+
+.btn-primary:hover {
+    background: var(--nav-hover); /* Assuming --nav-hover is defined elsewhere */
+    transform: translateY(-2px); /* Slight lift on hover */
+    box-shadow: 0 6px 15px rgba(55, 81, 126, 0.4); /* Enhanced shadow on hover */
+}

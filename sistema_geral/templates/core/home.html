@@ -3,7 +3,7 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}"> {# Ensure home.css is loaded AFTER any default Bootstrap or core styles if you have them, so your custom styles override #}
 {% endblock %}
 
 {% block content %}
@@ -102,11 +102,11 @@
                     <h2>Ações Rápidas</h2>
                     <p>Gerencie sua conta ou acesse funcionalidades essenciais.</p>
                     <div class="mt-auto"> {# Push buttons to the bottom of the card if content is short #}
-                        <a href="{% url 'alterar_senha' %}" class="btn btn-primary w-100 mb-2">Alterar Senha</a>
+                        <a href="{% url 'alterar_senha' %}" class="btn btn-primary w-100 mb-2">Alterar Senha</a> {# Added w-100 and mb-2 for consistent spacing and width #}
                         {% if request.user.is_staff %}
-                               <a href="{% url 'adm_chamados_abertos' %}" class="btn btn-secondary w-100">Meus Chamados (Admin)</a>
+                            <a href="{% url 'adm_chamados_abertos' %}" class="btn btn-primary w-100">Meus Chamados (Admin)</a> {# Changed class from btn-admin-chamados to btn-primary and added w-100 #}
                         {% else %}
-                            <a href="{% url 'chamados_abertos' %}" class="btn btn-secondary w-100">Meus Chamados</a>
+                            <a href="{% url 'chamados_abertos' %}" class="btn btn-primary w-100">Meus Chamados</a> {# Changed class from btn-secondary to btn-primary #}
                         {% endif %}
                     </div>
                 </div>
