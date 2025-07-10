@@ -220,16 +220,6 @@ form .d-flex.align-items-center.flex-grow-1 {
     background: linear-gradient(135deg, #e53e3e 0%, #fc8181 100%);
 }
 
-/* No items message */
-.text-center {
-    padding: 2rem;
-    background-color: #f7fafc;
-    border-radius: 1rem;
-    border: 1px dashed #e2e8f0;
-    color: #718096;
-    font-size: 1.1rem;
-    margin-top: 2rem;
-}
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
