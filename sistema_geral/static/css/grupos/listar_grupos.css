@@ -22,17 +22,6 @@ body {
     box-sizing: border-box;
 }
 
-/* Title Container Styling (New, based on ramais pattern) */
-.title-container {
-    background-color: #ffffff; /* White background */
-    border: 1px solid #e2e8f0; /* Light gray border */
-    border-radius: 1rem; /* Rounded corners */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05); /* Soft shadow */
-    padding: 2.5rem; /* Ample padding */
-    margin-bottom: 2rem; /* Space below the title section */
-    text-align: center; /* Center align content */
-    animation: fadeIn 0.8s ease-out; /* Fade-in animation */
-}
 
 @keyframes fadeIn {
     from {
