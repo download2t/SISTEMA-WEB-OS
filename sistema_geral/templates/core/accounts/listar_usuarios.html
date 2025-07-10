@@ -7,21 +7,21 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h1 class="mb-4">Lista de Usuários</h1>
+    <h1 class="mb-4"><i class="fas fa-users"></i> Lista de Usuários</h1> {# Added icon for title #}
     <!-- Filtro para Ativos/Inativos e Campo de Busca -->
     <form method="get" action="{% url 'listar_usuarios' %}" class="d-flex flex-wrap justify-content-between align-items-center mb-4">
         {% csrf_token %}
         <div class="d-flex align-items-center">
             <!-- Dropdown de status -->
-            <select name="status" id="status" class="form-select me-2" style="width: 200px;">
+            <select name="status" id="status" class="form-select me-2"> {# Removed inline style #}
                 <option value="todos" {% if request.GET.status == "todos" %}selected{% endif %}>Todos</option>
                 <option value="ativos" {% if request.GET.status == "ativos" %}selected{% endif %}>Ativos</option>
                 <option value="inativos" {% if request.GET.status == "inativos" %}selected{% endif %}>Inativos</option>
             </select>
 
             <!-- Campo de busca -->
-            <input type="text" name="search" placeholder="Nome, Email ou Usuário" value="{{ request.GET.search }}" class="form-control me-2" style="width: 300px;" />
-            
+            <input type="text" name="search" placeholder="Nome, Email ou Usuário" value="{{ request.GET.search }}" class="form-control me-2" /> {# Removed inline style #}
+
             <!-- Botão de buscar -->
             <button type="submit" class="btn btn-primary">
                 <i class="fas fa-search me-1"></i>Buscar
@@ -29,7 +29,7 @@
         </div>
 
         <!-- Botão de Criar Novo Usuário -->
-        <a href="{% url 'cadastrar_usuario' %}" class="btn btn-success">
+        <a href="{% url 'cadastrar_usuario' %}" class="btn btn-success ms-md-auto mt-3 mt-md-0"> {# Added ms-md-auto for spacing on medium screens #}
             <i class="fas fa-user-plus me-1"></i>Novo Usuário
         </a>
     </form>
@@ -44,10 +44,10 @@
                     <th>Primeiro Nome</th>
                     <th>Último Nome</th>
                     <th>Email</th>
-                    <th>É Staff?</th>   
+                    <th>Staff</th>   
                     <th>Data de Criação</th>
-                    <th>Ativo?</th>
-                    <th scope="col" class="text-end">Ações</th>
+                    <th>status</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -58,7 +58,7 @@
                     <td>{{ usuario.first_name }}</td>
                     <td>{{ usuario.last_name }}</td>
                     <td>{{ usuario.email }}</td>
-                    <td>{{ usuario.is_staff|yesno:"Sim,Não" }}</td>      
+                    <td>{{ usuario.is_staff|yesno:"Sim,Não" }}</td>      
                     <td>{{ usuario.date_joined|date:"d/m/Y H:i" }}</td>
                     <td>
                         <!-- Botão interruptor de ativar/inativar -->
@@ -66,8 +66,8 @@
                             <input type="checkbox" data-id="{{ usuario.id }}" class="toggle-status" {% if usuario.is_active %}checked{% endif %}>
                             <span class="slider round"></span>
                         </label>
-                    </td>    
-                    <td>
+                    </td>    
+                    <td class="text-end">
                         <!-- Botão de Alterar -->
                         <a href="{% url 'alterar_usuario' user_id=usuario.id %}" class="btn btn-sm btn-secondary">
                             <i class="fas fa-edit"></i> Alterar
@@ -83,7 +83,7 @@
         </table>
     </div>
 </div>
-
+  
 <!-- Incluindo o CSRF token para uso no JavaScript -->
 <script type="text/javascript">
     var csrfToken = "{{ csrf_token }}";

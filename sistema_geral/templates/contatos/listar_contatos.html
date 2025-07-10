@@ -2,30 +2,27 @@
 {% load static %}
 
 {% block extra_css %}
-
+<link rel="stylesheet" href="{% static 'css/contatos/listar_contatos.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 {% endblock %}
+ 
 {% block content %}
 <div class="container mt-4">
-    <h1 class="mb-4">Lista de Contatos</h1>
-    <!-- Filtro e botão de busca -->
-    <form method="get" action="{% url 'listar_contatos' %}" class="d-flex flex-wrap justify-content-between align-items-center mb-4">
-        <div class="d-flex align-items-center">
-            <!-- Campo de busca -->
-            <input type="text" name="search" placeholder="Nome ou Telefone do Contato" value="{{ request.GET.search }}" class="form-control me-2" style="width: 300px;">
+    <h1><i class="fas fa-address-book"></i> Lista de Contatos</h1> {# Adicionado ícone e ajustado texto #}
+    <form method="get" action="{% url 'listar_contatos' %}" class="search-filter-form">
+        <div class="search-input-group">
+            <input type="text" name="search" placeholder="Nome ou Telefone do Contato" value="{{ request.GET.search }}" class="form-control me-2" />
             
-            <!-- Botão de buscar -->
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn2 btn2-primary">
                 <i class="fas fa-search me-1"></i> Buscar
             </button>
         </div>
 
-        <!-- Botão de Adicionar Novo Contato -->
-        <a href="{% url 'criar_contato' %}" class="btn btn-success">
+        <a href="{% url 'criar_contato' %}" class="btn2 btn2-success">
             <i class="fas fa-plus-circle me-1"></i> Novo Contato
         </a>
     </form>
 
-    <!-- Tabela de Contatos -->
     <div class="table-responsive">
         <table class="table table-hover align-middle">
             <thead class="table-primary">
@@ -34,21 +31,21 @@
                     <th scope="col">Nome</th>
                     <th scope="col">Telefone</th>
                     <th scope="col">Setor</th>
-                    <th scope="col" class="text-end">Ações</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 {% for contato in contatos %}
                     <tr>
-                        <td>{{ contato.id }}</td>
-                        <td>{{ contato.nome_responsavel }}</td>
-                        <td>{{ contato.numero_telefone }}</td>
-                        <td>{{ contato.grupo.name }}</td>
-                        <td class="text-end">
-                            <a href="{% url 'editar_contato' contato.id %}" class="btn btn-sm btn-warning">
+                        <td data-label="ID">{{ contato.id }}</td>
+                        <td data-label="Nome">{{ contato.nome_responsavel }}</td>
+                        <td data-label="Telefone">{{ contato.numero_telefone }}</td>
+                        <td data-label="Setor">{{ contato.grupo.name }}</td>
+                        <td class="text-end" data-label="Ações">
+                            <a href="{% url 'editar_contato' contato.id %}" class="btn2 btn2-warning btn-sm me-2">
                                 <i class="fas fa-edit"></i> Editar
                             </a>
-                            <a href="{% url 'excluir_contato' contato.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir este contato?');">
+                            <a href="{% url 'excluir_contato' contato.id %}" class="btn2 btn2-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este contato?');">
                                 <i class="fas fa-trash-alt"></i> Excluir
                             </a>
                         </td>

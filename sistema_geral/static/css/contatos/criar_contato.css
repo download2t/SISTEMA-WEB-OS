@@ -1,0 +1,212 @@
+/* static/css/contatos/criar_contato.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Main container for the form to center it within the main content area */
+.form-page-outer-wrapper {
+    display: flex;
+    justify-content: center; /* Centers the inner col div */
+    align-items: flex-start; /* Aligns to the top, adjust to 'center' if you want it vertically centered on the page */
+    min-height: calc(100vh - 120px); /* Adjust based on your header/footer height */
+    padding: 20px 0; /* Add some vertical padding */
+    box-sizing: border-box;
+}
+
+/* This targets the div that will act as the column for centering the card */
+/* Adjust width as needed for this form's fields */
+.col-lg-6.col-md-8.col-sm-10 {
+    width: 100%; /* Ensure it takes full width within its flex context */
+    max-width: 600px; /* Increased max width slightly from criar_grupo for more fields */
+    margin: 0 auto; /* Center horizontally (redundant with flex parent, but good for fallback) */
+}
+
+/* Card Styling - consistent with previous forms */
+.card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0; /* border-gray-200 */
+    border-radius: 1.5rem; /* rounded-3xl */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); /* shadow-xl */
+    padding: 2.5rem; /* p-10 */
+    box-sizing: border-box;
+    animation: fadeIn 0.8s ease-out; /* Fade-in animation */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Page Heading */
+h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: 2.2rem; /* text-3xl */
+    font-weight: 700; /* font-bold */
+    color: #2d3748; /* text-gray-800 */
+    margin-bottom: 2rem; /* mb-8 */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+/* Form Labels and Inputs */
+.form-label {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    color: #4a5568; /* text-gray-700 */
+    margin-bottom: 0.5rem;
+}
+
+.form-control,
+.form-select { /* Include select for consistency */
+    width: 100%;
+    padding: 0.75rem 1rem; /* p-3 */
+    border: 1px solid #e2e8f0; /* border-gray-300 */
+    border-radius: 0.5rem; /* rounded-lg */
+    font-size: 1rem;
+    color: #2d3748; /* text-gray-800 */
+    transition: all 0.2s ease-in-out;
+    font-family: 'Inter', sans-serif;
+}
+
+.form-control:focus,
+.form-select:focus {
+    outline: none;
+    border-color: #667eea; /* border-indigo-500 */
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2); /* ring-4 ring-indigo-200 */
+}
+
+/* Input Group Styling */
+.input-group {
+    display: flex; /* Ensure flex behavior */
+    align-items: center; /* Vertically align icon and input */
+    margin-bottom: 1.5rem; /* Consistent spacing for each input group */
+}
+
+.input-group .input-group-text {
+    background-color: #e2e8f0; /* bg-gray-200 */
+    border: 1px solid #e2e8f0; /* border-gray-200 */
+    border-right: none; /* Remove right border to blend with input */
+    border-radius: 0.5rem 0 0 0.5rem; /* Rounded left corners */
+    padding: 0.75rem 1rem;
+    color: #718096; /* text-gray-600 */
+    display: flex;
+    align-items: center; /* Center icon vertically */
+    height: 100%; /* Ensure it matches input height */
+}
+
+.input-group .form-control,
+.input-group .form-select {
+    border-left: none; /* Remove left border to blend with text */
+    border-radius: 0 0.5rem 0.5rem 0; /* Rounded right corners */
+}
+
+/* Error Messages */
+.alert.alert-danger {
+    background-color: #fee2e2; /* bg-red-100 */
+    color: #c53030; /* text-red-700 */
+    border: 1px solid #fc8181; /* border-red-400 */
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    text-align: left;
+    animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Buttons - Reusing btn2 classes for consistency */
+.btn2 {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    white-space: nowrap;
+    border: none;
+    font-family: 'Inter', sans-serif;
+}
+
+.btn2-primary { /* For the Save button */
+    background: var(--painel);
+    color: white;
+    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+    margin-right: 1rem; /* Space between Save and Cancel */
+}
+
+.btn2-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+    background: var(--nav-hover);
+}
+
+.btn2-secondary { /* For the Cancel button */
+    background: #a0aec0; /* gray-400 */
+    color: white;
+    box-shadow: 0 4px 10px rgba(160, 174, 192, 0.3);
+}
+
+.btn2-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(160, 174, 192, 0.4);
+    background: #718096; /* gray-600 */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    .col-lg-6.col-md-8.col-sm-10 {
+        padding: 0;
+        max-width: 100%;
+    }
+    .card {
+        padding: 1.5rem;
+        border-radius: 1rem;
+    }
+    h1 {
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+    }
+    .input-group {
+        flex-direction: column; /* Stack input group elements vertically */
+    }
+    .input-group .input-group-text {
+        border-bottom: none;
+        border-radius: 0.5rem 0.5rem 0 0; /* Rounded top corners */
+        width: 100%; /* Make icon span full width */
+        justify-content: center; /* Center the icon in the full width span */
+        border-right: 1px solid #e2e8f0; /* Add back border for stacked elements */
+    }
+    .input-group .form-control,
+    .input-group .form-select {
+        border-top: none;
+        border-radius: 0 0 0.5rem 0.5rem; /* Rounded bottom corners */
+        border-left: 1px solid #e2e8f0; /* Add back border for stacked elements */
+    }
+    .btn2 {
+        width: 100%; /* Full width for buttons on small screens */
+        margin-bottom: 0.75rem; /* Add space between stacked buttons */
+        margin-right: 0 !important; /* Override margin-right for stacking */
+    }
+}

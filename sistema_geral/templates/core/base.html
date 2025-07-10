@@ -68,7 +68,7 @@
                         <li><a class="dropdown-item" href="{% url 'alterar_senha' %}"><i class="fas fa-key me-2"></i> Alterar Senha</a></li>
                         <li><a class="dropdown-item" href="{% url 'listar_ramais' %}"><i class="fas fa-phone-alt me-2"></i> Listar Ramais</a></li>
                         <li><a class="dropdown-item" href="{% url 'selecionar_gov' %}"><i class="fas fa-project-diagram me-2"></i> Governança</a></li>
-                        <li><a class="dropdown-item" href="{% url 'canais_tv' %}"><i class="fas fa-tv me-2"></i> Listar Canais - TV</a></li>
+                    <!-- <li><a class="dropdown-item" href="{% url 'canais_tv' %}"><i class="fas fa-tv me-2"></i> Listar Canais - TV</a></li> -->
                         <li>
                             {% if request.user.is_staff %}
                                 <a class="dropdown-item" href="{% url 'adm_chamados_abertos' %}"><i class="fas fa-list-alt me-2"></i> Chamados (Admin)</a>

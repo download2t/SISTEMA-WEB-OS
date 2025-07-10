@@ -1,24 +1,102 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/contatos/criar_contato.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock %}
+
 {% block content %}
-<div class="container">
-    <h1 class="mb-4">Adicionar Novo Canal</h1>
-    <!-- Formulário para criar canal -->
-    <form method="post" action="{% url 'criar_canal' %}" class="mt-4">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="numero" class="form-label">Número do Canal</label>
-            <input type="number" name="numero" id="numero" class="form-control" placeholder="Digite o número do canal" value="{{ form.numero.value }}" required>
-        </div>
+<div class="form-page-outer-wrapper">
+    {# Adjust column width if you think 600px is too wide/narrow #}
+    <div class="col-lg-6 col-md-8 col-sm-10"> 
+        <div class="card">
+            <h1>Criar Novo Contato</h1>
 
-        <div class="mb-3">
-            <label for="titulo" class="form-label">Título do Canal</label>
-            <input type="text" name="titulo" id="titulo" class="form-control" placeholder="Digite o título do canal" value="{{ form.titulo.value }}" required>
-        </div>
+            <form method="post" action="{% url 'criar_contato' %}" novalidate>
+                {% csrf_token %}
+                
+                {# Nome Responsavel Field #}
+                <div class="mb-3"> {# Using mb-3 for consistency with other forms #}
+                    <label for="{{ form.nome_responsavel.id_for_label }}" class="form-label">Nome do Responsável:</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-user-alt"></i></span> {# Icon for person #}
+                        {{ form.nome_responsavel }}
+                    </div>
+                    {% if form.nome_responsavel.errors %}
+                        <div class="alert alert-danger mt-2">
+                            {{ form.nome_responsavel.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
 
-        <button type="submit" class="btn btn-success">Salvar</button>
-        <a href="{% url 'listar_canais' %}" class="btn btn-secondary">Cancelar</a>
-    </form>
+                {# Numero Telefone Field #}
+                <div class="mb-3">
+                    <label for="{{ form.numero_telefone.id_for_label }}" class="form-label">Número de Telefone:</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-phone"></i></span> {# Icon for phone #}
+                        {{ form.numero_telefone }}
+                    </div>
+                    {% if form.numero_telefone.errors %}
+                        <div class="alert alert-danger mt-2">
+                            {{ form.numero_telefone.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Grupo Field #}
+                <div class="mb-3">
+                    <label for="{{ form.grupo.id_for_label }}" class="form-label">Grupo:</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-layer-group"></i></span> {# Icon for group #}
+                        {{ form.grupo }}
+                    </div>
+                    {% if form.grupo.errors %}
+                        <div class="alert alert-danger mt-2">
+                            {{ form.grupo.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Usuario Field (Optional, if you want to link to a User) #}
+                {# Only show if the field is present in the form (e.g., for admin users) #}
+                {% if form.usuario %}
+                    <div class="mb-3">
+                        <label for="{{ form.usuario.id_for_label }}" class="form-label">Usuário (Opcional):</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user-circle"></i></span> {# Icon for user #}
+                            {{ form.usuario }}
+                        </div>
+                        {% if form.usuario.errors %}
+                            <div class="alert alert-danger mt-2">
+                                {{ form.usuario.errors|join:", " }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                {# Non-field errors from Django form #}
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger mt-3">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="d-flex justify-content-center mt-4"> {# Centered buttons, added mt-4 for spacing #}
+                    <button type="submit" class="btn2 btn2-primary"> {# Using btn2-primary for save #}
+                        <i class="fas fa-save me-2"></i>Salvar
+                    </button>
+                    <a href="{% url 'listar_contatos' %}" class="btn2 btn2-secondary"> {# Assuming a listar_contatos URL #}
+                        <i class="fas fa-times-circle me-2"></i>Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
 {% endblock %}

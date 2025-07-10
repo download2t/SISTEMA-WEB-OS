@@ -2,71 +2,136 @@
 {% load static %}
 
 {% block extra_css %}
-
+<link rel="stylesheet" href="{% static 'css/accounts/alterar_usuario.css' %}"> {# Link to the new dedicated CSS #}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 {% endblock %}
 
 {% block content %}
-<!-- Formulário para editar usuário com grupos -->
-<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light" style="padding-top: 70px;">
-    <div class="col-lg-8 col-md-10 col-sm-12">
-        <div class="card shadow-lg rounded-4 border-0">
-            <div class="card-body p-4 p-md-5">
-                <h2 class="text-center mb-4 fw-bold">Alterar Usuário</h2>
+<div class="form-page-outer-wrapper">
+    <div class="col-lg-8 col-md-10 col-sm-12"> {# Using the wider columns for this form #}
+        <div class="card">
+            <h2>Alterar Usuário</h2>
 
-                <form method="post" action="{% url 'alterar_usuario' user.id %}">
-                    {% csrf_token %}
-                    
-                    <!-- Linha: Nome de Usuário, Primeiro Nome, Último Nome -->
-                    <div class="row mb-4">
-                        <div class="col-md-4">
-                            <label for="username" class="form-label fw-medium">Nome de Usuário:</label>
-                            <input type="text" id="username" name="username" class="form-control form-control-lg" value="{{ form.username.value|default_if_none:user.username }}" required>
+            <form method="post" action="{% url 'alterar_usuario' user.id %}" novalidate>
+                {% csrf_token %}
+                
+                {# User Details Section #}
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="username" class="form-label">Nome de Usuário:</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" id="username" name="username" class="form-control" value="{{ form.username.value|default_if_none:user.username }}" required>
                         </div>
-                        <div class="col-md-4">
-                            <label for="first_name" class="form-label fw-medium">Primeiro Nome:</label>
-                            <input type="text" id="first_name" name="first_name" class="form-control form-control-lg" value="{{ form.first_name.value|default_if_none:user.first_name }}" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="last_name" class="form-label fw-medium">Último Nome:</label>
-                            <input type="text" id="last_name" name="last_name" class="form-control form-control-lg" value="{{ form.last_name.value|default_if_none:user.last_name }}" required>
-                        </div>
+                        {% if form.username.errors %}
+                            <div class="alert alert-danger">
+                                {{ form.username.errors|join:", " }}
+                            </div>
+                        {% endif %}
                     </div>
-
-                    <!-- Linha: E-mail, Status, Staff -->
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <label for="email" class="form-label fw-medium">E-mail:</label>
-                            <input type="email" id="email" name="email" class="form-control form-control-lg" value="{{ form.email.value|default_if_none:user.email }}" required>
+                    <div class="col-md-4">
+                        <label for="first_name" class="form-label">Primeiro Nome:</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-font"></i></span>
+                            <input type="text" id="first_name" name="first_name" class="form-control" value="{{ form.first_name.value|default_if_none:user.first_name }}" required>
                         </div>
-                        <div class="col-md-3">
-                            <label for="is_active" class="form-label fw-medium">Status:</label>
-                            <select id="is_active" name="is_active" class="form-select form-select-lg">
+                        {% if form.first_name.errors %}
+                            <div class="alert alert-danger">
+                                {{ form.first_name.errors|join:", " }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label for="last_name" class="form-label">Último Nome:</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-font"></i></span>
+                            <input type="text" id="last_name" name="last_name" class="form-control" value="{{ form.last_name.value|default_if_none:user.last_name }}" required>
+                        </div>
+                        {% if form.last_name.errors %}
+                            <div class="alert alert-danger">
+                                {{ form.last_name.errors|join:", " }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="email" class="form-label">E-mail:</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input type="email" id="email" name="email" class="form-control" value="{{ form.email.value|default_if_none:user.email }}" required>
+                        </div>
+                        {% if form.email.errors %}
+                            <div class="alert alert-danger">
+                                {{ form.email.errors|join:", " }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-3">
+                        <label for="is_active" class="form-label">Status:</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-power-off"></i></span>
+                            <select id="is_active" name="is_active" class="form-select">
                                 <option value="True" {% if user.is_active %}selected{% endif %}>Ativo</option>
                                 <option value="False" {% if not user.is_active %}selected{% endif %}>Inativo</option>
                             </select>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-check form-switch mt-4">
-                                <input class="form-check-input" type="checkbox" id="is_staff" name="is_staff" {% if form.is_staff.value %}checked{% endif %}>
-                                <label class="form-check-label fw-medium" for="is_staff">ADMINISTRADOR</label>
+                        {% if form.is_active.errors %}
+                            <div class="alert alert-danger">
+                                {{ form.is_active.errors|join:", " }}
                             </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-3 d-flex align-items-center"> {# Changed align-items-end to align-items-center for better vertical alignment with switch #}
+                        <div class="form-check form-switch mb-0">
+                            {# Check if the user is staff OR if the form was submitted with is_staff checked #}
+                            <input class="form-check-input" type="checkbox" id="is_staff" name="is_staff" {% if user.is_staff or form.is_staff.value %}checked{% endif %}>
+                            <label class="form-check-label" for="is_staff">ADMINISTRADOR</label>
                         </div>
+                        {% if form.is_staff.errors %}
+                            <div class="alert alert-danger">
+                                {{ form.is_staff.errors|join:", " }}
+                            </div>
+                        {% endif %}
                     </div>
+                </div>
 
-                    <!-- Botões -->
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-success btn-lg fw-medium">
-                            <i class="fas fa-save me-2"></i> Salvar Alterações
-                        </button>
+                {# Groups Section #}
+                <div class="permissions-section">
+                    <h3>Grupos de Permissão</h3>
+                    <div class="row">
+                        {% for group in groups %}
+                            <div class="col-md-4 col-sm-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="groups" id="group_{{ group.id }}" value="{{ group.id }}"
+                                        {% if group in user.groups.all %}checked{% endif %}>
+                                    <label class="form-check-label" for="group_{{ group.id }}">
+                                        {{ group.name }}
+                                    </label>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
-                </form>
-            </div>
+                    {% if form.groups.errors %}
+                        <div class="alert alert-danger mt-2">
+                            {{ form.groups.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Submit Button #}
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn2 btn2-primary w-100">
+                        <i class="fas fa-save me-2"></i> Salvar Alterações
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
-<!-- JavaScript específico para esta página -->
 <script src="{% static 'js/accounts/alterar_usuario.js' %}"></script>
 {% endblock %}

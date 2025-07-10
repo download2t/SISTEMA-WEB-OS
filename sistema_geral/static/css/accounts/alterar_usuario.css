@@ -1,23 +1,327 @@
-/* Estilos adicionais */
-#available_groups, #assigned_groups {
-    height: 200px;
-    width: 100%;
-}
+/* static/css/accounts/alterar_usuario.css */
 
-button {
-    width: 100%;
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-#available_groups, #assigned_groups {
+/* Main container for the form to center it within the main content area */
+.form-page-outer-wrapper {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    justify-content: center; /* Centers the inner col div */
+    align-items: flex-start; /* Aligns to the top, adjust to 'center' if you want it vertically centered on the page */
+    min-height: calc(100vh - 120px); /* Adjust based on your header/footer height */
+    padding: 20px 0; /* Add some vertical padding */
+    box-sizing: border-box;
 }
 
-select {
-    margin: 5px 0;
+/* This targets the div that will act as the column for centering the card */
+/* Slightly wider for Alterar User form since it has more fields */
+.col-lg-8.col-md-10.col-sm-12 {
+    width: 100%; /* Ensure it takes full width within its flex context */
+    max-width: 800px; /* Increased max-width for more fields */
+    margin: 0 auto; /* Center horizontally (redundant with flex parent, but good for fallback) */
 }
 
-button {
-    margin-top: 10px;
+/* Card Styling - consistent base, but specific padding/shadow can be adjusted */
+.card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0; /* border-gray-200 */
+    border-radius: 1.5rem; /* rounded-3xl */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); /* shadow-xl */
+    padding: 2.5rem; /* p-10 */
+    box-sizing: border-box;
+    animation: fadeIn 0.8s ease-out; /* Fade-in animation */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Heading Styles */
+h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 2.2rem; /* text-3xl */
+    font-weight: 700; /* font-bold */
+    color: #2d3748; /* text-gray-800 */
+    margin-bottom: 2rem; /* mb-8 */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+/* Form Labels and Inputs */
+.form-label {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    color: #4a5568; /* text-gray-700 */
+    margin-bottom: 0.5rem;
+}
+
+.form-control,
+.form-select {
+    width: 100%;
+    padding: 0.75rem 1rem; /* p-3 */
+    border: 1px solid #e2e8f0; /* border-gray-300 */
+    border-radius: 0.5rem; /* rounded-lg */
+    font-size: 1rem;
+    color: #2d3748; /* text-gray-800 */
+    transition: all 0.2s ease-in-out;
+    font-family: 'Inter', sans-serif;
+}
+
+.form-control:focus,
+.form-select:focus {
+    outline: none;
+    border-color: #667eea; /* border-indigo-500 */
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2); /* ring-4 ring-indigo-200 */
+}
+
+/* Input Group Styling */
+.input-group {
+    display: flex; /* Ensure flex behavior */
+    align-items: center; /* Vertically align icon and input */
+    margin-bottom: 1rem; /* Added margin-bottom for better spacing within columns */
+}
+
+.input-group .input-group-text {
+    background-color: #e2e8f0; /* bg-gray-200 */
+    border: 1px solid #e2e8f0; /* border-gray-200 */
+    border-right: none; /* Remove right border to blend with input */
+    border-radius: 0.5rem 0 0 0.5rem; /* Rounded left corners */
+    padding: 0.75rem 1rem;
+    color: #718096; /* text-gray-600 */
+    display: flex;
+    align-items: center; /* Center icon vertically */
+    height: 100%; /* Ensure it matches input height */
+}
+
+.input-group .form-control,
+.input-group .form-select {
+    border-left: none; /* Remove left border to blend with text */
+    border-radius: 0 0.5rem 0.5rem 0; /* Rounded right corners */
+}
+
+/* Error Messages */
+.alert.alert-danger {
+    background-color: #fee2e2; /* bg-red-100 */
+    color: #c53030; /* text-red-700 */
+    border: 1px solid #fc8181; /* border-red-400 */
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    text-align: left;
+    animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form Check (Checkbox/Radio) */
+.form-check {
+    margin-bottom: 1.5rem; /* Consistent spacing for standalone checks */
+}
+
+.form-check-label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    color: #4a5568;
+    cursor: pointer;
+}
+
+/* Toggle Switch (Checkbox) Styling */
+.form-check.form-switch {
+    display: flex;
+    align-items: center; /* Vertically align items */
+    justify-content: flex-start; /* Align switch and label to the left */
+    /* Removed default margin-bottom here to manage it with parent .mb-3 or col-div */
+}
+
+.form-check-label {
+    margin-bottom: 0; /* Remove default label margin */
+    margin-right: 0.75rem; /* Add margin to the right of the label */
+    white-space: nowrap; /* Prevent label text from wrapping */
+}
+
+.form-check-input {
+    min-width: 2.5rem; /* Ensure switch has enough width */
+    height: 1.5rem; /* Adjust height */
+    margin-left: 0; /* Remove default margin */
+    background-color: #cbd5e0; /* bg-gray-300 for unchecked */
+    border-color: #a0aec0; /* border-gray-400 */
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    flex-shrink: 0; /* Prevent the switch from shrinking */
+    -webkit-appearance: none; /* Remove default browser styling */
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 1.5rem; /* Make it pill-shaped */
+    cursor: pointer;
+    position: relative;
+}
+
+.form-check-input:before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 1.1rem; /* Size of the circle inside the switch */
+    height: 1.1rem;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.2s ease-in-out;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.form-check-input:checked {
+    background-color: #48bb78; /* bg-green-500 for checked */
+    border-color: #38a169; /* border-green-600 */
+}
+
+.form-check-input:checked:before {
+    transform: translateX(1rem); /* Move the circle to the right when checked */
+}
+
+/* Submit Button */
+.btn2 {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem; /* px-6 py-3 */
+    border-radius: 0.75rem; /* rounded-xl */
+    font-weight: 600; /* font-semibold */
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    white-space: nowrap; /* Prevent text wrapping */
+    border: none; /* Remove default button border */
+    font-family: 'Inter', sans-serif;
+}
+
+.btn2-primary {
+    background: var(--painel); /* Use CSS variable from your base.html */
+    color: white;
+    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+}
+
+.btn2-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+    background: var(--nav-hover); /* Use CSS variable from your base.html */
+}
+
+/* Responsive adjustments for Alterar User form */
+@media (max-width: 992px) { /* Adjust breakpoint for larger tablets/smaller desktops */
+    .col-lg-8.col-md-10.col-sm-12 {
+        max-width: 90%; /* Allow form to take more width on smaller large screens */
+    }
+}
+
+@media (max-width: 768px) { /* Common tablet breakpoint */
+    body {
+        padding: 15px; /* Ensure body has padding */
+    }
+    .col-lg-8.col-md-10.col-sm-12 {
+        padding: 0; /* Remove padding from col classes on small screens */
+        max-width: 100%; /* Take full width on small screens */
+    }
+    .card {
+        padding: 1.5rem;
+        border-radius: 1rem;
+    }
+    h2 {
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+    }
+    .btn2-primary {
+        width: 100%; /* Full width button on small screens */
+    }
+    /* Input group stacking on small screens */
+    .input-group {
+        flex-direction: column; /* Stack input group elements vertically */
+    }
+    .input-group .input-group-text {
+        border-bottom: none;
+        border-radius: 0.5rem 0.5rem 0 0; /* Rounded top corners */
+        width: 100%; /* Make icon span full width */
+        justify-content: center; /* Center the icon in the full width span */
+        border-right: 1px solid #e2e8f0; /* Add back border for stacked elements */
+    }
+    .input-group .form-control,
+    .input-group .form-select {
+        border-top: none;
+        border-radius: 0 0 0.5rem 0.5rem; /* Rounded bottom corners */
+        border-left: 1px solid #e2e8f0; /* Add back border for stacked elements */
+    }
+    /* Form check switch alignment for small screens */
+    .form-check.form-switch {
+        flex-direction: row; /* Keep label and switch in a row */
+        justify-content: flex-start; /* Align to start */
+        align-items: center; /* Center vertically */
+    }
+    .form-check-label {
+        margin-right: 0.75rem; /* Ensure space between label and switch */
+        white-space: nowrap; /* Prevent wrapping */
+    }
+}
+
+/* Specific styling for the permission groups section */
+.permissions-section {
+    margin-top: 2rem;
+    border-top: 1px solid #e2e8f0; /* Light border top */
+    padding-top: 1.5rem;
+}
+
+.permissions-section h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.permissions-section .form-check {
+    margin-bottom: 0.75rem; /* Closer spacing for checkboxes in a list */
+}
+
+.permissions-section .form-check-input[type="checkbox"] {
+    /* Style for regular checkboxes, distinct from toggle switch */
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 0.25rem; /* Square corners */
+    border: 1px solid #a0aec0;
+    background-color: #cbd5e0;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    -webkit-appearance: checkbox; /* Ensure default checkbox appearance */
+    -moz-appearance: checkbox;
+    appearance: checkbox;
+    margin-right: 0.5rem; /* Space between checkbox and label */
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+.permissions-section .form-check-input[type="checkbox"]:checked {
+    background-color: #48bb78; /* Green when checked */
+    border-color: #38a169; /* Darker green border */
+}
+
+.permissions-section .form-check-label {
+    font-weight: 400; /* Lighter font weight for list items */
+}
+
+/* Spacing for multiple error messages from different columns */
+.row .alert.alert-danger {
+    margin-top: 0.75rem; /* Adjust margin for errors inside columns */
 }

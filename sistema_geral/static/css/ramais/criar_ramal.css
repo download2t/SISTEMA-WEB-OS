@@ -127,7 +127,7 @@ h2 {
 }
 
 .btn2-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--painel);
     color: white;
     box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
 }
@@ -135,7 +135,7 @@ h2 {
 .btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
-    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    background:var(--nav-hover);
 }
 
 /* Responsive adjustments */
