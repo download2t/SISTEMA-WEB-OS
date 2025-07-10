@@ -7,7 +7,7 @@
  
 {% block content %}
 <div class="container mt-4">
-    <h1 class="mb-4">Lista de Ramais</h1>
+    <h1><i class="fas fa-address-book"></i> Lista de Ramais</h1>
     <!-- Filtro para Ramal Ativo/Inativo e Campo de Busca -->
     <form method="get" action="{% url 'listar_ramais' %}" class="d-flex flex-wrap align-items-center mb-4">
         {% csrf_token %}
