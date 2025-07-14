@@ -1,6 +1,10 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+{% endblock %}
+
 {% block content %}
 <button class="sidebar-toggle" id="sidebarToggle">
     <i class="fas fa-bars"></i>
