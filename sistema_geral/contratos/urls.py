@@ -5,6 +5,7 @@ urlpatterns = [
     path('', views.listar_contratos, name='listar_contratos'),
     path('criar/', views.criar_contrato, name='criar_contrato'),
     path('editar/<int:contrato_id>/', views.editar_contrato, name='editar_contrato'),
+    path('visualizar/<int:contrato_id>/', views.visualizar_contrato, name='visualizar_contrato'),
     path('inativar/<int:contrato_id>/', views.inativar_contrato, name='inativar_contrato'),
     path('ativar/<int:contrato_id>/', views.ativar_contrato, name='ativar_contrato'),
     path('vencendo/', views.contratos_vencendo, name='contratos_vencendo'),
@@ -13,3 +14,4 @@ urlpatterns = [
     path('relatorio/word/', views.generate_word, name='contrato_generate_word'),
     path('relatorio/excel/', views.generate_excel, name='contrato_generate_excel'),
 ]
+ 

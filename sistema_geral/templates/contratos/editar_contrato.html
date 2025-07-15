@@ -3,6 +3,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/contratos/formulario.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -10,112 +11,181 @@
     <i class="fas fa-bars"></i>
 </button>
 {% include 'contratos/menu_contratos.html' %}
-{% if form.errors %}
-    <div class="alert alert-danger">
-        <strong>Erro ao enviar o formulário:</strong>
-        <ul>
-            {% for field in form %}
-                {% for error in field.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            {% endfor %}
-        </ul>
+<div class="contract-form-container">
+    <div class="form-header">
+        <h1><i class="fas fa-file-contract"></i> Editar Contrato</h1>
+        <p class="form-subtitle">Atualize os campos necessários</p>
     </div>
-{% endif %}
-<div class="container mt-4">
-    <h1 class="mb-4">Editar Contrato</h1>
-    <!-- Formulário -->
-    <form method="post" enctype="multipart/form-data" class="card p-4 shadow-sm">
+
+    <form method="post" enctype="multipart/form-data" class="contract-form" id="contractForm">
         {% csrf_token %}
-
-        <!-- Linha para CNPJ, Razão Social e Nome Fantasia -->
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <label for="documento">CNPJ/CPF <span class="text-danger">*</span></label>
-                {{ form.documento }}
-            </div>
-
-            <div class="col-md-4">
-                <label for="razao_social">Razão Social <span class="text-danger">*</span></label>
-                {{ form.razao_social }}
-            </div>
-
-            <div class="col-md-4">
-                <label for="nome_fantasia">Nome Fantasia</label>
-                {{ form.nome_fantasia }}
-            </div>
-        </div>
-
-        <!-- Linha para Telefone e Email -->
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="telefone">Telefone </label>
-                {{ form.telefone }}
-            </div>
-
-            <div class="col-md-6">
-                <label for="email">E-mail </label>
-                {{ form.email }}
-            </div>
-        </div>
-
-         <!-- Linha para Descrição, Data de Assinatura e Data de Validade -->
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <label for="descricao">Descrição</label>
-                {{ form.descricao }}
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <label for="data_assinatura">Data de Assinatura <span class="text-danger">*</span></label>
-                {{ form.data_assinatura }}
-            </div>
-
-            <div class="col-md-4">
-                <label for="data_validade">Data de Validade <span class="text-danger">*</span></label>
-                {{ form.data_validade }}
-            </div>
-
-             <div class="col-md-4">
-                  <label for="{{ form.grupo_responsavel.id_for_label }}">Setor de contratação: <span class="text-danger">*</span></label>
-                    {{ form.grupo_responsavel }}
-
-                    {% if form.grupo.errors %}
-                        <div class="alert alert-danger">
-                            {{ form.grupo.errors|join:", " }}
-                        </div>
+    
+        <!-- Seção de Dados Básicos -->
+        <div class="form-section">
+            <h3 class="section-title"><i class="fas fa-id-card"></i> Dados do Contratante</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form.documento.label_tag }}
+                    {{ form.documento }}
+                    {% if form.documento.errors %}
+                    <div class="error-message">{{ form.documento.errors|join:", " }}</div>
                     {% endif %}
+                    <small class="form-hint">Somente números</small>
+                </div>
+
+                <div class="form-group">
+                    {{ form.razao_social.label_tag }}
+                    {{ form.razao_social }}
+                    {% if form.razao_social.errors %}
+                    <div class="error-message">{{ form.razao_social.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.nome_fantasia.label_tag }}
+                    {{ form.nome_fantasia }}
+                    {% if form.nome_fantasia.errors %}
+                    <div class="error-message">{{ form.nome_fantasia.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
             </div>
         </div>
 
-        <!-- Linha para Valor -->
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <label for="valor">Valor do Contrato <span class="text-danger">*</span></label>
-                {{ form.valor }}
+        <!-- Seção de Contato -->
+        <div class="form-section">
+            <h3 class="section-title"><i class="fas fa-address-book"></i> Informações de Contato</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form.telefone.label_tag }}
+                    {{ form.telefone }}
+                    {% if form.telefone.errors %}
+                    <div class="error-message">{{ form.telefone.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.email.label_tag }}
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                    <div class="error-message">{{ form.email.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
             </div>
         </div>
 
-        <!-- Botões -->
-        <div class="d-flex justify-content-between">
-            <div>
-                {% if form.instance.ativo %}
-                    <button type="submit" class="btn btn-primary">Salvar</button>
-                {% else %}
-                    <button type="button" class="btn btn-primary" disabled>Contrato Inativo</button>
-                {% endif %}
-                <a href="{% url 'listar_contratos' %}" class="btn btn-secondary">Cancelar</a>
-            </div>
-            <div>
-                {% if form.instance.ativo %}
-                    <a href="{% url 'inativar_contrato' form.instance.id %}" class="btn btn-danger">Inativar</a>
-                {% else %}
-                    <a href="{% url 'ativar_contrato' form.instance.id %}" class="btn btn-success">Ativar</a>
+        <!-- Seção de Descrição -->
+        <div class="form-section">
+            <h3 class="section-title"><i class="fas fa-align-left"></i> Descrição do Contrato</h3>
+            <div class="form-group full-width">
+                {{ form.descricao.label_tag }}
+                {{ form.descricao }}
+                {% if form.descricao.errors %}
+                <div class="error-message">{{ form.descricao.errors|join:", " }}</div>
                 {% endif %}
             </div>
+        </div>
+
+        <!-- Seção de Datas e Valores -->
+        <div class="form-section">
+            <h3 class="section-title"><i class="fas fa-calendar-alt"></i> Datas e Valores</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form.data_assinatura.label_tag }}
+                    {{ form.data_assinatura }}
+                    {% if form.data_assinatura.errors %}
+                    <div class="error-message">{{ form.data_assinatura.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.data_validade.label_tag }}
+                    {{ form.data_validade }}
+                    {% if form.data_validade.errors %}
+                    <div class="error-message">{{ form.data_validade.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.valor.label_tag }}
+                    {{ form.valor }}
+                    {% if form.valor.errors %}
+                    <div class="error-message">{{ form.valor.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção de Responsável e Anexos -->
+        <div class="form-section">
+            <h3 class="section-title"><i class="fas fa-user-tie"></i> Responsável e Anexos</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form.usuario_responsavel.label_tag }}
+                    {{ form.usuario_responsavel }}
+                    {% if form.usuario_responsavel.errors %}
+                    <div class="error-message">{{ form.usuario_responsavel.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_arquivo_contrato">Arquivo do Contrato</label>
+                    
+                    <!-- Mostrar arquivo atual se existir -->
+                    {% if form.instance.arquivo_contrato %}
+                    <div class="current-file">
+                        <i class="fas fa-paperclip"></i>
+                        <a href="{{ form.instance.arquivo_contrato.url }}" target="_blank" class="file-link">
+                            {{ form.instance.arquivo_contrato.name|slice:"20:" }}
+                        </a>
+                        <span class="file-size">({{ form.instance.arquivo_contrato.size|filesizeformat }})</span>
+                        
+                        <label class="file-replace">
+                            <input type="checkbox" name="arquivo_contrato-clear" id="arquivo_contrato-clear_id">
+                            <span>Remover arquivo atual</span>
+                        </label>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Upload de novo arquivo -->
+                    <div class="file-upload-wrapper">
+                        <input type="file" name="arquivo_contrato" id="id_arquivo_contrato" class="file-upload-input" 
+                            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx">
+                        <label for="id_arquivo_contrato" class="file-upload-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span class="file-upload-text">
+                                {% if form.instance.arquivo_contrato %}
+                                    Substituir arquivo
+                                {% else %}
+                                    Selecionar arquivo
+                                {% endif %}
+                            </span>
+                        </label>
+                        <div class="file-requirements">
+                            <small>Tamanho máximo: {{ max_upload_mb }}MB • Formatos: PDF, DOC, DOCX, JPG, PNG, XLS, XLSX</small>
+                        </div>
+                    </div>
+                    
+                    {% if form.arquivo_contrato.errors %}
+                    <div class="error-message">{{ form.arquivo_contrato.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Atualizar Contrato
+            </button>
+            <a href="{% url 'listar_contratos' %}" class="btn btn-secondary">
+                <i class="fas fa-times"></i> Cancelar
+            </a>
         </div>
     </form>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/contratos/validacao.js' %}"></script>
+<script src="{% static 'js/contratos/uppercase.js' %}"></script>
 {% endblock %}

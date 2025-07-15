@@ -12,7 +12,6 @@
 </button>
 
 {% include 'contratos/menu_contratos.html' %}
-
 <div class="main-content-wrapper">
     <div class="envolve">
         <h1><i class="fas fa-file-contract"></i> Lista de Contratos</h1>
@@ -48,14 +47,13 @@
                             <input type="text" id="razao_social" name="razao_social" value="{{ razao_social }}" class="form-control" placeholder="Nome Fantasia ou Razão Social">
                         </div>
 
+                        {# Alterado de 'grupo' para 'usuario_responsavel' #}
                         <div class="col-lg-2 col-md-3 col-sm-6">
-                            <label for="grupo" class="form-label">Grupo</label>
-                            <select id="grupo" name="grupo" class="form-select">
+                            <label for="usuario_responsavel" class="form-label">Usuário Responsável</label>
+                            <select id="usuario_responsavel" name="usuario_responsavel" class="form-select">
                                 <option value="">Todos</option>
-                                {% for grupo in grupos %}
-                                {% if grupo.name in "COMERCIAL ADMINISTRATIVO MANUTENÇÃO SEGURANÇA RH TI RESERVAS A&B COZINHA" %}
-                                <option value="{{ grupo.id }}" {% if grupo.id|stringformat:"s" == grupo_selecionado %}selected{% endif %}>{{ grupo.name }}</option>
-                                {% endif %}
+                                {% for user in usuarios %} {# Iterando sobre 'usuarios' em vez de 'grupos' #}
+                                <option value="{{ user.id }}" {% if user.id|stringformat:"s" == usuario_selecionado %}selected{% endif %}>{{ user.username }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -65,7 +63,7 @@
                                 <i class="fas fa-search me-1"></i> Filtrar
                             </button>
                         </div>
-                        
+
                         <div class="col-lg-6 col-md-12 col-sm-6 d-flex align-items-end justify-content-start">
                             <a href="{% url 'listar_contratos' %}" class="btn btn-secondary me-2 w-100 w-md-auto">
                                 <i class="fas fa-times-circle me-1"></i> Limpar Filtros
@@ -80,7 +78,7 @@
             <table class="table table-hover align-middle">
                 <thead class="table-primary">
                 <tr>
-                    <th scope="col">Setor</th>
+                    <th scope="col">Usuário Responsável</th> {# Cabeçalho alterado #}
                     <th scope="col">Nome Fantasia</th>
                     <th scope="col">Vencimento</th>
                     <th scope="col">Telefone</th>
@@ -91,15 +89,20 @@
                 <tbody>
                     {% for contrato in contratos %}
                     <tr>
-                        <td data-label="Setor">{{ contrato.grupo_responsavel }}</td>
+                        <td data-label="Usuário Responsável">{{ contrato.usuario_responsavel.username }}</td> {# Acessa o username #}
                         <td data-label="Nome Fantasia">{{ contrato.nome_fantasia }}</td>
                         <td data-label="Vencimento">{{ contrato.data_validade|date:"d/m/Y" }}</td>
                         <td data-label="Telefone" class="telefone">{{ contrato.telefone }}</td>
                         <td data-label="E-mail">{{ contrato.email }}</td>
                         <td data-label="Ações" class="text-end">
-                            <a href="{% url 'editar_contrato' contrato.id %}" class="btn2 btn2-warning btn-sm me-2">
-                                <i class="fas fa-edit"></i> Editar
-                            </a>
+                            <div class="d-flex gap-2">  
+                                <a href="{% url 'editar_contrato' contrato.id %}" class="btn2 btn2-warning btn-sm">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                                <a href="{% url 'visualizar_contrato' contrato.id %}" class="btn2 btn2-visualizar btn-sm">
+                                    <i class="fas fa-eye"></i> Visualizar
+                                </a>
+                            </div>
                         </td>
                     </tr>
                     {% empty %}

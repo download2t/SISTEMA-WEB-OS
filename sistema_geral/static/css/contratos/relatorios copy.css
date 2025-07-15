@@ -1,0 +1,58 @@
+/* Ajustar largura do container */
+.container {
+    max-width: 90%; /* Usa mais espaço da tela */
+    margin: 0 auto; /* Centraliza */
+}
+
+/* Melhor distribuição das colunas */
+.col-lg-2,
+.col-md-3 {
+    flex: 1; /* Ajusta para ocupar melhor o espaço */
+}
+
+.col-lg-10,
+.col-md-9 {
+    flex: 4; /* Ajusta o conteúdo principal */
+}
+
+/* Melhor distribuição dos filtros */
+.row.g-3 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Equilibra os elementos */
+}
+
+/* Ajusta a tabela */
+.table-responsive {
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Responsividade */
+@media (max-width: 992px) {
+    .container-fluid {
+        max-width: 95%;
+    }
+    .col-lg-2,
+    .col-md-3 {
+        width: 20%;
+    }
+    .col-lg-10,
+    .col-md-9 {
+        width: 80%;
+    }
+}
+
+@media (max-width: 768px) {
+    .container-fluid {
+        max-width: 100%;
+    }
+    .col-lg-2,
+    .col-md-3 {
+        width: 100%; /* Menu lateral vira um bloco */
+    }
+    .col-lg-10,
+    .col-md-9 {
+        width: 100%; /* Conteúdo principal ocupa toda a tela */
+    }
+}

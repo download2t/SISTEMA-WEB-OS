@@ -1,0 +1,168 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load os_custom_filters %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/contratos/visualizar_contrato.css' %}">
+{% endblock %}
+
+{% block content %}
+<button class="sidebar-toggle" id="sidebarToggle">
+    <i class="fas fa-bars"></i>
+</button>
+{% include 'contratos/menu_contratos.html' %}
+
+<div class="main-content-wrapper">
+    <div class="container-custom">
+        <!-- Card de Visualização do Contrato -->
+        <div class="contract-card">
+            <div class="contract-header">
+                <h1 class="contract-title">
+                    <i class="fas fa-file-contract"></i> Contrato #{{ contrato.id }}
+                </h1>
+                <span class="contract-status {% if contrato.ativo %}status-active{% else %}status-inactive{% endif %}">
+                    {% if contrato.ativo %}Ativo{% else %}Inativo{% endif %}
+                </span>
+            </div>
+            
+            <div class="contract-details">
+                <!-- Coluna 1 -->
+                <div>
+                    <div class="detail-group">
+                        <div class="detail-label">CNPJ/CPF:</div>
+                        <div class="detail-value">{{ contrato.documento }}</div>
+                    </div>
+                    
+                    <div class="detail-group">
+                        <div class="detail-label">Razão Social:</div>
+                        <div class="detail-value">{{ contrato.razao_social }}</div>
+                    </div>
+                    
+                    <div class="detail-group">
+                        <div class="detail-label">Nome Fantasia:</div>
+                        <div class="detail-value {% if not contrato.nome_fantasia %}empty{% endif %}">
+                            {{ contrato.nome_fantasia|default:"Não informado" }}
+                        </div>
+                    </div>
+                    
+                    <div class="detail-group">
+                        <div class="detail-label">Usuário Responsável:</div>
+                        <div class="detail-value">
+                            {{ contrato.usuario_responsavel.get_full_name|default:contrato.usuario_responsavel.username }}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Coluna 2 -->
+                <div>
+                    <div class="detail-group">
+                        <div class="detail-label">Data de Assinatura:</div>
+                        <div class="detail-value">{{ contrato.data_assinatura|date:"d/m/Y" }}</div>
+                    </div>
+                    
+                    <div class="detail-group">
+                        <div class="detail-label">Data de Validade:</div>
+                        <div class="detail-value">{{ contrato.data_validade|date:"d/m/Y" }}</div>
+                    </div>
+                    
+                    <div class="detail-group">
+                        <div class="detail-label">Valor do Contrato:</div>
+                        <div class="detail-value">R$ {{ contrato.valor|floatformat:2 }}</div>
+                    </div>
+                    
+                    <div class="detail-group">
+                        <div class="detail-label">Email Enviado:</div>
+                        <div class="detail-value">
+                            {% if contrato.email_enviado %}
+                                <span style="color: #28a745;">Sim</span>
+                            {% else %}
+                                <span style="color: #dc3545;">Não</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Coluna 3 -->
+                <div>
+                    <div class="detail-group">
+                        <div class="detail-label">Telefone:</div>
+                        <div class="detail-value {% if not contrato.telefone %}empty{% endif %}">
+                            {{ contrato.telefone|default:"Não informado" }}
+                        </div>
+                    </div>
+                    
+                    <div class="detail-group">
+                        <div class="detail-label">E-mail:</div>
+                        <div class="detail-value {% if not contrato.email %}empty{% endif %}">
+                            {{ contrato.email|default:"Não informado" }}
+                        </div>
+                    </div>
+                    
+                    <div class="detail-group">
+                        <div class="detail-label">Arquivo do Contrato:</div>
+                        <div class="detail-value">
+                            {% if contrato.arquivo_contrato %}
+                                <a href="{{ contrato.arquivo_contrato.url }}" class="file-download" target="_blank">
+                                    <i class="fas fa-file-download"></i>
+                                    {% if contrato.arquivo_contrato.name %}
+                                        {{ contrato.arquivo_contrato.name|filename }}
+                                    {% else %}
+                                        Baixar Arquivo
+                                    {% endif %}
+                                </a>
+                            {% else %}
+                                <span class="empty">Nenhum arquivo anexado</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Descrição (full width) -->
+            <div class="detail-group" style="grid-column: 1 / -1;">
+                <div class="detail-label">Descrição:</div>
+                <div class="detail-value {% if not contrato.descricao %}empty{% endif %}">
+                    {{ contrato.descricao|default:"Não informado"|linebreaks }}
+                </div>
+            </div>
+            
+            <!-- Ações -->
+            <div class="contract-actions">
+                <a href="{% url 'listar_contratos' %}" class="btn btn-back">
+                    <i class="fas fa-arrow-left"></i> Voltar para Lista
+                </a>
+                <a href="{% url 'editar_contrato' contrato.id %}" class="btn btn-edit">
+                    <i class="fas fa-edit"></i> Editar Contrato
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Toggle do sidebar
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                const sidebar = document.querySelector('.sidebar');
+                const mainContent = document.querySelector('.main-content-wrapper');
+                
+                if (sidebar && mainContent) {
+                    sidebar.classList.toggle('collapsed');
+                    mainContent.classList.toggle('expanded');
+                    
+                    if (sidebar.classList.contains('collapsed')) {
+                        mainContent.style.marginLeft = '0';
+                    } else {
+                        mainContent.style.marginLeft = '250px';
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

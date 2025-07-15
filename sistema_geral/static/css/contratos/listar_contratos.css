@@ -7,7 +7,7 @@
     background-color: #ffffff;
     border-radius: 1.5rem; /* rounded-3xl */
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); /* shadow-xl */
-    padding: 2.5rem; /* p-10 */
+    padding: 1.5rem; /* p-10 */
     box-sizing: border-box;
     margin-bottom: 10px;
 }
@@ -107,6 +107,7 @@ h1 i {
     border: none;
     font-family: 'Inter', sans-serif;
     min-width: 100px; /* Ensure buttons have a minimum width */
+    width: 120px; 
 }
 
 .btn2-primary {
@@ -144,6 +145,18 @@ h1 i {
     box-shadow: 0 6px 15px rgba(246, 173, 85, 0.4);
     background: #ed8936; /* orange-500 */
 }
+
+.btn2-visualizar {
+    background: #c9def1;
+    color: #2d3748; /* Alterado para texto escuro para melhor contraste */
+    box-shadow: 0 4px 10px rgba(101, 113, 119, 0.3);
+}
+
+.btn2-visualizar:hover {
+    background: #8192b3;
+    color: white;
+}
+
 
 .btn2-danger {
     background: linear-gradient(135deg, #fc8181 0%, #e53e3e 100%);
@@ -369,4 +382,27 @@ h1 i {
         padding: 0.6rem 1rem;
         font-size: 0.9rem;
     }
+}
+/* Ações - Botões lado a lado */
+.table td.text-end .d-flex {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+/* Ajustes específicos para telas pequenas */
+@media (max-width: 991.98px) {
+    .table td.text-end .d-flex {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .table td.text-end .btn2 {
+        width: 100%;
+    }
+}
+
+/* Ícones dos botões */
+.btn2 i {
+    margin-right: 5px;
 }

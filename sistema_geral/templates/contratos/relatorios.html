@@ -4,104 +4,119 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
 <link rel="stylesheet" href="{% static 'css/contratos/relatorios.css' %}">
-
 {% endblock %}
 
 {% block content %}
 <div class="container-fluid mt-4">
     <button class="sidebar-toggle" id="sidebarToggle">
-    <i class="fas fa-bars"></i>
-</button>
-{% include 'contratos/menu_contratos.html' %}
-<div class="main-content-wrapper"> 
-    <div class="col-lg-10 col-md-9">
-        <div class="card p-4 shadow-lg border-0 rounded">
-            <h1 class="fw-bold text-center theme-title">Relatórios de Contratos</h1>
+        <i class="fas fa-bars"></i>
+    </button>
 
-            <!-- Botão de filtros -->
-            <button type="button" id="toggle-filters" class="btn theme-button d-block mx-auto my-3">
+    {% include 'contratos/menu_contratos.html' %}
+
+    <div class="main-content-wrapper">
+        <div class="d-flex justify-content-between align-items-center mb-3"> {# Adicione este contêiner flexível #}
+            <h1><i class="fas fa-address-book"></i> Relatórios de Contratos</h1>
+            <button type="button" id="toggle-filters" class="btn theme-button"
+                aria-expanded="false" aria-controls="filter-options">
                 <i class="fas fa-filter"></i> Filtrar Relatórios
             </button>
+        </div>
 
-            <!-- Filtros -->
-            <div id="filter-options" class="d-none">
-                <div class="row g-3">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card p-3">
-                            <h5 class="fw-bold">Razão Social</h5>
-                            <input type="text" name="razao_social" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card p-3">
-                            <h5 class="fw-bold">Grupo</h5>
-                            <select name="grupo" class="form-select">
-                                <option value="">Todos</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card p-3">
-                            <h5 class="fw-bold">Data</h5>
-                            <input type="date" name="data_inicio" class="form-control">
-                        </div>
-                    </div>
+        <div class="filters-section" id="filter-options">
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label class="filter-label">Razão Social</label>
+                    <input type="text" name="razao_social" class="filter-input" placeholder="Digite a razão social...">
+                </div>
+    
+                <div class="filter-group">
+                    <label class="filter-label">Data Início</label>
+                    <input type="date" name="data_inicio" class="filter-input">
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Data Fim</label>
+                    <input type="date" name="data_fim" class="filter-input">
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Status</label>
+                    <select name="status" class="filter-select">
+                        <option value="">Todos</option>
+                        <option value="ativo">Ativo</option>
+                        <option value="inativo">Inativo</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Valor Mínimo</label>
+                    <input type="number" name="valor_min" class="filter-input" placeholder="0,00" step="0.01">
+                </div>
+                <div class="filter-actions">
+                    <button type="button" class="btn-clear">
+                        <i class="fas fa-times"></i> Limpar
+                    </button>
+                    <button type="button" class="btn-apply">
+                        <i class="fas fa-check"></i> Aplicar
+                    </button>
                 </div>
             </div>
+        </div>
 
-            <!-- Tabela -->
-            <div class="table-responsive">
-                <table class="table theme-table align-middle">
-                    <thead>
-                        <tr>
-                            <th>Razão Social</th>
-                            <th>Nome Fantasia</th>
-                            <th>Documento</th>
-                            <th>Telefone</th>
-                            <th>E-mail</th>
-                            <th>Data Assinatura</th>
-                            <th>Data Validade</th>
-                            <th>Grupo</th>
-                            <th>Valor</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for contrato in contratos %}
-                        <tr>
-                            <td>{{ contrato.razao_social }}</td>
-                            <td>{{ contrato.nome_fantasia }}</td>
-                            <td>{{ contrato.documento }}</td>
-                            <td>{{ contrato.telefone }}</td>
-                            <td>{{ contrato.email }}</td>
-                            <td>{{ contrato.data_assinatura|date:"d/m/Y" }}</td>
-                            <td>{{ contrato.data_validade|date:"d/m/Y" }}</td>
-                            <td>{{ contrato.grupo_responsavel.name }}</td>
-                            <td>{{ contrato.valor }}</td>
-                            <td>{% if contrato.ativo %}Sim{% else %}Não{% endif %}</td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="10" class="text-center text-muted">Nenhum contrato encontrado.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+        <div class="table-container">
+            <div class="table-header">
+                <h2 class="table-title">Contratos Registrados</h2>
+                <div class="table-info"></div> {# Este div será populado pelo JavaScript #}
+                <div class="table-actions"> {# Container para os botões #}
+                    <a href="{% url 'contrato_gerar_relatorio_pdf' %}" target="_blank" class="btn btn-danger btn-sm">
+                        <i class="fas fa-file-pdf"></i> Gerar PDF
+                    </a>
+                </div>
             </div>
+            <table class="modern-table">
+                <thead>
+                    <tr>
+
+                        <th>Nome Fantasia</th>
+                        <th>Documento</th>
+                        <th>Telefone</th>
+                        <th>E-mail</th>
+                        <th>Data Assinatura</th>
+                        <th>Data Validade</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contrato in contratos %}
+                    <tr>
+                        <td>{{ contrato.nome_fantasia }}</td>
+                        <td>{{ contrato.documento }}</td>
+                        <td>{{ contrato.telefone }}</td>
+                        <td>{{ contrato.email }}</td>
+                        <td>{{ contrato.data_assinatura|date:"d/m/Y" }}</td>
+                        <td>{{ contrato.data_validade|date:"d/m/Y" }}</td>
+                        <td class="valor-cell">{{ contrato.valor|floatformat:2 }}</td>
+                        <td>
+                            <span class="status-badge {% if contrato.ativo %}status-ativo{% else %}status-inativo{% endif %}">
+                                {% if contrato.ativo %}Ativo{% else %}Inativo{% endif %}
+                            </span>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="10" class="empty-state">
+                            <i class="fas fa-clipboard"></i>
+                            <h3>Nenhum resultado encontrado</h3>
+                            <p>Tente ajustar os filtros para encontrar o que você procura.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
- 
 </div>
 {% endblock %}
 
-{% block scripts %}
-<script>
-    document.getElementById('toggle-filters').addEventListener('click', function () {
-        const filterOptions = document.getElementById('filter-options');
-        filterOptions.classList.toggle('d-none');
-        this.innerHTML = filterOptions.classList.contains('d-none') 
-            ? '<i class="fas fa-filter"></i> Filtrar Relatórios' 
-            : '<i class="fas fa-times"></i> Fechar Filtros';
-    });
-</script>
+{% block extra_js %}
+<script src="{% static 'js/contratos/relatorios.js' %}"></script>
 {% endblock %}

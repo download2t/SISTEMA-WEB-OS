@@ -1,142 +1,178 @@
 {% extends 'core/base.html' %}
 {% load static %}
+
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/contratos/formulario.css' %}">
 {% endblock %}
+
 {% block content %}
 <button class="sidebar-toggle" id="sidebarToggle">
     <i class="fas fa-bars"></i>
 </button>
 {% include 'contratos/menu_contratos.html' %}
-<div class="main-content-wrapper"> 
-    <div class="container mt-4">
-        <h1 class="mb-4">Cadastrar novo Contrato</h1>
-        <!-- Formulário -->
-        <form method="post" enctype="multipart/form-data" class="card p-4 shadow-sm">
-            {% csrf_token %}
-
-            <!-- Linha para CNPJ, Razão Social e Nome Fantasia -->
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label for="documento">CNPJ/CPF <span class="text-danger">*</span></label>
-                    {{ form.documento }}
-                </div>
-
-                <div class="col-md-4">
-                    <label for="razao_social">Razão Social <span class="text-danger">*</span></label>
-                    {{ form.razao_social }}
-                </div>
-
-                <div class="col-md-4">
-                    <label for="nome_fantasia">Nome Fantasia</label>
-                    {{ form.nome_fantasia }}
-                </div>
-            </div>
-
-            <!-- Linha para Telefone e Email -->
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label for="telefone">Telefone  </label>
-                    {{ form.telefone }}
-                </div>
-
-                <div class="col-md-6">
-                    <label for="email">E-mail </label>
-                    {{ form.email }}
-                </div>
-            </div>
-
-            <!-- Linha para Descrição, Data de Assinatura e Data de Validade -->
-            <div class="row mb-3">
-                <div class="col-md-12">
-                    <label for="descricao">Descrição</label>
-                    {{ form.descricao }}
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label for="data_assinatura">Data de Assinatura <span class="text-danger">*</span></label>
-                    {{ form.data_assinatura }}
-                </div>
-
-                <div class="col-md-4">
-                    <label for="data_validade">Data de Validade <span class="text-danger">*</span></label>
-                    {{ form.data_validade }}
-                </div>
-
-                <div class="col-md-4">
-                    <label for="{{ form.grupo_responsavel.id_for_label }}">Setor de contratação: <span class="text-danger">*</span></label>
-                        {{ form.grupo_responsavel }}
-
-                        {% if form.grupo.errors %}
-                            <div class="alert alert-danger">
-                                {{ form.grupo.errors|join:", " }}
-                            </div>
-                        {% endif %}
-                </div>
-            </div>
-
-                <!-- Linha para Valor -->
-            <div class="row mb-3">
-                <div class="col-md-12">
-                    <label for="valor">Valor do Contrato <span class="text-danger">*</span></label>
-                    {{ form.valor }}
-                </div>
-            </div>
-
-            <!-- Botões -->
-            <div class="d-flex justify-content-between">
-                <button type="submit" class="btn btn-primary">Salvar</button>
-                <a href="{% url 'listar_contratos' %}" class="btn btn-secondary">Cancelar</a>
-            </div>
-        </form>
+<div class="contract-form-container">
+    <div class="form-header">
+        <h1><i class="fas fa-file-contract"></i> {{ titulo }}</h1>
+        <p class="form-subtitle">Preencha os campos obrigatórios para registrar um novo contrato</p>
     </div>
+
+    <form method="post" enctype="multipart/form-data" class="contract-form" id="contractForm">
+        {% csrf_token %}
+        
+        <!-- Mensagens de erro/sucesso -->
+        {% if messages %}
+        <div class="alert-messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Seção de Dados Básicos -->
+        <div class="form-section">
+            <h3 class="section-title"><i class="fas fa-id-card"></i> Dados do Contratante</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form.documento.label_tag }}
+                    {{ form.documento }}
+                    {% if form.documento.errors %}
+                    <div class="error-message">{{ form.documento.errors|join:", " }}</div>
+                    {% endif %}
+                    <small class="form-hint">Somente números</small>
+                </div>
+
+                <div class="form-group">
+                    {{ form.razao_social.label_tag }}
+                    {{ form.razao_social }}
+                    {% if form.razao_social.errors %}
+                    <div class="error-message">{{ form.razao_social.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.nome_fantasia.label_tag }}
+                    {{ form.nome_fantasia }}
+                    {% if form.nome_fantasia.errors %}
+                    <div class="error-message">{{ form.nome_fantasia.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção de Contato -->
+        <div class="form-section">
+            <h3 class="section-title"><i class="fas fa-address-book"></i> Informações de Contato</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form.telefone.label_tag }}
+                    {{ form.telefone }}
+                    {% if form.telefone.errors %}
+                    <div class="error-message">{{ form.telefone.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.email.label_tag }}
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                    <div class="error-message">{{ form.email.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção de Descrição -->
+        <div class="form-section">
+            <h3 class="section-title"><i class="fas fa-align-left"></i> Descrição do Contrato</h3>
+            <div class="form-group full-width">
+                {{ form.descricao.label_tag }}
+                {{ form.descricao }}
+                {% if form.descricao.errors %}
+                <div class="error-message">{{ form.descricao.errors|join:", " }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Seção de Datas e Valores -->
+        <div class="form-section">
+            <h3 class="section-title"><i class="fas fa-calendar-alt"></i> Datas e Valores</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form.data_assinatura.label_tag }}
+                    {{ form.data_assinatura }}
+                    {% if form.data_assinatura.errors %}
+                    <div class="error-message">{{ form.data_assinatura.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.data_validade.label_tag }}
+                    {{ form.data_validade }}
+                    {% if form.data_validade.errors %}
+                    <div class="error-message">{{ form.data_validade.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.valor.label_tag }}
+                    {{ form.valor }}
+                    {% if form.valor.errors %}
+                    <div class="error-message">{{ form.valor.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção de Responsável e Anexos -->
+        <div class="form-section">
+            <h3 class="section-title"><i class="fas fa-user-tie"></i> Responsável e Anexos</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form.usuario_responsavel.label_tag }}
+                    {{ form.usuario_responsavel }}
+                    {% if form.usuario_responsavel.errors %}
+                    <div class="error-message">{{ form.usuario_responsavel.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_arquivo_contrato">Arquivo do Contrato</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" name="arquivo_contrato" id="id_arquivo_contrato" class="file-upload-input" 
+                            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx">
+                        <label for="id_arquivo_contrato" class="file-upload-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span class="file-upload-text">Selecione um arquivo</span>
+                        </label>
+                        <div class="file-requirements">
+                            <small>Tamanho máximo: {{ max_upload_mb }}MB • Formatos: PDF, DOC, DOCX, JPG, PNG, XLS, XLSX</small>
+                        </div>
+                    </div>
+                    {% if form.arquivo_contrato.errors %}
+                    <div class="error-message">{{ form.arquivo_contrato.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Salvar Contrato
+            </button>
+            <a href="{% url 'listar_contratos' %}" class="btn btn-secondary">
+                <i class="fas fa-times"></i> Cancelar
+            </a>
+        </div>
+    </form>
 </div>
 {% endblock %}
-<script>
-    // Função para formatar o valor em formato de moeda
-    function formatarValor(event) {
-        var input = event.target;
-        var valor = input.value;
 
-        // Remover caracteres não numéricos
-        valor = valor.replace(/\D/g, '');
-
-        // Adicionar ponto a cada 3 dígitos e colocar o símbolo de R$
-        valor = valor.replace(/(\d)(\d{3})(\d)/, '$1.$2.$3');
-        valor = valor.replace(/(\d)(\d{3})$/, '$1.$2');
-        
-        // Adiciona o símbolo de R$ no início
-        input.value = 'R$ ' + valor;
-    }
-
-    // Adiciona o evento para formatação do campo "valor"
-    document.addEventListener('DOMContentLoaded', function () {
-        var valorInput = document.querySelector('#id_valor'); // A ID do campo de valor
-        valorInput.addEventListener('input', formatarValor);
-    });
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Seleciona os campos de entrada de texto
-        var camposTexto = document.querySelectorAll("input[type='text'], textarea");
-
-        // Aplica evento de transformação para caixa alta
-        camposTexto.forEach(function (campo) {
-            campo.addEventListener("input", function () {
-                this.value = this.value.toUpperCase();
-            });
-        });
-    });
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var documentoInput = document.querySelector("#id_documento");
-
-        documentoInput.addEventListener("input", function () {
-            this.value = this.value.replace(/[^0-9]/g, "");  // Remove qualquer caractere não numérico
-        });
-    });
-</script>
-
+{% block extra_js %}
+{#<script src="{% static 'js/contratos/mascaras.js' %}"></script>#}
+<script src="{% static 'js/contratos/validacao.js' %}"></script>
+<script src="{% static 'js/contratos/uppercase.js' %}"></script>
+{% endblock %}

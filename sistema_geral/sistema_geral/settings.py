@@ -152,19 +152,18 @@ MEDIA_URL = '/media/' # Caminho onde os arquivos de mídia (evidências) serão 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # Caminho absoluto no servidor para salvar os arquivos
 
-FILE_UPLOAD_MAX_MEMORY_SIZE = 20485760  # Limite de 20 MB em upload de chamados
+FILE_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024 # 20MB
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Usar o banco de dados para armazenar sessões
 SESSION_COOKIE_AGE = 28800 # Tempo em segundos que a sessão dura (exemplo: 8 horas)
 
 CRONJOBS = [
-    ('10 08 * * *', 'myapp.tasks.verificar_contratos_vencendo'), 
+    ('05 14 * * *', 'myapp.tasks.verificar_contratos_vencendo'), 
 
     # MINUTO / HORA / 8H e 10 min
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    #'https://f355-177-87-108-241.ngrok-free.app',
     'https://outgoing-friendly-snake.ngrok-free.app',
 ]
 
