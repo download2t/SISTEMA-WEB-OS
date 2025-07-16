@@ -1,71 +1,82 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* Base container styles */
-.container,
+/* Main content wrapper adjustments */
+.main-content-wrapper {
+    margin-left: 220px; /* Default sidebar width */
+    padding: 1.5rem;
+    transition: margin-left 0.3s ease;
+    width: auto;
+}
+
+/* Base container styling */
 .envolve {
-    width: 100%;
     background-color: #ffffff;
-    border-radius: 1.5rem; /* rounded-3xl */
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); /* shadow-xl */
-    padding: 1.5rem; /* p-10 */
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.07);
+    padding: 2rem;
     box-sizing: border-box;
-    margin-bottom: 10px;
 }
 
 /* Heading styles */
 h1 {
-    font-size: 2.5rem; /* text-4xl */
-    font-weight: 700; /* font-bold */
-    color: #2d3748; /* text-gray-800 */
-    margin-bottom: 2.5rem; /* mb-10 */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 2rem;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 1rem;
 }
 
 h1 i {
-    color: #667eea; /* Icon color */
+    color: #667eea;
 }
 
-/* Filter Section Styling */
+/* =================================== */
+/* FILTER SECTION STYLING */
+/* =================================== */
 .filters-section {
     margin-bottom: 2rem;
     padding: 1.5rem;
     background-color: #f8fafc;
-    border-radius: 0.75rem;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    border-radius: 1rem;
+    border: 1px solid #e2e8f0;
 }
 
 .filters-header {
     cursor: pointer;
     user-select: none;
-    padding-bottom: 1rem; /* Space below header when content is hidden */
 }
 
 .filters-header h5 {
     font-weight: 600;
-    color: #2d3748;
-    margin-bottom: 0;
+    color: #374151;
 }
 
-.filters-header i {
+#filterToggleIcon {
     transition: transform 0.3s ease;
 }
 
-.filters-header.collapsed i {
-    transform: rotate(-90deg); /* Rotate icon when collapsed */
+/* State when filters are collapsed */
+.filters-header.collapsed #filterToggleIcon {
+    transform: rotate(-90deg);
 }
 
 .filters-content {
-    display: block; /* Default to visible on larger screens */
-    animation: fadeIn 0.3s ease-out; /* Fade in animation for filters */
+    padding-top: 1.5rem;
+    animation: fadeIn 0.4s ease-out;
+    display: none; /* Hidden by default, JS will manage visibility */
 }
+
+.filters-content.show {
+    display: block;
+}
+
 
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(-10px);
     }
     to {
         opacity: 1;
@@ -74,14 +85,16 @@ h1 i {
 }
 
 /* Form element styles */
+.form-label {
+    font-weight: 500;
+    color: #4a5568;
+    margin-bottom: 0.5rem;
+}
+
 .form-select,
 .form-control {
-    width: 100%; /* Make them full width within their columns */
-    padding: 0.75rem 1rem;
-    border: 1px solid #e2e8f0;
     border-radius: 0.5rem;
-    font-size: 1rem;
-    color: #2d3748;
+    border-color: #e2e8f0;
     transition: all 0.2s ease-in-out;
 }
 
@@ -89,320 +102,210 @@ h1 i {
 .form-control:focus {
     outline: none;
     border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.25);
 }
 
-/* Custom Buttons (btn2 family) */
+/* =================================== */
+/* BUTTON STYLING */
+/* =================================== */
+.btn {
+    border-radius: 0.5rem;
+    font-weight: 600;
+    padding: 0.65rem 1.25rem;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Custom buttons for actions in table */
 .btn2 {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.75rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
     font-weight: 600;
     text-decoration: none;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.2s ease-in-out;
     cursor: pointer;
-    white-space: nowrap;
     border: none;
-    font-family: 'Inter', sans-serif;
-    min-width: 100px; /* Ensure buttons have a minimum width */
-    width: 120px; 
+    white-space: nowrap;
 }
 
-.btn2-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
-}
-
-.btn2-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
-    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-}
-
-.btn2-success {
-    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-    color: white;
-    box-shadow: 0 4px 10px rgba(72, 187, 120, 0.3);
-}
-
-.btn2-success:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(72, 187, 120, 0.4);
-    background: linear-gradient(135deg, #38a169 0%, #48bb78 100%);
+.btn2 i {
+    margin-right: 0.5rem;
 }
 
 .btn2-warning {
-    background: #f6ad55; /* orange-400 */
+    background-color: #f6ad55;
     color: white;
-    box-shadow: 0 4px 10px rgba(246, 173, 85, 0.3);
 }
-
 .btn2-warning:hover {
+    background-color: #ed8936;
     transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(246, 173, 85, 0.4);
-    background: #ed8936; /* orange-500 */
 }
 
 .btn2-visualizar {
-    background: #c9def1;
-    color: #2d3748; /* Alterado para texto escuro para melhor contraste */
-    box-shadow: 0 4px 10px rgba(101, 113, 119, 0.3);
+    background-color: #e2e8f0;
+    color: #2d3748;
 }
-
 .btn2-visualizar:hover {
-    background: #8192b3;
-    color: white;
-}
-
-
-.btn2-danger {
-    background: linear-gradient(135deg, #fc8181 0%, #e53e3e 100%);
-    color: white;
-    box-shadow: 0 4px 10px rgba(252, 129, 129, 0.3);
-}
-
-.btn2-danger:hover {
+    background-color: #cbd5e0;
     transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(252, 129, 129, 0.4);
-    background: linear-gradient(135deg, #e53e3e 0%, #fc8181 100%);
 }
 
-.btn-secondary { /* Styling for the "Limpar Filtros" button */
-    background-color: #6c757d;
-    color: white;
-    border-color: #6c757d;
-    transition: all 0.3s ease;
-}
-
-.btn-secondary:hover {
-    background-color: #5a6268;
-    border-color: #545b62;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Table Styling */
-.table {
+/* =================================== */
+/* TABLE STYLING */
+/* =================================== */
+.table-responsive {
     width: 100%;
-    margin-bottom: 0;
+    overflow-x: auto;
+    box-shadow: none;
+}
+
+.table {
     border-collapse: separate;
     border-spacing: 0;
-    border-radius: 1rem;
-    overflow: hidden;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    border-radius: 0;
+    min-width: 800px; /* Prevents squishing on medium screens before it breaks */
+    
 }
 
 .table thead {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    font-weight: 600;
+    background-color: #f8fafc;
+    color: #4a5568;
 }
 
 .table th,
 .table td {
-    padding: 1rem 1.5rem;
+    padding: 1rem;
     vertical-align: middle;
     border-bottom: 1px solid #e2e8f0;
 }
 
 .table th {
-    text-align: left;
-    font-size: 0.9rem;
+    font-weight: 600;
     text-transform: uppercase;
+    font-size: 0.75rem;
     letter-spacing: 0.05em;
 }
 
-.table th:first-child {
-    border-top-left-radius: 1rem;
-}
-
-.table th:last-child {
-    border-top-right-radius: 1rem;
-}
-
-.table tbody tr:last-child td {
-    border-bottom: none;
-}
-
 .table tbody tr:hover {
-    background-color: #f7fafc;
-    transition: background-color 0.2s ease-in-out;
+    background-color: #f9fafb;
 }
 
+/* =================================== */
+/* RESPONSIVE DESIGN (MOBILE-FIRST APPROACH) */
+/* =================================== */
 
-/* Responsive adjustments */
-@media (max-width: 991.98px) { /* Medium devices (tablets, 768px and up) */
-    .container,
+/* Medium devices (tablets, less than 992px) */
+@media (max-width: 991.98px) {
+    .main-content-wrapper {
+        margin-left: 0; /* Remove margin when sidebar is likely overlayed or hidden */
+        padding: 1rem;
+    }
+
     .envolve {
         padding: 1.5rem;
-        border-radius: 1rem;
     }
 
     h1 {
-        font-size: 2rem;
-        margin-bottom: 1.5rem;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
+        font-size: 1.75rem;
+    }
+    
+    /* Hide button text on mobile for a cleaner look */
+    .btn2 span {
+        display: none;
     }
 
-    h1 i {
-        font-size: 2.2rem;
+    .btn2 i {
         margin-right: 0;
     }
 
-    /* Filter Section Mobile Adjustments */
-    .filters-section .row > div {
-        width: 100%; /* Make all columns full width */
+    .btn2 {
+        padding: 0.6rem;
+        aspect-ratio: 1 / 1; /* Make buttons square */
     }
 
-    .filters-content {
-        display: none; /* Hide by default on smaller screens */
-    }
-    
-    .filters-content.show {
-        display: block; /* Show when 'show' class is added by JS */
-    }
-
-    .filters-header {
-        padding-bottom: 0; /* Remove padding when collapsed */
-        margin-bottom: 1rem; /* Add margin below header */
-    }
-
-    .filters-header.collapsed {
-        padding-bottom: 1rem; /* Add padding when collapsed */
-    }
-
-    .form-label {
-        margin-bottom: 0.25rem; /* Reduce space below labels */
-    }
-
-    .col-lg-6.col-md-12.col-sm-6.d-flex.align-items-end.justify-content-start {
-        justify-content: center !important; /* Center the "Limpar Filtros" button */
-        margin-top: 1rem; /* Add some space above it */
-    }
-
-    .btn-secondary.w-100.w-md-auto {
-        width: 100% !important; /* Make "Limpar Filtros" full width */
-    }
-
-
-    /* Table Responsive for Small Screens (card-like layout) */
+    /* Card-like layout for the table on smaller screens */
     .table-responsive {
-        border: none; /* Remove outer border, rows will have borders */
-        box-shadow: none;
-        overflow-x: hidden; /* Prevent horizontal scroll on this container */
+        overflow-x: hidden;
     }
 
     .table {
-        border-collapse: collapse; /* Ensure no extra spacing */
-        border-spacing: 0;
-        border-radius: 0;
+        min-width: 100%;
+        border: none;
         box-shadow: none;
     }
 
     .table thead {
-        display: none; /* Hide table header */
+        display: none;
     }
 
     .table tbody,
-    .table tr {
-        display: block; /* Make tbody and tr behave as block elements */
+    .table tr,
+    .table td {
+        display: block;
         width: 100%;
     }
 
-    .table tbody tr {
-        margin-bottom: 1rem; /* Space between "cards" */
-        border: 1px solid #e2e8f0; /* Border for each "card" */
-        border-radius: 0.75rem;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
-        padding: 1rem; /* Padding inside each card */
+    .table tr {
+        margin-bottom: 1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 1rem;
+        padding: 1rem;
+        background-color: #fff;
     }
 
     .table td {
-        display: flex; /* Make table cells flex containers */
-        justify-content: space-between; /* Space out label and value */
+        padding: 0.75rem 0.5rem;
+        border: none;
+        border-bottom: 1px dashed #e9ecef;
+        display: flex;
+        justify-content: space-between;
         align-items: center;
-        padding: 0.5rem 0; /* Vertical padding, no horizontal padding as row has padding */
-        border-bottom: 1px dashed #e9ecef; /* Subtle separator for each field */
+        text-align: right; /* Align value to the right */
     }
 
-    .table td:last-child {
-        border-bottom: none; /* No border for the last field */
-        padding-bottom: 0; /* No extra padding for last cell */
+    .table tr td:last-child {
+        border-bottom: none;
     }
 
     .table td::before {
-        content: attr(data-label); /* Use data-label for the field name */
+        content: attr(data-label);
         font-weight: 600;
         color: #4a5568;
-        flex-shrink: 0; /* Prevent label from shrinking */
         margin-right: 1rem;
+        text-align: left;
     }
 
-    /* Assign data-label to each td in the Django template for this to work */
-    /* Example: <td data-label="Setor">{{ contrato.grupo_responsavel }}</td> */
-
-    .table td.text-end { /* For action buttons column */
-        flex-direction: column; /* Stack buttons vertically */
-        align-items: stretch; /* Stretch buttons to full width */
-        gap: 0.75rem; /* Space between buttons */
-        padding-top: 1rem;
-        border-bottom: none; /* No border above buttons */
+    .table td.text-end {
+        justify-content: flex-end;
     }
 
-    .table td.text-end .btn2 {
-        width: 100%; /* Make action buttons full width */
-        margin: 0 !important; /* Remove any lingering margins */
+    .table td[data-label="Ações"] .d-flex {
+        width: 100%;
+        justify-content: flex-end !important;
     }
 }
 
-/* Specific adjustments for very small screens (phones, less than 576px) */
+/* Small devices (phones, less than 576px) */
 @media (max-width: 575.98px) {
-    .container,
     .envolve {
         padding: 1rem;
     }
 
     h1 {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
         text-align: center;
         flex-direction: column;
-        align-items: center;
-    }
-
-    h1 i {
-        font-size: 2rem;
-    }
-
-    .btn2 {
-        padding: 0.6rem 1rem;
-        font-size: 0.9rem;
-    }
-}
-/* Ações - Botões lado a lado */
-.table td.text-end .d-flex {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
-}
-
-/* Ajustes específicos para telas pequenas */
-@media (max-width: 991.98px) {
-    .table td.text-end .d-flex {
-        flex-direction: column;
-        gap: 0.75rem;
     }
     
-    .table td.text-end .btn2 {
+    /* Make filter buttons full width on smallest screens */
+    .filters-section .btn {
         width: 100%;
     }
-}
-
-/* Ícones dos botões */
-.btn2 i {
-    margin-right: 5px;
 }

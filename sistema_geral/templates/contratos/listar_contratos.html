@@ -12,110 +12,118 @@
 </button>
 
 {% include 'contratos/menu_contratos.html' %}
+
 <div class="main-content-wrapper">
     <div class="envolve">
         <h1><i class="fas fa-file-contract"></i> Lista de Contratos</h1>
-            <div class="filters-section container"> {# Adicionado a classe container aqui #}
-                <div class="filters-header" onclick="toggleFilters()">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Filtrar Contratos</h5>
-                        <i class="fas fa-chevron-down" id="filterToggleIcon"></i>
+
+        <!-- =================================== -->
+        <!-- FILTER SECTION - RESTRUCTURED FOR RESPONSIVENESS -->
+        <!-- =================================== -->
+        <div class="filters-section">
+            <div class="filters-header" id="filtersHeader">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Filtrar Contratos</h5>
+                    <i class="fas fa-chevron-down" id="filterToggleIcon"></i>
+                </div>
+            </div>
+            <form method="get" action="{% url 'listar_contratos' %}" id="filtersContent" class="filters-content">
+                <!-- Restructured row with more responsive columns -->
+                <div class="row g-3">
+                    <div class="col-12 col-sm-6 col-lg-4 col-xl-2">
+                        <label for="tipo_data" class="form-label">Filtrar por Data</label>
+                        <select id="tipo_data" name="tipo_data" class="form-select">
+                            <option value="assinatura" {% if tipo_data == "assinatura" %}selected{% endif %}>Assinatura</option>
+                            <option value="validade" {% if tipo_data == "validade" %}selected{% endif %}>Vencimento</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-lg-4 col-xl-2">
+                        <label for="data_inicio" class="form-label">Data Inicial</label>
+                        <input type="date" id="data_inicio" name="data_inicio" value="{{ data_inicio }}" class="form-control">
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-lg-4 col-xl-2">
+                        <label for="data_fim" class="form-label">Data Final</label>
+                        <input type="date" id="data_fim" name="data_fim" value="{{ data_fim }}" class="form-control">
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-lg-6 col-xl-3">
+                        <label for="razao_social" class="form-label">Buscar Contrato</label>
+                        <input type="text" id="razao_social" name="razao_social" value="{{ razao_social }}" class="form-control" placeholder="Nome Fantasia ou Razão Social">
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-lg-6 col-xl-3">
+                        <label for="usuario_responsavel" class="form-label">Usuário Responsável</label>
+                        <select id="usuario_responsavel" name="usuario_responsavel" class="form-select">
+                            <option value="">Todos</option>
+                            {% for user in usuarios %}
+                            <option value="{{ user.id }}" {% if user.id|stringformat:"s" == usuario_selecionado %}selected{% endif %}>{{ user.username }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
-                <form method="get" action="{% url 'listar_contratos' %}" id="filtersContent" class="filters-content">
-                    <div class="row g-3"> {# Usando g-3 para Bootstrap 5 gap #}
-                        <div class="col-lg-2 col-md-4 col-sm-6">
-                            <label for="tipo_data" class="form-label">Filtrar por Data</label>
-                            <select id="tipo_data" name="tipo_data" class="form-select">
-                                <option value="assinatura" {% if tipo_data == "assinatura" %}selected{% endif %}>Assinatura</option>
-                                <option value="validade" {% if tipo_data == "validade" %}selected{% endif %}>Vencimento</option>
-                            </select>
-                        </div>
 
-                        <div class="col-lg-2 col-md-3 col-sm-6">
-                            <label for="data_inicio" class="form-label">Data Inicial</label>
-                            <input type="date" id="data_inicio" name="data_inicio" value="{{ data_inicio }}" class="form-control">
-                        </div>
-
-                        <div class="col-lg-2 col-md-3 col-sm-6">
-                            <label for="data_fim" class="form-label">Data Final</label>
-                            <input type="date" id="data_fim" name="data_fim" value="{{ data_fim }}" class="form-control">
-                        </div>
-
-                        <div class="col-lg-2 col-md-4 col-sm-6">
-                            <label for="razao_social" class="form-label">Buscar Contrato</label>
-                            <input type="text" id="razao_social" name="razao_social" value="{{ razao_social }}" class="form-control" placeholder="Nome Fantasia ou Razão Social">
-                        </div>
-
-                        {# Alterado de 'grupo' para 'usuario_responsavel' #}
-                        <div class="col-lg-2 col-md-3 col-sm-6">
-                            <label for="usuario_responsavel" class="form-label">Usuário Responsável</label>
-                            <select id="usuario_responsavel" name="usuario_responsavel" class="form-select">
-                                <option value="">Todos</option>
-                                {% for user in usuarios %} {# Iterando sobre 'usuarios' em vez de 'grupos' #}
-                                <option value="{{ user.id }}" {% if user.id|stringformat:"s" == usuario_selecionado %}selected{% endif %}>{{ user.username }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <div class="col-lg-2 col-md-3 col-sm-6 d-flex align-items-end">
-                            <button type="submit" class="btn btn-primary w-100">
-                                <i class="fas fa-search me-1"></i> Filtrar
-                            </button>
-                        </div>
-
-                        <div class="col-lg-6 col-md-12 col-sm-6 d-flex align-items-end justify-content-start">
-                            <a href="{% url 'listar_contratos' %}" class="btn btn-secondary me-2 w-100 w-md-auto">
-                                <i class="fas fa-times-circle me-1"></i> Limpar Filtros
-                            </a>
-                        </div>
+                <!-- Grouped action buttons for better responsive behavior -->
+                <div class="row mt-3">
+                    <div class="col-12 d-flex flex-wrap justify-content-start gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search me-1"></i> Filtrar
+                        </button>
+                        <a href="{% url 'listar_contratos' %}" class="btn btn-secondary">
+                            <i class="fas fa-times-circle me-1"></i> Limpar Filtros
+                        </a>
                     </div>
-                </form>
-            </div>
-            {# FIM DA SECTION DE FILTROS #}
+                </div>
+            </form>
+        </div>
+        <!-- =================================== -->
+        <!-- END OF FILTER SECTION -->
+        <!-- =================================== -->
 
-            <div class="table-responsive">
+        <div class="table-responsive">
             <table class="table table-hover align-middle">
                 <thead class="table-primary">
-                <tr>
-                    <th scope="col">Usuário Responsável</th> {# Cabeçalho alterado #}
-                    <th scope="col">Nome Fantasia</th>
-                    <th scope="col">Vencimento</th>
-                    <th scope="col">Telefone</th>
-                    <th scope="col">E-mail</th>
-                    <th></th>
-                </tr>
-            </thead>
+                    <tr>
+                        <th scope="col">Usuário Responsável</th>
+                        <th scope="col">Nome Fantasia</th>
+                        <th scope="col">Vencimento</th>
+                        <th scope="col">Telefone</th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col" class="text-end"></th>
+                    </tr>
+                </thead>
                 <tbody>
                     {% for contrato in contratos %}
                     <tr>
-                        <td data-label="Usuário Responsável">{{ contrato.usuario_responsavel.username }}</td> {# Acessa o username #}
+                        <!-- Added data-label attributes for mobile view -->
+                        <td data-label="Responsável">{{ contrato.usuario_responsavel.username }}</td>
                         <td data-label="Nome Fantasia">{{ contrato.nome_fantasia }}</td>
                         <td data-label="Vencimento">{{ contrato.data_validade|date:"d/m/Y" }}</td>
                         <td data-label="Telefone" class="telefone">{{ contrato.telefone }}</td>
                         <td data-label="E-mail">{{ contrato.email }}</td>
                         <td data-label="Ações" class="text-end">
-                            <div class="d-flex gap-2">  
+                            <!-- Using a flex container for buttons to ensure they align properly -->
+                            <div class="d-flex justify-content-end gap-2">
                                 <a href="{% url 'editar_contrato' contrato.id %}" class="btn2 btn2-warning btn-sm">
-                                    <i class="fas fa-edit"></i> Editar
+                                    <i class="fas fa-edit"></i> <span class="d-none d-md-inline">Editar</span>
                                 </a>
                                 <a href="{% url 'visualizar_contrato' contrato.id %}" class="btn2 btn2-visualizar btn-sm">
-                                    <i class="fas fa-eye"></i> Visualizar
+                                    <i class="fas fa-eye"></i> <span class="d-none d-md-inline">Visualizar</span>
                                 </a>
                             </div>
                         </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="8" class="text-center text-muted">Nenhum contrato encontrado.</td>
+                        <td colspan="6" class="text-center text-muted py-5">Nenhum contrato encontrado.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
-</div> {# End of .main-content-wrapper #}
-
+</div>
 {% endblock %}
 
 {% block extra_js %}

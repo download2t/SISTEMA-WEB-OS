@@ -13,5 +13,6 @@ urlpatterns = [
     path('relatorio/pdf/', views.gerar_relatorio_pdf, name='contrato_gerar_relatorio_pdf'),
     path('relatorio/word/', views.generate_word, name='contrato_generate_word'),
     path('relatorio/excel/', views.generate_excel, name='contrato_generate_excel'),
+    path('toggle-status/<int:contrato_id>/', views.toggle_status_contrato, name='toggle_status_contrato'),
 ]
  

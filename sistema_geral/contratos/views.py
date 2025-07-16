@@ -207,6 +207,28 @@ def contratos_vencendo(request):
         'titulo_pagina': 'Contratos Vencendo'
     })
 
+
+from django.views.decorators.http import require_POST
+
+@login_required
+@require_POST # Ensures this view only accepts POST requests
+@user_passes_test(has_permission_contratos, login_url='403')
+def toggle_status_contrato(request, contrato_id):
+    """ Toggles the 'ativo' status of a contract. """
+    contrato = get_object_or_404(Contrato, id=contrato_id)
+    
+    # Flip the boolean status
+    contrato.ativo = not contrato.ativo
+    contrato.save()
+
+    # Create a success message
+    if contrato.ativo:
+        messages.success(request, f"O contrato '{contrato.nome_fantasia or contrato.razao_social}' foi ATIVADO com sucesso.")
+    else:
+        messages.warning(request, f"O contrato '{contrato.nome_fantasia or contrato.razao_social}' foi DESATIVADO.")
+        
+    # Redirect back to the edit page
+    return redirect('editar_contrato', contrato_id=contrato.id)
 ####################################### RELATÓRIOS #######################################
 
 

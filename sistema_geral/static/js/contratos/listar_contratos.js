@@ -1,97 +1,93 @@
 document.addEventListener("DOMContentLoaded", function () {
-  function formatarTelefone(numero) {
-    let apenasNumeros = numero.replace(/\D/g, "");
-    if (apenasNumeros.length === 10) {
-      return `(${apenasNumeros.substring(0, 2)}) ${apenasNumeros.substring(
-        2,
-        6
-      )}-${apenasNumeros.substring(6)}`;
-    } else if (apenasNumeros.length === 11) {
-      return `(${apenasNumeros.substring(0, 2)}) ${apenasNumeros.substring(
-        2,
-        7
-      )}-${apenasNumeros.substring(7)}`;
-    } else if (apenasNumeros.length === 8) {
-      return `${apenasNumeros.substring(0, 4)}-${apenasNumeros.substring(4)}`;
-    } else if (apenasNumeros.length === 9) {
-      return `${apenasNumeros.substring(0, 5)}-${apenasNumeros.substring(5)}`;
-    }
-    return numero;
-  }
-
-  document.querySelectorAll(".telefone").forEach((td) => {
-    if (td.textContent.trim()) {
-      td.textContent = formatarTelefone(td.textContent.trim());
-    }
-  });
-
-  // Sidebar Toggle Logic (should ideally be in base.js or a common script)
-  const sidebar = document.getElementById("sidebar");
-  const sidebarToggle = document.getElementById("sidebar-toggle-btn");
-  const sidebarOverlay = document.getElementById("sidebar-overlay");
-
-  if (sidebarToggle && sidebar && sidebarOverlay) {
-    sidebarToggle.addEventListener("click", function () {
-      sidebar.classList.toggle("active");
-      sidebarOverlay.classList.toggle("active");
-      document.body.classList.toggle("no-scroll");
-    });
-
-    sidebarOverlay.addEventListener("click", function () {
-      sidebar.classList.remove("active");
-      sidebarOverlay.classList.remove("active");
-      document.body.classList.remove("no-scroll");
-    });
-  }
-
-  // Toggle Filters Logic - COPIADO DO listar_chamados.js
+  // --- ELEMENTS ---
+  const filtersHeader = document.getElementById("filtersHeader");
   const filtersContent = document.getElementById("filtersContent");
   const filterToggleIcon = document.getElementById("filterToggleIcon");
+  const sidebarToggle = document.getElementById("sidebarToggle");
+  const sidebar = document.querySelector(".sidebar"); // Assuming your sidebar has this class
+  const mainContent = document.querySelector(".main-content-wrapper");
 
-  // Initialize filter state
-  // If you want the filters to be collapsed by default, add 'd-none' to filtersContent in HTML
-  // Otherwise, they will be open by default.
-  if (filtersContent) {
-    // Check if there are any active filters from the URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    let hasFilters = false;
-    for (const [key, value] of urlParams.entries()) {
-      if (value && key !== "page") {
-        // Ignore empty values and pagination
-        hasFilters = true;
-        break;
-      }
-    }
-
-    // If there are no filters, collapse by default
-    if (!hasFilters) {
-      filtersContent.classList.add("d-none"); // Hide filter content
-      if (filterToggleIcon) {
-        filterToggleIcon.classList.remove("fa-chevron-down");
-        filterToggleIcon.classList.add("fa-chevron-up");
-      }
-    } else {
-      // If filters are present, ensure content is visible and icon is correct
-      filtersContent.classList.remove("d-none");
-      if (filterToggleIcon) {
-        filterToggleIcon.classList.remove("fa-chevron-up");
-        filterToggleIcon.classList.add("fa-chevron-down");
+  // --- FILTER TOGGLE LOGIC ---
+  function toggleFilters() {
+    if (filtersContent && filtersHeader) {
+      const isCollapsed = filtersContent.classList.contains("show");
+      if (isCollapsed) {
+        filtersContent.classList.remove("show");
+        filtersHeader.classList.add("collapsed");
+      } else {
+        filtersContent.classList.add("show");
+        filtersHeader.classList.remove("collapsed");
       }
     }
   }
 
-  window.toggleFilters = function () {
-    if (filtersContent) {
-      filtersContent.classList.toggle("d-none");
-      if (filterToggleIcon) {
-        if (filtersContent.classList.contains("d-none")) {
-          filterToggleIcon.classList.remove("fa-chevron-down");
-          filterToggleIcon.classList.add("fa-chevron-up");
-        } else {
-          filterToggleIcon.classList.remove("fa-chevron-up");
-          filterToggleIcon.classList.add("fa-chevron-down");
-        }
-      }
+  // Set initial state of filters based on screen size
+  function initializeFilters() {
+    if (window.innerWidth < 992) {
+      // Start collapsed on mobile/tablet
+      filtersContent.classList.remove("show");
+      filtersHeader.classList.add("collapsed");
+    } else {
+      // Start open on desktop
+      filtersContent.classList.add("show");
+      filtersHeader.classList.remove("collapsed");
     }
-  };
+  }
+
+  if (filtersHeader) {
+    filtersHeader.addEventListener("click", toggleFilters);
+    initializeFilters(); // Set initial state on load
+  }
+
+  // --- SIDEBAR TOGGLE LOGIC ---
+  if (sidebarToggle && sidebar && mainContent) {
+    sidebarToggle.addEventListener("click", () => {
+      sidebar.classList.toggle("collapsed");
+      mainContent.classList.toggle("collapsed"); // You might need CSS for this class
+    });
+  }
+
+  // --- PHONE NUMBER MASKING (UX Improvement) ---
+  function formatPhoneNumber(input) {
+    // Strips all non-numeric characters from the input
+    let numericInput = input.value.replace(/\D/g, "");
+
+    // Apply mask based on length
+    if (numericInput.length > 10) {
+      // (XX) XXXXX-XXXX for cell phones
+      numericInput = numericInput.replace(
+        /^(\d\d)(\d{5})(\d{4}).*/,
+        "($1) $2-$3"
+      );
+    } else if (numericInput.length > 6) {
+      // (XX) XXXX-XXXX for landlines
+      numericInput = numericInput.replace(
+        /^(\d\d)(\d{4})(\d{0,4}).*/,
+        "($1) $2-$3"
+      );
+    } else if (numericInput.length > 2) {
+      numericInput = numericInput.replace(/^(\d\d)(\d{0,5}).*/, "($1) $2");
+    } else {
+      numericInput = numericInput.replace(/^(\d*)/, "($1");
+    }
+    input.value = numericInput;
+  }
+
+  // Apply the mask to all elements with the class 'telefone'
+  const phoneFields = document.querySelectorAll(".telefone");
+  phoneFields.forEach((field) => {
+    // For table cells, we format the text content directly
+    if (field.tagName === "TD") {
+      const tempInput = document.createElement("input");
+      tempInput.value = field.textContent;
+      formatPhoneNumber(tempInput);
+      field.textContent = tempInput.value;
+    }
+    // If it's an actual input field, add an event listener
+    else if (field.tagName === "INPUT") {
+      field.addEventListener("input", (e) => {
+        formatPhoneNumber(e.target);
+      });
+    }
+  });
 });

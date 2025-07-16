@@ -2,14 +2,20 @@
 :root {
     --primary-color: #4361ee;
     --secondary-color: #3f37c9;
-    --success-color: #4cc9f0;
-    --danger-color: #f72585;
+    --success-color: #28a745; /* Verde para sucesso */
+    --danger-color: #dc3545; /* Vermelho para perigo */
     --warning-color: #f8961e;
     --light-color: #f8f9fa;
     --dark-color: #212529;
     --border-radius: 8px;
     --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     --transition: all 0.3s ease;
+}
+
+.main-content-wrapper {
+    margin-left: 220px;
+    padding: 1.5rem;
+    transition: margin-left 0.3s ease;
 }
 
 .contract-form-container {
@@ -90,10 +96,6 @@ label {
     color: #495057;
 }
 
-.required {
-    color: var(--danger-color);
-}
-
 .form-control {
     width: 100%;
     padding: 0.75rem 1rem;
@@ -115,9 +117,9 @@ textarea.form-control {
     resize: vertical;
 }
 
-.form-hint {
+.form-hint, .file-requirements {
     display: block;
-    margin-top: 0.25rem;
+    margin-top: 0.5rem;
     font-size: 0.8rem;
     color: #6c757d;
 }
@@ -129,24 +131,18 @@ textarea.form-control {
 }
 
 .file-upload-input {
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
+    width: 0.1px; height: 0.1px;
+    opacity: 0; overflow: hidden;
+    position: absolute; z-index: -1;
 }
 
 .file-upload-label {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 1rem;
+    display: flex; align-items: center;
+    gap: 0.75rem; padding: 1rem;
     background-color: white;
     border: 2px dashed #dee2e6;
     border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: var(--transition);
+    cursor: pointer; transition: var(--transition);
 }
 
 .file-upload-label:hover {
@@ -154,25 +150,22 @@ textarea.form-control {
     background-color: #f8f9fe;
 }
 
-.file-upload-label i {
-    font-size: 1.5rem;
-    color: var(--primary-color);
-}
+.file-upload-label i { font-size: 1.5rem; color: var(--primary-color); }
+.file-upload-text { font-size: 0.9rem; color: #495057; }
 
-.file-upload-text {
-    font-size: 0.9rem;
-    color: #495057;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 200px;
+.current-file {
+    margin-bottom: 1rem; padding: 0.75rem;
+    background-color: #f8f9fa;
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--primary-color);
 }
+.current-file i { margin-right: 8px; color: var(--primary-color); }
+.file-link { color: var(--primary-color); text-decoration: none; }
+.file-link:hover { text-decoration: underline; }
+.file-size { color: #6c757d; font-size: 0.8rem; }
+.file-replace { display: block; margin-top: 0.5rem; font-size: 0.85rem; }
+.file-replace input { margin-right: 5px; }
 
-.file-requirements {
-    margin-top: 0.5rem;
-    font-size: 0.8rem;
-    color: #6c757d;
-}
 
 /* Mensagens de Erro */
 .error-message {
@@ -182,26 +175,49 @@ textarea.form-control {
     min-height: 1rem;
 }
 
-.alert-messages {
-    margin-bottom: 2rem;
+/* =================================== */
+/* NEW: STATUS SECTION STYLES          */
+/* =================================== */
+.status-section {
+    background-color: #fffbeb; /* Light yellow background */
+    border: 1px solid #fde68a;
 }
-
-.alert {
-    padding: 1rem;
-    border-radius: var(--border-radius);
+.status-section .section-title i {
+    color: #f59e0b; /* Amber color for the icon */
+}
+.status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
     margin-bottom: 1rem;
 }
-
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
+.status-display {
+    font-weight: 500;
+    color: var(--dark-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
-
-.alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: white;
+    text-transform: uppercase;
+}
+.status-active {
+    background-color: var(--success-color);
+}
+.status-inactive {
+    background-color: var(--danger-color);
+}
+.status-actions p {
+    margin-bottom: 1rem;
+    color: #6c757d;
+    font-size: 0.9rem;
 }
 
 /* Botões */
@@ -228,164 +244,26 @@ textarea.form-control {
     border: none;
 }
 
-.btn-primary {
-    background-color: var(--primary-color);
-    color: white;
-}
+.btn-primary { background-color: var(--primary-color); color: white; }
+.btn-primary:hover { background-color: var(--secondary-color); transform: translateY(-2px); }
+.btn-secondary { background-color: #6c757d; color: white; }
+.btn-secondary:hover { background-color: #5a6268; transform: translateY(-2px); }
+.btn-success { background-color: var(--success-color); color: white; }
+.btn-success:hover { background-color: #218838; transform: translateY(-2px); }
+.btn-danger { background-color: var(--danger-color); color: white; }
+.btn-danger:hover { background-color: #c82333; transform: translateY(-2px); }
 
-.btn-primary:hover {
-    background-color: var(--secondary-color);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    color: white;
-}
-
-.btn-secondary:hover {
-    background-color: #5a6268;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
-}
 
 /* Responsividade */
 @media (max-width: 768px) {
-    .contract-form-container {
-        padding: 1rem;
-    }
-    
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .form-actions {
-        flex-direction: column;
-    }
-    
-    .btn {
-        width: 100%;
-    }
+    .main-content-wrapper { margin-left: 0; }
+    .contract-form-container { padding: 1rem; }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-actions { flex-direction: column; }
+    .btn { width: 100%; }
 }
 
 /* Estilo para campos inválidos */
 .is-invalid {
     border-color: var(--danger-color) !important;
 }
-
-/* Animação para chamar atenção aos erros */
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-5px); }
-    40%, 80% { transform: translateX(5px); }
-}
-
-.is-invalid {
-    animation: shake 0.5s ease-in-out;
-}
-
-/* Estilo para botão quando formulário é inválido */
-.form-invalid .btn-primary {
-    background-color: #dc3545;
-    animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.02); }
-    100% { transform: scale(1); }
-}
-
-/* Estilos para upload de arquivos */
-.file-upload-wrapper {
-    position: relative;
-    margin-bottom: 10px;
-}
-
-.file-upload-input {
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0;
-    width: 0.1px;
-    height: 0.1px;
-}
-
-.file-upload-label {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 15px 20px;
-    background-color: #f8f9fa;
-    border: 2px dashed #ced4da;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-align: center;
-    flex-direction: column;
-}
-
-.file-upload-label:hover {
-    background-color: #e9ecef;
-    border-color: #adb5bd;
-}
-
-.file-upload-label i {
-    font-size: 24px;
-    margin-bottom: 8px;
-    color: #6c757d;
-}
-
-.file-upload-text {
-    font-size: 14px;
-    color: #495057;
-}
-
-.file-requirements {
-    margin-top: 8px;
-    font-size: 12px;
-    color: #6c757d;
-}
-
-/* Estilo para arquivo atual */
-.current-file {
-    margin-bottom: 15px;
-    padding: 12px;
-    background-color: #f8f9fa;
-    border-radius: 6px;
-    border-left: 4px solid #0d6efd;
-}
-
-.current-file i {
-    margin-right: 8px;
-    color: #0d6efd;
-}
-
-.file-link {
-    color: #0d6efd;
-    text-decoration: none;
-    margin-right: 8px;
-}
-
-.file-link:hover {
-    text-decoration: underline;
-}
-
-.file-size {
-    color: #6c757d;
-    font-size: 12px;
-}
-
-.file-replace {
-    display: block;
-    margin-top: 8px;
-    font-size: 13px;
-    color: #6c757d;
-    cursor: pointer;
-}
-
-.file-replace input {
-    margin-right: 5px;
-}
-
