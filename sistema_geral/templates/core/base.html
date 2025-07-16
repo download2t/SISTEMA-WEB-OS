@@ -46,7 +46,6 @@
                         <li><a class="dropdown-item" href="{% url 'listar_usuarios' %}"><i class="fas fa-users me-2"></i> Listar Usuários</a></li>
                         <li><a class="dropdown-item" href="{% url 'listar_grupos' %}"><i class="fas fa-layer-group me-2"></i> Listar Setores</a></li>
                         <li><a class="dropdown-item" href="{% url 'listar_contatos' %}"><i class="fas fa-address-book me-2"></i> Listar Contatos</a></li>             
-                        <li><a class="dropdown-item" href="{% url 'listar_contratos' %}"><i class="fas fa-file-contract me-2"></i> Contratos</a></li>
                     </ul>
                 </li>
 
@@ -76,6 +75,7 @@
                                 <a class="dropdown-item" href="{% url 'chamados_abertos' %}"><i class="fas fa-list-alt me-2"></i> Chamados</a>
                             {% endif %}
                         </li>
+                        <li><a class="dropdown-item" href="{% url 'listar_contratos' %}"><i class="fas fa-file-contract me-2"></i> Contratos</a></li>
                         <li><a class="dropdown-item" href="{% url 'listar_spa' %}"><i class="fas fa-spa me-2"></i> Agendamentos - SPA</a></li>
                     </ul>
                 </li>

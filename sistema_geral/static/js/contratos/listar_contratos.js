@@ -47,47 +47,22 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // --- PHONE NUMBER MASKING (UX Improvement) ---
-  function formatPhoneNumber(input) {
-    // Strips all non-numeric characters from the input
-    let numericInput = input.value.replace(/\D/g, "");
-
-    // Apply mask based on length
-    if (numericInput.length > 10) {
-      // (XX) XXXXX-XXXX for cell phones
-      numericInput = numericInput.replace(
-        /^(\d\d)(\d{5})(\d{4}).*/,
-        "($1) $2-$3"
-      );
-    } else if (numericInput.length > 6) {
-      // (XX) XXXX-XXXX for landlines
-      numericInput = numericInput.replace(
-        /^(\d\d)(\d{4})(\d{0,4}).*/,
-        "($1) $2-$3"
-      );
-    } else if (numericInput.length > 2) {
-      numericInput = numericInput.replace(/^(\d\d)(\d{0,5}).*/, "($1) $2");
-    } else {
-      numericInput = numericInput.replace(/^(\d*)/, "($1");
-    }
-    input.value = numericInput;
+  // Function to apply formatting to all phone fields
+  function applyPhoneNumberFormatting() {
+    const phoneFields = document.querySelectorAll(".telefone");
+    phoneFields.forEach((field) => {
+      // For table cells, we format the text content directly
+      if (field.tagName === "TD") {
+        formatPhoneNumber(field); // Pass the TD element directly
+      }
+      else if (field.tagName === "INPUT") {
+        field.addEventListener("input", (e) => {
+          formatPhoneNumber(e.target);
+        });
+      }
+    });
   }
 
-  // Apply the mask to all elements with the class 'telefone'
-  const phoneFields = document.querySelectorAll(".telefone");
-  phoneFields.forEach((field) => {
-    // For table cells, we format the text content directly
-    if (field.tagName === "TD") {
-      const tempInput = document.createElement("input");
-      tempInput.value = field.textContent;
-      formatPhoneNumber(tempInput);
-      field.textContent = tempInput.value;
-    }
-    // If it's an actual input field, add an event listener
-    else if (field.tagName === "INPUT") {
-      field.addEventListener("input", (e) => {
-        formatPhoneNumber(e.target);
-      });
-    }
-  });
+  applyPhoneNumberFormatting();
+
 });
