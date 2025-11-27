@@ -170,7 +170,14 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 db_sistema.sqlite3
-venv
-/venv
+
+# Virtual Environments (mais específico)
+venv/
+/venv/
+**/venv/
+env/
+/env/
+
+# Media files
 /media/
 
