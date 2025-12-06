@@ -1,0 +1,269 @@
+/* Estilos para a página de detalhamento de controle de quartos */
+
+.detail-container {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.detail-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.detail-header h2 {
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.detail-header .subtitle {
+    opacity: 0.9;
+    font-size: 1.1rem;
+}
+
+.performance-section {
+    padding: 40px 30px;
+    text-align: center;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.performance-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    font-size: 1.8rem;
+    margin: 0 auto 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.performance-excelente { 
+    background: linear-gradient(45deg, #28a745, #20c997); 
+}
+
+.performance-bom { 
+    background: linear-gradient(45deg, #17a2b8, #20c997); 
+}
+
+.performance-regular { 
+    background: linear-gradient(45deg, #ffc107, #fd7e14); 
+}
+
+.performance-abaixo { 
+    background: linear-gradient(45deg, #dc3545, #e83e8c); 
+}
+
+.performance-status {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.performance-description {
+    color: #6c757d;
+    font-size: 0.95rem;
+}
+
+.detail-content {
+    padding: 30px;
+}
+
+.detail-section {
+    margin-bottom: 30px;
+}
+
+.detail-section h4 {
+    color: #2c3e50;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.info-card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid #007bff;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.info-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.info-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.info-label {
+    color: #6c757d;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.progress-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.progress-item {
+    margin-bottom: 15px;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.progress-bar-container {
+    height: 12px;
+    background: #e9ecef;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    transition: width 0.8s ease;
+    border-radius: 6px;
+}
+
+.comparison-section {
+    background: #e7f3ff;
+    border: 1px solid #b8daff;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    text-align: center;
+}
+
+.comparison-item {
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+}
+
+.comparison-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #007bff;
+    display: block;
+}
+
+.comparison-label {
+    color: #6c757d;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #f1f1f1;
+}
+
+.btn-action {
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.metadata-section {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    border: 1px solid #e9ecef;
+}
+
+.metadata-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.metadata-item:last-child {
+    border-bottom: none;
+}
+
+.breadcrumb-custom {
+    background: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.breadcrumb-custom .breadcrumb-item + .breadcrumb-item::before {
+    color: #6c757d;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .detail-container {
+        margin: 10px;
+    }
+    
+    .detail-header, 
+    .detail-content {
+        padding: 20px;
+    }
+    
+    .performance-section {
+        padding: 30px 20px;
+    }
+    
+    .info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .action-buttons {
+        justify-content: center;
+    }
+}

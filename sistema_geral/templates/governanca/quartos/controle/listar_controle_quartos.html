@@ -1,0 +1,481 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Controle de Quartos{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/governanca/controle_quartos.css' %}">
+  
+{% endblock %}
+
+{% block content %}
+<div class="main-content-wrapper">
+    <div class="container-fluid">
+        <!-- Cabeçalho -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="display-4">
+                    <i class="fas fa-clipboard-list"></i> Controle de Quartos
+                </h2>
+                <p class="text-muted">Gerencie e acompanhe o desempenho diário dos funcionários</p>
+            </div>
+            <div>
+                <a href="{% url 'dashboard_quartos' %}" class="btn btn-outline-secondary me-2">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+                <a href="{% url 'criar_controle_quartos' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Novo Controle
+                </a>
+            </div>
+        </div>
+
+        <!-- Ações Rápidas -->
+        <div class="actions-section mb-4">
+            <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                <div>
+                    <a href="{% url 'criar_controle_quartos' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Novo Controle
+                    </a>
+                    <a href="{% url 'listar_funcionarios' %}" class="btn btn-outline-info">
+                        <i class="fas fa-users"></i> Funcionários
+                    </a>
+                    <a href="{% url 'listar_motivos_ausencia' %}" class="btn btn-outline-warning">
+                        <i class="fas fa-user-times"></i> Motivos de Ausência
+                    </a>
+                </div>
+                <div class="text-muted">
+                    <small>
+                        <i class="fas fa-info-circle"></i>
+                        Gerencie controles, funcionários e motivos de ausência
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção de Filtros -->
+        <div class="filter-section">
+            <h5><i class="fas fa-filter"></i> Filtrar Controles</h5>
+            <form method="GET" class="filter-form">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Data Início</label>
+                        {{ form.data_inicio }}
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Data Fim</label>
+                        {{ form.data_fim }}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Funcionário</label>
+                        {{ form.funcionario }}
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search"></i> Filtrar
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    {% if request.GET %}
+                        <a href="{% url 'listar_controle_quartos' %}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-times"></i> Limpar Filtros
+                        </a>
+                    {% endif %}
+                    <span class="text-muted ms-3">
+                        <i class="fas fa-info-circle"></i>
+                        Mostrando {% if request.GET %}resultados filtrados{% else %}últimos 30 dias{% endif %}
+                    </span>
+                </div>
+            </form>
+        </div>
+
+        <!-- Estatísticas -->
+        {% if stats.total_registros > 0 %}
+        <div class="stats-section">
+            <h5><i class="fas fa-chart-bar"></i> Estatísticas dos Resultados</h5>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">{{ stats.total_registros }}</span>
+                    <span class="stat-label">Total de Registros</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">{{ stats.media_porcentagem|floatformat:1 }}%</span>
+                    <span class="stat-label">Média de Performance</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">{{ stats.total_quartos|default:0 }}</span>
+                    <span class="stat-label">Total de Quartos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">{{ stats.total_realizados|default:0 }}</span>
+                    <span class="stat-label">Total Realizados</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Seção de Relatórios -->
+        <div class="reports-section">
+            <h5><i class="fas fa-file-alt"></i> Gerar Relatórios</h5>
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                <a href="{% url 'relatorio_controle_quartos_pdf' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}" 
+                   class="btn btn-outline-danger">
+                    <i class="fas fa-file-pdf"></i> PDF
+                </a>
+                <a href="{% url 'relatorio_controle_quartos_excel' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}" 
+                   class="btn btn-outline-success">
+                    <i class="fas fa-file-excel"></i> Excel
+                </a>
+                <button onclick="imprimirRelatorio()" class="btn btn-outline-primary">
+                    <i class="fas fa-print"></i> Imprimir
+                </button>
+            </div>
+            <small class="text-muted">
+                <i class="fas fa-info-circle"></i>
+                {% if request.GET %}
+                    Os relatórios serão gerados com os filtros aplicados.
+                {% else %}
+                    Os relatórios incluirão os registros dos últimos 30 dias.
+                {% endif %}
+            </small>
+        </div>
+        {% endif %}
+
+        <!-- Lista de Controles -->
+        {% if controles %}
+            <!-- Visualização em Cards (oculta por padrão) -->
+            <div id="cardView" style="display: none;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5>
+                            <i class="fas fa-th-large"></i> 
+                            {{ controles.count }} controle{{ controles.count|pluralize }} encontrado{{ controles.count|pluralize }}
+                        </h5>
+                        <small class="text-muted">
+                            <i class="fas fa-sort-amount-down"></i> 
+                            Ordenados por data mais recente primeiro
+                        </small>
+                    </div>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="toggleView()">
+                        <i class="fas fa-th-large"></i> Visualizar como Cards
+                    </button>
+                </div>
+                
+                <div class="row">
+                    {% for controle in controles %}
+                    <div class="col-lg-6 col-xl-4">
+                        <div class="controle-card">
+                            <div class="controle-header">
+                                <div class="funcionario-info">
+                                    <h5>{{ controle.funcionario.nome }}</h5>
+                                    <div class="funcionario-cargo">{{ controle.funcionario.cargo }}</div>
+                                    {% if controle.motivo_ausencia %}
+                                        <div class="mt-1">
+                                            <span class="badge" style="background-color: {{ controle.motivo_ausencia.cor }}; color: white; font-size: 0.75rem;">
+                                                {{ controle.motivo_ausencia.nome }}
+                                            </span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="data-info">
+                                    <strong>{{ controle.data|date:"d/m/Y" }}</strong><br>
+                                    <small>{{ controle.data|date:"l" }}</small>
+                                </div>
+                            </div>
+
+                            <div class="text-center mb-3">
+                                <div class="performance-circle performance-{{ controle.status_desempenho|lower|cut:" "|cut:"ã"|cut:"ç" }}">
+                                    {{ controle.porcentagem|floatformat:1 }}%
+                                </div>
+                                <small class="text-muted d-block mt-2">
+                                    {{ controle.status_desempenho }}
+                                </small>
+                            </div>
+
+                            <div class="progress-custom">
+                                <div class="progress-bar-custom 
+                                    {% if controle.porcentagem >= 100 %}bg-success
+                                    {% elif controle.porcentagem >= 80 %}bg-info  
+                                    {% elif controle.porcentagem >= 60 %}bg-warning
+                                    {% else %}bg-danger{% endif %}"
+                                    style="width: {% if controle.porcentagem > 100 %}100{% else %}{{ controle.porcentagem }}{% endif %}%">
+                                </div>
+                            </div>
+
+                            <div class="controle-details">
+                                <div class="detail-item">
+                                    <span class="detail-number">{{ controle.quantidade_quartos }}</span>
+                                    <span class="detail-label">Total Quartos</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-number">{{ controle.realizados }}</span>
+                                    <span class="detail-label">Realizados</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-number">{{ controle.permanece_realizadas }}</span>
+                                    <span class="detail-label">Entradas</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-number">{{ controle.saidas_realizadas }}</span>
+                                    <span class="detail-label">Saídas</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-number">{{ controle.reservas_realizadas }}</span>
+                                    <span class="detail-label">Reservas*</span>
+                                </div>
+                            </div>
+
+                            <div class="actions-buttons">
+                                <a href="{% url 'detalhar_controle_quartos' controle.id %}" 
+                                   class="btn btn-outline-info btn-sm-custom">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </a>
+                                <a href="{% url 'editar_controle_quartos' controle.id %}" 
+                                   class="btn btn-outline-primary btn-sm-custom">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                                <button type="button" 
+                                        class="btn btn-outline-danger btn-sm-custom"
+                                        onclick="confirmarExclusao('{{ controle.funcionario.nome }}', '{{ controle.data|date:"d/m/Y" }}', '{% url 'excluir_controle_quartos' controle.id %}')">
+                                    <i class="fas fa-trash"></i> Excluir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Visualização em Tabela (padrão) -->
+            <div id="tableView">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5>
+                            <i class="fas fa-table"></i> 
+                            {{ controles.count }} controle{{ controles.count|pluralize }} encontrado{{ controles.count|pluralize }}
+                        </h5>
+                        <small class="text-muted">
+                            <i class="fas fa-sort-amount-down"></i> 
+                            Ordenados por data mais recente primeiro
+                        </small>
+                    </div>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="toggleView()">
+                        <i class="fas fa-th-large"></i> Visualizar como Cards
+                    </button>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Funcionário</th>
+                                <th>Data</th>
+                                <th>Motivo</th>
+                                <th>Performance</th>
+                                <th>Quartos</th>
+                                <th>Realizados</th>
+                                <th>Entradas</th>
+                                <th>Saídas</th>
+                                <th>Reservas</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for controle in controles %}
+                            <tr>
+                                <td>
+                                    <div>
+                                        <strong>{{ controle.funcionario.nome }}</strong><br>
+                                        <small class="text-muted">{{ controle.funcionario.cargo }}</small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <strong>{{ controle.data|date:"d/m/Y" }}</strong><br>
+                                    <small class="text-muted">{{ controle.data|date:"l" }}</small>
+                                </td>
+                                <td>
+                                    {% if controle.motivo_ausencia %}
+                                        <span class="badge" style="background-color: {{ controle.motivo_ausencia.cor }}; color: white;">
+                                            {{ controle.motivo_ausencia.nome }}
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Trabalho Normal</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge 
+                                        {% if controle.porcentagem >= 100 %}bg-success
+                                        {% elif controle.porcentagem >= 80 %}bg-info
+                                        {% elif controle.porcentagem >= 60 %}bg-warning
+                                        {% else %}bg-danger{% endif %}">
+                                        {{ controle.porcentagem|floatformat:1 }}%
+                                    </span>
+                                </td>
+                                <td class="text-center">{{ controle.quantidade_quartos }}</td>
+                                <td class="text-center">{{ controle.realizados }}</td>
+                                <td class="text-center">{{ controle.permanece_realizadas }}</td>
+                                <td class="text-center">{{ controle.saidas_realizadas }}</td>
+                                <td class="text-center">{{ controle.reservas_realizadas }}</td>
+                                <td>
+                                    <div class="d-flex gap-1">
+                                        <a href="{% url 'detalhar_controle_quartos' controle.id %}" 
+                                           class="btn btn-outline-info btn-sm" title="Ver detalhes">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{% url 'editar_controle_quartos' controle.id %}" 
+                                           class="btn btn-outline-primary btn-sm" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-outline-danger btn-sm" 
+                                                title="Excluir"
+                                                onclick="confirmarExclusao('{{ controle.funcionario.nome }}', '{{ controle.data|date:"d/m/Y" }}', '{% url 'excluir_controle_quartos' controle.id %}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Nota explicativa sobre reservas -->
+            <div class="mt-3">
+                <small class="text-muted">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>* Reservas:</strong> Campo informativo que indica quantos dos quartos de saída realizados eram reservas. Já incluído no total de "Saídas Realizadas".
+                </small>
+            </div>
+        {% else %}
+            <div class="no-results">
+                <i class="fas fa-clipboard-list fa-4x mb-3"></i>
+                <h4>Nenhum controle encontrado</h4>
+                {% if request.GET %}
+                    <p>Não foram encontrados controles com os filtros aplicados.</p>
+                    <a href="{% url 'listar_controle_quartos' %}" class="btn btn-outline-primary me-2">
+                        <i class="fas fa-list"></i> Ver todos os controles
+                    </a>
+                {% else %}
+                    <p>Você ainda não cadastrou nenhum controle de quartos.</p>
+                {% endif %}
+                <a href="{% url 'criar_controle_quartos' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Criar primeiro controle
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal de Confirmação -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                    Confirmar Exclusão
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Você tem certeza que deseja excluir o controle de:</p>
+                <p><strong>Funcionário:</strong> <span id="funcionarioNome"></span></p>
+                <p><strong>Data:</strong> <span id="controleData"></span></p>
+                <p class="text-muted">
+                    <i class="fas fa-info-circle"></i>
+                    Esta ação não pode ser desfeita.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <a href="#" id="confirmDeleteBtn" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Confirmar Exclusão
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function confirmarExclusao(funcionario, data, url) {
+        document.getElementById('funcionarioNome').textContent = funcionario;
+        document.getElementById('controleData').textContent = data;
+        document.getElementById('confirmDeleteBtn').href = url;
+        
+        const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+        modal.show();
+    }
+
+    function toggleView() {
+        const cardView = document.getElementById('cardView');
+        const tableView = document.getElementById('tableView');
+        
+        if (tableView.style.display === 'none') {
+            // Mostrar tabela, ocultar cards
+            tableView.style.display = 'block';
+            cardView.style.display = 'none';
+        } else {
+            // Mostrar cards, ocultar tabela  
+            tableView.style.display = 'none';
+            cardView.style.display = 'block';
+        }
+    }
+
+    // Auto-submit do formulário quando mudar as datas
+    document.addEventListener('DOMContentLoaded', function() {
+        const dataInputs = document.querySelectorAll('input[type="date"]');
+        const funcionarioSelect = document.querySelector('select[name="funcionario"]');
+        
+        dataInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                // Auto-submit após pequena pausa para UX
+                setTimeout(() => {
+                    this.form.submit();
+                }, 100);
+            });
+        });
+        
+        if (funcionarioSelect) {
+            funcionarioSelect.addEventListener('change', function() {
+                this.form.submit();
+            });
+        }
+    });
+
+    // Função para imprimir o relatório atual
+    function imprimirRelatorio() {
+        // Criar uma nova janela com o conteúdo da página atual
+        const printWindow = window.open('', '_blank');
+        
+        // Buscar os dados atuais da página
+        const params = new URLSearchParams(window.location.search);
+        const url = "{% url 'relatorio_controle_quartos_imprimir' %}?" + params.toString();
+        
+        // Fazer requisição para obter o conteúdo de impressão
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                printWindow.document.write(html);
+                printWindow.document.close();
+                
+                // Aguardar carregamento completo e imprimir
+                printWindow.onload = function() {
+                    setTimeout(() => {
+                        printWindow.print();
+                        printWindow.close();
+                    }, 500);
+                };
+            })
+            .catch(error => {
+                console.error('Erro ao carregar página de impressão:', error);
+                printWindow.close();
+                alert('Erro ao carregar página de impressão');
+            });
+    }
+</script>
+{% endblock %}

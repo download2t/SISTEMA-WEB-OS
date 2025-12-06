@@ -1,0 +1,830 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Controle de Quartos{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/governanca/selecionar.css' %}">
+<link rel="stylesheet" href="{% static 'css/governanca/dashboard_quartos.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="main-content-wrapper">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="display-4">
+                <i class="fas fa-chart-line"></i> Dashboard - Controle de Quartos
+            </h2>
+            <div class="text-muted">
+                <i class="far fa-calendar-alt"></i> {{ today|date:"d/m/Y" }}
+            </div>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="action-buttons">
+            <a href="{% url 'criar_controle_quartos' %}" class="btn-dashboard btn-primary">
+                <i class="fas fa-plus"></i> Novo Controle
+            </a>
+            <a href="{% url 'listar_controle_quartos' %}" class="btn-dashboard btn-success">
+                <i class="fas fa-list"></i> Ver Todos os Controles
+            </a>
+            <a href="{% url 'listar_funcionarios' %}" class="btn-dashboard btn-info">
+                <i class="fas fa-users"></i> Gerenciar Funcionários
+            </a>
+            <a href="{% url 'criar_funcionario' %}" class="btn-dashboard btn-warning">
+                <i class="fas fa-user-plus"></i> Novo Funcionário
+            </a>
+        </div>
+
+        <!-- Estatísticas Gerais -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">{{ controles_hoje.count }}</div>
+                <div class="stat-label">Controles Hoje</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ stats_semana.total_registros|default:0 }}</div>
+                <div class="stat-label">Registros Esta Semana</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ total_funcionarios_ativos|default:0 }}</div>
+                <div class="stat-label">Funcionários Ativos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">
+                    {{ stats_semana.media_porcentagem|floatformat:1|default:0 }}%
+                </div>
+                <div class="stat-label">Média da Semana</div>
+                <small class="text-muted d-block mt-1">
+                    ({{ stats_semana.registros_para_media|default:0 }} dias considerados)
+                </small>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Controles de Hoje -->
+            <div class="col-md-6">
+                <div class="dashboard-card" id="controlesHojeCard">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5><i class="fas fa-calendar-day"></i> Controles de Hoje</h5>
+                        <button id="toggleControlesHojeBtn" class="btn btn-sm btn-outline-info" title="Minimizar/Expandir seção">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                    <div id="controlesHojeContent" class="section-content">
+                    {% if controles_hoje %}
+                        {% for controle in controles_hoje %}
+                        <div class="funcionario-card">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">{{ controle.funcionario.nome }}</h6>
+                                    <small class="text-muted">{{ controle.funcionario.cargo }}</small>
+                                    {% if controle.motivo_ausencia %}
+                                        <div class="mt-1">
+                                            <span class="badge" style="background-color: {{ controle.motivo_ausencia.cor }}; color: white; font-size: 0.75rem;">
+                                                {{ controle.motivo_ausencia.nome }}
+                                            </span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="text-right">
+                                    <div class="h5 mb-1">{{ controle.porcentagem|floatformat:1 }}%</div>
+                                    <span class="performance-badge performance-{{ controle.status_desempenho|lower|cut:" "|cut:"ã"|cut:"ç" }}">
+                                        {{ controle.status_desempenho }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                {% if controle.motivo_ausencia %}
+                                    <small class="text-muted">
+                                        <i class="fas fa-info-circle"></i>
+                                        Ausência registrada - valores zerados
+                                    </small>
+                                {% else %}
+                                    <small class="text-muted">
+                                        {{ controle.realizados }} de {{ controle.quantidade_quartos }} quartos
+                                    </small>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">Nenhum controle registrado para hoje.</p>
+                            <a href="{% url 'criar_controle_quartos' %}" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Criar Primeiro Controle
+                            </a>
+                        </div>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance por Funcionário (30 dias) -->
+            <div class="col-md-6">
+                <div class="dashboard-card" id="performanceCard">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5><i class="fas fa-chart-bar"></i> Performance - Últimos 30 Dias</h5>
+                        <button id="togglePerformanceBtn" class="btn btn-sm btn-outline-info" title="Minimizar/Expandir seção">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                    <div id="performanceContent" class="section-content">
+                    {% if stats_funcionarios %}
+                        {% for funcionario in stats_funcionarios %}
+                        <div class="funcionario-card">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">{{ funcionario.funcionario__nome }}</h6>
+                                    <small class="text-muted">{{ funcionario.funcionario__cargo }}</small>
+                                    <div class="mt-1">
+                                        <small class="text-muted">
+                                            📅 {{ funcionario.total_registros }} dias |
+                                            💼 {{ funcionario.dias_trabalho }} trabalho |
+                                            ✅ {{ funcionario.dias_ausencia_justificada }} ausências just. |
+                                            ❌ {{ funcionario.dias_falta_nao_justificada }} faltas
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="h6 mb-1">{{ funcionario.media_porcentagem|floatformat:1 }}%</div>
+                                    <small class="text-muted">Média Real de Trabalho</small>
+                                </div>
+                            </div>
+                            <div class="progress mt-2" style="height: 8px;">
+                                <div class="progress-bar 
+                                    {% if funcionario.media_porcentagem >= 100 %}bg-success
+                                    {% elif funcionario.media_porcentagem >= 80 %}bg-info
+                                    {% elif funcionario.media_porcentagem >= 60 %}bg-warning
+                                    {% else %}bg-danger{% endif %}"
+                                    role="progressbar" 
+                                    style="width: {% if funcionario.media_porcentagem > 100 %}100{% else %}{{ funcionario.media_porcentagem|floatformat:0 }}{% endif %}%">
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">Nenhum dado de performance disponível.</p>
+                        </div>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico de Performance Individual por Funcionário -->
+        {% if funcionarios_graficos %}
+        <div class="dashboard-card" id="chartCard">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="fas fa-chart-line"></i> Evolução da Performance Individual</h5>
+                <div class="chart-controls d-flex align-items-center gap-3">
+                    <!-- Botão expandir/retrair -->
+                    <button id="toggleChartBtn" class="btn btn-sm btn-outline-info" title="Minimizar/Expandir gráfico">
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                    
+                    <!-- Controles de período -->
+                    <div class="btn-group" role="group">
+                        <a href="?periodo=semanal" class="btn btn-sm {% if periodo_atual == 'semanal' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                            <i class="fas fa-calendar-week"></i> 7 dias
+                        </a>
+                        <a href="?periodo=mensal" class="btn btn-sm {% if periodo_atual == 'mensal' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                            <i class="fas fa-calendar-alt"></i> 30 dias
+                        </a>
+                    </div>
+                    
+                    <!-- Botão de exportar PDF -->
+                    <button id="exportPdfBtn" class="btn btn-sm btn-success">
+                        <i class="fas fa-file-pdf"></i> Exportar PDF
+                    </button>
+                </div>
+            </div>
+            
+            <div id="chartContent" class="section-content">
+            <!-- Seleção de funcionários -->
+            <div class="funcionarios-selector mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="form-label mb-0"><strong>Funcionários no gráfico:</strong></label>
+                    <div class="btn-group btn-group-sm">
+                        <button id="selectAllBtn" class="btn btn-outline-secondary" type="button">
+                            <i class="fas fa-check-square"></i> Todos
+                        </button>
+                        <button id="unselectAllBtn" class="btn btn-outline-secondary" type="button">
+                            <i class="fas fa-square"></i> Nenhum
+                        </button>
+                    </div>
+                </div>
+                <div class="funcionarios-checkboxes">
+                    {% for funcionario in funcionarios_graficos %}
+                        <div class="form-check form-check-inline funcionario-checkbox">
+                            <input class="form-check-input funcionario-check" 
+                                   type="checkbox" 
+                                   id="func_{{ forloop.counter0 }}" 
+                                   value="{{ forloop.counter0 }}"
+                                   data-funcionario-id="{{ funcionario.id }}"
+                                   data-nome="{{ funcionario.nome }}"
+                                   data-cor="{{ funcionario.borderColor }}"
+                                   checked>
+                            <label class="form-check-label" for="func_{{ forloop.counter0 }}">
+                                <span class="funcionario-color-indicator" style="background-color: {{ funcionario.borderColor }}"></span>
+                                {{ funcionario.nome }}
+                                <small class="text-muted">({{ funcionario.pontos_validos }})</small>
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="chart-info mb-3">
+                <p class="text-muted small mb-2">
+                    <i class="fas fa-info-circle"></i>
+                    Mostra apenas dias com trabalho ou faltas não justificadas. 
+                    Folgas e faltas justificadas não são exibidas (gaps nas linhas).
+                </p>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="performanceChart" style="max-height: 400px;"></canvas>
+            </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="dashboard-card">
+            <h5><i class="fas fa-chart-line"></i> Evolução da Performance Individual</h5>
+            <div class="text-center py-4">
+                <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                <p class="text-muted">Nenhum dado de performance disponível para o período selecionado.</p>
+                <div class="btn-group mt-2" role="group">
+                    <a href="?periodo=semanal" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-calendar-week"></i> 7 dias
+                    </a>
+                    <a href="?periodo=mensal" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-calendar-alt"></i> 30 dias
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% if funcionarios_graficos %}
+<script>
+    // Dados do gráfico - funcionários individuais
+    const funcionariosData = {{ funcionarios_json|safe }};
+    const labels = {{ labels_json|safe }};
+    const periodoAtual = '{{ periodo_atual }}';
+    
+    // Variáveis globais
+    let chart;
+    let allDatasets = [];
+    
+    // Criar datasets para cada funcionário
+    function createDatasets() {
+        return funcionariosData.map((funcionario, index) => ({
+            label: funcionario.nome,
+            data: funcionario.data,
+            borderColor: funcionario.borderColor,
+            backgroundColor: funcionario.backgroundColor,
+            borderWidth: 2,
+            fill: false,
+            tension: 0.4,
+            pointBackgroundColor: funcionario.borderColor,
+            pointBorderColor: funcionario.borderColor,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            spanGaps: false,
+            hidden: false  // Por padrão, todos visíveis
+        }));
+    }
+    
+    // Inicializar o gráfico
+    function initChart() {
+        allDatasets = createDatasets();
+        
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: allDatasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 120,
+                        title: {
+                            display: true,
+                            text: 'Performance (%)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        },
+                        grid: {
+                            color: '#e0e0e0',
+                            lineWidth: 1
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Data'
+                        },
+                        grid: {
+                            color: '#e0e0e0',
+                            lineWidth: 1
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 15,
+                            fontSize: 11,
+                            filter: function(legendItem, chartData) {
+                                // Só mostrar na legenda se o dataset não está hidden
+                                return !chartData.datasets[legendItem.datasetIndex].hidden;
+                            }
+                        },
+                        onClick: function(e, legendItem, legend) {
+                            // Interceptar cliques na legenda para atualizar checkboxes
+                            const index = legendItem.datasetIndex;
+                            const dataset = chart.data.datasets[index];
+                            
+                            // Toggle visibility
+                            dataset.hidden = !dataset.hidden;
+                            
+                            // Atualizar checkbox correspondente
+                            const checkbox = document.getElementById(`func_${index}`);
+                            if (checkbox) {
+                                checkbox.checked = !dataset.hidden;
+                            }
+                            
+                            chart.update();
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                if (context.parsed.y !== null && context.parsed.y !== undefined) {
+                                    return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '%';
+                                }
+                                return null;
+                            },
+                            afterLabel: function(context) {
+                                if (context.parsed.y !== null && context.parsed.y !== undefined) {
+                                    if (context.parsed.y === 0) {
+                                        return 'Falta não justificada';
+                                    } else if (context.parsed.y >= 100) {
+                                        return 'Excelente performance!';
+                                    } else if (context.parsed.y >= 80) {
+                                        return 'Boa performance';
+                                    } else if (context.parsed.y >= 60) {
+                                        return 'Performance regular';
+                                    } else {
+                                        return 'Performance baixa';
+                                    }
+                                }
+                                return null;
+                            }
+                        },
+                        backgroundColor: 'rgba(0,0,0,0.8)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: '#fff',
+                        borderWidth: 1
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                elements: {
+                    line: {
+                        borderCapStyle: 'round'
+                    },
+                    point: {
+                        hoverBorderWidth: 3
+                    }
+                },
+                onHover: function(event, activeElements) {
+                    event.native.target.style.cursor = activeElements.length > 0 ? 'pointer' : 'default';
+                }
+            }
+        });
+    }
+    
+    // Função para atualizar visibility dos datasets
+    function updateChartVisibility() {
+        const checkboxes = document.querySelectorAll('.funcionario-check');
+        
+        checkboxes.forEach((checkbox, index) => {
+            const dataset = chart.data.datasets[index];
+            if (dataset) {
+                dataset.hidden = !checkbox.checked;
+            }
+        });
+        
+        chart.update();
+    }
+    
+    // Event listeners para checkboxes
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar gráfico
+        initChart();
+        
+        // Checkboxes individuais
+        document.querySelectorAll('.funcionario-check').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                updateChartVisibility();
+            });
+        });
+        
+        // Botão "Todos"
+        document.getElementById('selectAllBtn').addEventListener('click', function() {
+            document.querySelectorAll('.funcionario-check').forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            updateChartVisibility();
+        });
+        
+        // Botão "Nenhum"
+        document.getElementById('unselectAllBtn').addEventListener('click', function() {
+            document.querySelectorAll('.funcionario-check').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            updateChartVisibility();
+        });
+        
+        // Botão Exportar PDF
+        document.getElementById('exportPdfBtn').addEventListener('click', function() {
+            // Pegar funcionários selecionados
+            const funcionariosSelecionados = [];
+            const checkboxes = document.querySelectorAll('.funcionario-check:checked');
+            
+            checkboxes.forEach((checkbox) => {
+                const funcionarioId = checkbox.getAttribute('data-funcionario-id');
+                if (funcionarioId) {
+                    funcionariosSelecionados.push(funcionarioId);
+                }
+            });
+            
+            if (funcionariosSelecionados.length === 0) {
+                alert('Selecione pelo menos um funcionário para exportar o gráfico.');
+                return;
+            }
+            
+            // Construir URL com parâmetros
+            const url = new URL('{% url "exportar_grafico_performance_pdf" %}', window.location.origin);
+            url.searchParams.set('periodo', periodoAtual);
+            
+            // Adicionar funcionários selecionados
+            funcionariosSelecionados.forEach(id => {
+                url.searchParams.append('funcionarios[]', id);
+            });
+            
+            // Abrir em nova aba/fazer download
+            window.open(url.toString(), '_blank');
+        });
+    });
+</script>
+{% endif %}
+
+<!-- Custom CSS para o gráfico -->
+<style>
+.chart-controls .btn-group {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 6px;
+    display: inline-block;
+}
+
+.chart-container {
+    position: relative;
+    height: 400px;
+    margin-top: 15px;
+    transition: height 0.3s ease;
+}
+
+/* Estilos para expansão do gráfico */
+.dashboard-card.expanded {
+    position: relative;
+    z-index: 10;
+}
+
+.dashboard-card.expanded .chart-container {
+    height: 600px;
+}
+
+#toggleChartBtn {
+    transition: all 0.2s ease;
+}
+
+#toggleChartBtn:hover {
+    transform: scale(1.05);
+}
+
+#toggleChartBtn.btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: white;
+}
+
+#toggleChartBtn .fa-expand-arrows-alt,
+#toggleChartBtn .fa-compress-arrows-alt {
+    transition: transform 0.2s ease;
+}
+
+#toggleChartBtn:hover .fa-expand-arrows-alt,
+#toggleChartBtn:hover .fa-compress-arrows-alt {
+    transform: rotate(45deg);
+}
+
+.chart-info {
+    background-color: #f8f9fa;
+    padding: 12px;
+    border-radius: 6px;
+    border-left: 4px solid #007bff;
+}
+
+/* Estilos para seleção de funcionários */
+.funcionarios-selector {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.funcionarios-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.funcionario-checkbox {
+    margin-bottom: 8px !important;
+    margin-right: 0 !important;
+}
+
+.funcionario-checkbox .form-check-label {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background-color: white;
+    border: 2px solid #dee2e6;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.funcionario-checkbox .form-check-input:checked + .form-check-label {
+    background-color: #e7f3ff;
+    border-color: #007bff;
+    color: #0056b3;
+    font-weight: 500;
+}
+
+.funcionario-checkbox .form-check-label:hover {
+    border-color: #adb5bd;
+    background-color: #f1f3f4;
+}
+
+.funcionario-color-indicator {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin-right: 8px;
+    border: 2px solid white;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+}
+
+.funcionario-checkbox .form-check-input {
+    display: none; /* Esconder o checkbox padrão */
+}
+
+.chart-controls {
+    gap: 15px;
+}
+
+.chart-controls .btn-group .btn {
+    border-radius: 6px !important;
+}
+
+.chart-controls .btn-group .btn:first-child {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.chart-controls .btn-group .btn:last-child {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+#exportPdfBtn {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-weight: 500;
+}
+
+#exportPdfBtn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Estilos para botões de expandir/retrair */
+.section-content {
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+}
+
+/* Garantir que as colunas fiquem lado a lado */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.col-md-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+/* Estilos para dashboard cards */
+.dashboard-card {
+    height: auto;
+    min-height: 300px;
+}
+
+.btn i {
+    transition: transform 0.2s ease;
+}
+
+.btn:hover i {
+    transform: scale(1.1);
+}
+
+/* Animação específica para ícones de chevron */
+.fa-chevron-up, .fa-chevron-down {
+    transition: transform 0.3s ease;
+}
+
+/* Estados dos botões */
+.btn-outline-info:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,123,255,0.2);
+}
+
+.btn-info {
+    background-color: #17a2b8 !important;
+    border-color: #17a2b8 !important;
+}
+
+.btn-info:hover {
+    background-color: #138496 !important;
+    border-color: #138496 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(23,162,184,0.3);
+}
+
+/* Media queries para responsividade */
+@media (max-width: 768px) {
+    .col-md-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .chart-controls {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 10px;
+    }
+    
+    .funcionarios-checkboxes {
+        gap: 8px;
+    }
+    
+    .funcionario-checkbox .form-check-label {
+        font-size: 0.85rem;
+        padding: 4px 8px;
+    }
+    
+    .chart-container {
+        height: 300px;
+    }
+    
+    .funcionarios-selector {
+        padding: 12px;
+    }
+}
+</style>
+
+<!-- JavaScript para botões de expandir sempre presentes -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Botões de expandir/retrair para seções - NOVO COMPORTAMENTO
+    const toggleControlesBtn = document.getElementById('toggleControlesHojeBtn');
+    const togglePerformanceBtn = document.getElementById('togglePerformanceBtn');
+    
+    function setupToggleButton(toggleBtn, contentId) {
+        if (!toggleBtn) return;
+        
+        const content = document.getElementById(contentId);
+        const icon = toggleBtn.querySelector('i');
+        
+        toggleBtn.addEventListener('click', function() {
+            if (content.style.display === 'none') {
+                // Expandir
+                content.style.display = 'block';
+                toggleBtn.classList.remove('btn-outline-info');
+                toggleBtn.classList.add('btn-info');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+                toggleBtn.title = 'Minimizar seção';
+            } else {
+                // Minimizar/Retrair
+                content.style.display = 'none';
+                toggleBtn.classList.remove('btn-info');
+                toggleBtn.classList.add('btn-outline-info');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+                toggleBtn.title = 'Expandir seção';
+            }
+        });
+    }
+    
+    // Configurar os botões
+    setupToggleButton(toggleControlesBtn, 'controlesHojeContent');
+    setupToggleButton(togglePerformanceBtn, 'performanceContent');
+    
+    // Botão do gráfico (comportamento diferente)
+    const toggleChartBtn = document.getElementById('toggleChartBtn');
+    if (toggleChartBtn) {
+        const chartContent = document.getElementById('chartContent');
+        const chartIcon = toggleChartBtn.querySelector('i');
+        
+        toggleChartBtn.addEventListener('click', function() {
+            if (chartContent.style.display === 'none') {
+                // Expandir
+                chartContent.style.display = 'block';
+                toggleChartBtn.classList.remove('btn-outline-info');
+                toggleChartBtn.classList.add('btn-info');
+                chartIcon.classList.remove('fa-chevron-down');
+                chartIcon.classList.add('fa-chevron-up');
+                toggleChartBtn.title = 'Minimizar gráfico';
+                
+                // Redesenhar o gráfico após expandir
+                if (window.chart) {
+                    setTimeout(() => {
+                        window.chart.resize();
+                    }, 300);
+                }
+            } else {
+                // Minimizar
+                chartContent.style.display = 'none';
+                toggleChartBtn.classList.remove('btn-info');
+                toggleChartBtn.classList.add('btn-outline-info');
+                chartIcon.classList.remove('fa-chevron-up');
+                chartIcon.classList.add('fa-chevron-down');
+                toggleChartBtn.title = 'Expandir gráfico';
+            }
+        });
+    }
+});
+</script>
+
+{% endblock %}

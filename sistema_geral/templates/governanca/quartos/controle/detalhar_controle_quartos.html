@@ -1,0 +1,412 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Detalhes - {{ controle.funcionario.nome }} - {{ controle.data|date:"d/m/Y" }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/governanca/detalhar_controle_quartos.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="main-content-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="breadcrumb-custom">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'dashboard_quartos' %}">
+                                <i class="fas fa-chart-line"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'listar_controle_quartos' %}">
+                                <i class="fas fa-clipboard-list"></i> Controles
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Detalhes
+                        </li>
+                    </ol>
+                </nav>
+
+                <div class="detail-container">
+                    <!-- Cabeçalho -->
+                    <div class="detail-header">
+                        <h2>
+                            <i class="fas fa-user-circle"></i>
+                            {{ controle.funcionario.nome }}
+                        </h2>
+                        <div class="subtitle">
+                            {{ controle.funcionario.cargo }} • {{ controle.data|date:"l, d \d\e F \d\e Y" }}
+                        </div>
+                        {% if controle.motivo_ausencia %}
+                            <div class="mt-2">
+                                <span class="badge" style="background-color: {{ controle.motivo_ausencia.cor }}; color: white; font-size: 1rem; padding: 0.5rem 1rem;">
+                                    <i class="fas fa-info-circle"></i> {{ controle.motivo_ausencia.nome }}
+                                </span>
+                                {% if controle.motivo_ausencia.descricao %}
+                                    <div class="text-muted mt-1 small">{{ controle.motivo_ausencia.descricao }}</div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Seção de Performance -->
+                    <div class="performance-section">
+                        <div class="performance-circle performance-{{ controle.status_desempenho|lower|cut:" "|cut:"ã"|cut:"ç" }}">
+                            {{ controle.porcentagem|floatformat:1 }}%
+                        </div>
+                        <div class="performance-status">{{ controle.status_desempenho }}</div>
+                            <div class="performance-description">
+                                {% if controle.motivo_ausencia %}
+                                    <div class="text-muted">
+                                        <i class="fas fa-info-circle"></i>
+                                        Ausência registrada: {{ controle.motivo_ausencia.nome }}
+                                        {% if controle.motivo_ausencia.descricao %}
+                                            <br><small>{{ controle.motivo_ausencia.descricao }}</small>
+                                        {% endif %}
+                                        {% if controle.motivo_ausencia.afeta_media %}
+                                            <br><small class="text-warning"><strong>⚠️ Este motivo afeta negativamente as médias de performance.</strong></small>
+                                        {% else %}
+                                            <br><small class="text-success">✓ Este motivo não afeta as médias de performance.</small>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    {% if controle.porcentagem >= 100 %}
+                                        Performance exemplar! A meta de quartos do dia foi atingida ou superada.
+                                    {% elif controle.porcentagem >= 80 %}
+                                        Boa performance! A maioria dos quartos do dia foram realizados.
+                                    {% elif controle.porcentagem >= 60 %}
+                                        Performance regular. Há espaço para melhorias nos quartos realizados.
+                                    {% else %}
+                                        Performance abaixo do esperado. Requer atenção e suporte para atingir as metas.
+                                    {% endif %}
+                                    <br><small class="text-muted">
+                                        <i class="fas fa-info-circle"></i>
+                                        Porcentagem baseada em: ({{ controle.permanece_realizadas }} + {{ controle.saidas_realizadas }}) ÷ {{ controle.quantidade_quartos }} × 100
+                                    </small>
+                                {% endif %}
+                            </div>
+                    </div>
+
+                    <!-- Conteúdo Principal -->
+                    <div class="detail-content">
+                        <!-- Resumo Geral -->
+                        <div class="detail-section">
+                            <h4><i class="fas fa-chart-bar"></i> Resumo Geral</h4>
+                            <div class="info-grid">
+                                <div class="info-card">
+                                    <span class="info-number">{{ controle.meta_total }}</span>
+                                    <span class="info-label">Meta Base (Quartos do Dia)</span>
+                                </div>
+                                <div class="info-card">
+                                    <span class="info-number">{{ controle.realizados_base }}</span>
+                                    <span class="info-label">Realizados Base</span>
+                                </div>
+                                <div class="info-card">
+                                    <span class="info-number">{{ controle.reservas_realizadas }}</span>
+                                    <span class="info-label">Reservas (Quartos de Saída)</span>
+                                </div>
+                                <div class="info-card">
+                                    <span class="info-number">{{ controle.porcentagem|floatformat:1 }}%</span>
+                                    <span class="info-label">Taxa de Realização</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Metas vs Realizações -->
+                        <div class="detail-section">
+                            <h4><i class="fas fa-balance-scale"></i> Metas vs Realizações</h4>
+                            
+                            <div class="comparison-section">
+                                <h6 class="mb-3">Comparativo de Performance (Base para 100%)</h6>
+                                <div class="comparison-grid">
+                                    <div class="comparison-item">
+                                        <span class="comparison-number">{{ controle.permanece_entrada }}</span>
+                                        <span class="comparison-label">Meta Permanece</span>
+                                    </div>
+                                    <div class="comparison-item">
+                                        <span class="comparison-number">{{ controle.permanece_realizadas }}</span>
+                                        <span class="comparison-label">Permanece Realizadas</span>
+                                    </div>
+                                    <div class="comparison-item">
+                                        <span class="comparison-number">{{ controle.saida_entrada }}</span>
+                                        <span class="comparison-label">Meta Saídas</span>
+                                    </div>
+                                    <div class="comparison-item">
+                                        <span class="comparison-number">{{ controle.saidas_realizadas }}</span>
+                                        <span class="comparison-label">Saídas Realizadas</span>
+                                    </div>
+                                    <div class="comparison-item" style="background: #e7f3ff; border: 2px solid #007bff;">
+                                        <span class="comparison-number">{{ controle.reservas_realizadas }}</span>
+                                        <span class="comparison-label">Reservas (Quartos de Saída)</span>
+                                    </div>
+                                </div>
+                                <div class="mt-3 p-3" style="background: #f8f9fa; border-radius: 5px;">
+                                    <div class="row text-center">
+                                        <div class="col-md-4">
+                                            <strong>Meta Base:</strong><br>
+                                            <span class="text-primary">{{ controle.meta_total }} quartos</span><br>
+                                            <small class="text-muted">({{ controle.permanece_entrada }} + {{ controle.saida_entrada }})</small>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <strong>Realizados Base:</strong><br>
+                                            <span class="text-success">{{ controle.realizados_base }} quartos</span><br>
+                                            <small class="text-muted">({{ controle.permanece_realizadas }} + {{ controle.saidas_realizadas }})</small>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <strong>Detalhamento:</strong><br>
+                                            <span class="text-info">{{ controle.reservas_realizadas }} reservas</span><br>
+                                            <small class="text-muted">(tipo de quarto - informativo)</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Barras de Progresso -->
+                            <div class="progress-section">
+                                <h6 class="mb-3">Progresso por Categoria</h6>
+                                
+                                <!-- Entradas -->
+                                <div class="progress-item">
+                                    <div class="progress-label">
+                                        <span>Permanece</span>
+                                        <span>{{ controle.permanece_realizadas }} / {{ controle.permanece_entrada }}</span>
+                                    </div>
+                                    <div class="progress-bar-container">
+                                        <div class="progress-bar-fill 
+                                            {% if controle.permanece_entrada > 0 and controle.permanece_realizadas >= controle.permanece_entrada %}bg-success
+                                            {% elif controle.permanece_entrada > 0 %}bg-warning
+                                            {% else %}bg-danger{% endif %}"
+                                            style="width: {% if controle.permanece_entrada > 0 %}{% widthratio controle.permanece_realizadas controle.permanece_entrada 100 %}{% else %}0{% endif %}%">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Saídas -->
+                                <div class="progress-item">
+                                    <div class="progress-label">
+                                        <span>Saídas</span>
+                                        <span>{{ controle.saidas_realizadas }} / {{ controle.saida_entrada }}</span>
+                                    </div>
+                                    <div class="progress-bar-container">
+                                        <div class="progress-bar-fill 
+                                            {% if controle.saida_entrada > 0 and controle.saidas_realizadas >= controle.saida_entrada %}bg-success
+                                            {% elif controle.saida_entrada > 0 %}bg-warning
+                                            {% else %}bg-danger{% endif %}"
+                                            style="width: {% if controle.saida_entrada > 0 %}{% widthratio controle.saidas_realizadas controle.saida_entrada 100 %}{% else %}0{% endif %}%">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Reservas (Informativo) -->
+                                <div class="progress-item">
+                                    <div class="progress-label">
+                                        <span>Reservas (Quartos de Saída)</span>
+                                        <span>{{ controle.reservas_realizadas }}</span>
+                                    </div>
+                                    <div class="progress-bar-container">
+                                        <div class="progress-bar-fill bg-info" style="width: {% if controle.reservas_realizadas > 0 %}75{% else %}0{% endif %}%">
+                                        </div>
+                                    </div>
+                                    <small class="text-muted mt-1">
+                                        <i class="fas fa-info-circle"></i> Informativo - quartos de saída do tipo reserva
+                                    </small>
+                                </div>
+
+                                <!-- Base para Porcentagem (Quartos Realizados) -->
+                                <div class="progress-item">
+                                    <div class="progress-label">
+                                        <span><strong>Base para 100%</strong></span>
+                                        <span><strong>{{ controle.realizados_base }} / {{ controle.meta_total }}</strong></span>
+                                    </div>
+                                    <div class="progress-bar-container">
+                                        <div class="progress-bar-fill 
+                                            {% if controle.porcentagem >= 100 %}bg-success
+                                            {% elif controle.porcentagem >= 80 %}bg-info
+                                            {% elif controle.porcentagem >= 60 %}bg-warning
+                                            {% else %}bg-danger{% endif %}"
+                                            style="width: {% if controle.porcentagem > 100 %}100{% else %}{{ controle.porcentagem|floatformat:0 }}{% endif %}%">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Detalhamento Individual -->
+                        <div class="detail-section">
+                            <h4><i class="fas fa-list-ul"></i> Detalhamento por Categoria</h4>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <div class="info-card">
+                                        <i class="fas fa-user-clock fa-2x mb-2 text-primary"></i>
+                                        <span class="info-number">{{ controle.permanece_realizadas }}</span>
+                                        <span class="info-label">Permanece Realizadas</span>
+                                        <small class="text-muted d-block mt-2">
+                                            Meta: {{ controle.permanece_entrada }} 
+                                            {% if controle.permanece_entrada > 0 %}
+                                                ({% widthratio controle.permanece_realizadas controle.permanece_entrada 100 %}%)
+                                            {% endif %}
+                                        </small>
+                                        <div class="progress mt-2" style="height: 6px;">
+                                            <div class="progress-bar bg-primary" 
+                                                style="width: {% if controle.permanece_entrada > 0 %}{% widthratio controle.permanece_realizadas controle.permanece_entrada 100 %}{% else %}0{% endif %}%">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="info-card">
+                                        <i class="fas fa-sign-out-alt fa-2x mb-2 text-info"></i>
+                                        <span class="info-number">{{ controle.saidas_realizadas }}</span>
+                                        <span class="info-label">Saídas Realizadas</span>
+                                        <small class="text-muted d-block mt-2">
+                                            Meta: {{ controle.saida_entrada }}
+                                            {% if controle.saida_entrada > 0 %}
+                                                ({% widthratio controle.saidas_realizadas controle.saida_entrada 100 %}%)
+                                            {% endif %}
+                                        </small>
+                                        <div class="progress mt-2" style="height: 6px;">
+                                            <div class="progress-bar bg-info" 
+                                                style="width: {% if controle.saida_entrada > 0 %}{% widthratio controle.saidas_realizadas controle.saida_entrada 100 %}{% else %}0{% endif %}%">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="info-card" style="border-left-color: #17a2b8;">
+                                        <i class="fas fa-calendar-check fa-2x mb-2 text-info"></i>
+                                        <span class="info-number">{{ controle.reservas_realizadas }}</span>
+                                        <span class="info-label">Reservas (Quartos de Saída)</span>
+                                        <small class="text-muted d-block mt-2">
+                                            <i class="fas fa-info-circle"></i>
+                                            Quartos de saída do tipo reserva
+                                        </small>
+                                        <div class="mt-2">
+                                            <span class="badge bg-info">Informativo</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Metadados -->
+                        <div class="metadata-section">
+                            <h6><i class="fas fa-info-circle"></i> Informações do Registro</h6>
+                            <div class="metadata-item">
+                                <span><strong>Funcionário:</strong></span>
+                                <span>{{ controle.funcionario.nome }} ({{ controle.funcionario.cargo }})</span>
+                            </div>
+                            <div class="metadata-item">
+                                <span><strong>Data:</strong></span>
+                                <span>{{ controle.data|date:"l, d \d\e F \d\e Y" }}</span>
+                            </div>
+                            <div class="metadata-item">
+                                <span><strong>Criado em:</strong></span>
+                                <span>{{ controle.created_at|date:"d/m/Y \à\s H:i" }}</span>
+                            </div>
+                            {% if controle.updated_at != controle.created_at %}
+                            <div class="metadata-item">
+                                <span><strong>Última atualização:</strong></span>
+                                <span>{{ controle.updated_at|date:"d/m/Y \à\s H:i" }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Botões de Ação -->
+                        <div class="action-buttons">
+                            <a href="{% url 'listar_controle_quartos' %}" 
+                               class="btn btn-secondary btn-action">
+                                <i class="fas fa-arrow-left"></i> Voltar à Lista
+                            </a>
+                            
+                            <a href="{% url 'editar_controle_quartos' controle.id %}" 
+                               class="btn btn-primary btn-action">
+                                <i class="fas fa-edit"></i> Editar Controle
+                            </a>
+                            
+                            <a href="{% url 'listar_controle_quartos' %}?funcionario={{ controle.funcionario.id }}" 
+                               class="btn btn-info btn-action">
+                                <i class="fas fa-user"></i> Ver Outros Controles
+                            </a>
+                            
+                            <a href="{% url 'dashboard_quartos' %}" 
+                               class="btn btn-success btn-action">
+                                <i class="fas fa-chart-line"></i> Dashboard
+                            </a>
+                            
+                            <button type="button" 
+                                    class="btn btn-danger btn-action"
+                                    onclick="confirmarExclusao('{{ controle.funcionario.nome }}', '{{ controle.data|date:"d/m/Y" }}', '{% url 'excluir_controle_quartos' controle.id %}')">
+                                <i class="fas fa-trash"></i> Excluir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmação -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                    Confirmar Exclusão
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Você tem certeza que deseja excluir o controle de:</p>
+                <p><strong>Funcionário:</strong> <span id="funcionarioNome"></span></p>
+                <p><strong>Data:</strong> <span id="controleData"></span></p>
+                <p class="text-muted">
+                    <i class="fas fa-info-circle"></i>
+                    Esta ação não pode ser desfeita.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <a href="#" id="confirmDeleteBtn" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Confirmar Exclusão
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function confirmarExclusao(funcionario, data, url) {
+        document.getElementById('funcionarioNome').textContent = funcionario;
+        document.getElementById('controleData').textContent = data;
+        document.getElementById('confirmDeleteBtn').href = url;
+        
+        const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+        modal.show();
+    }
+
+    // Animar barras de progresso quando a página carregar
+    document.addEventListener('DOMContentLoaded', function() {
+        const progressBars = document.querySelectorAll('.progress-bar-fill');
+        
+        setTimeout(() => {
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 100);
+            });
+        }, 300);
+    });
+</script>
+{% endblock %}

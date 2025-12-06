@@ -1,0 +1,216 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Funcionários - Controle de Quartos{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/governanca/listar_funcionarios.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="main-content-wrapper">
+    <div class="container-fluid">
+        <!-- Cabeçalho -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="display-4">
+                    <i class="fas fa-users"></i> Funcionários
+                </h2>
+                <p class="text-muted">Gerencie os funcionários do controle de quartos</p>
+            </div>
+            <div>
+                <a href="{% url 'dashboard_quartos' %}" class="btn btn-outline-secondary me-2">
+                    <i class="fas fa-arrow-left"></i> Voltar ao Dashboard
+                </a>
+                <a href="{% url 'criar_funcionario' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Novo Funcionário
+                </a>
+            </div>
+        </div>
+
+        <!-- Seção de Busca -->
+        <div class="search-section">
+            <h5><i class="fas fa-search"></i> Buscar Funcionários</h5>
+            <form method="GET" class="row g-3">
+                <div class="col-md-10">
+                    <input type="text" 
+                           name="search" 
+                           class="form-control" 
+                           placeholder="Buscar por nome ou cargo..." 
+                           value="{{ search }}"
+                           id="searchInput">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+                </div>
+            </form>
+            {% if search %}
+                <div class="mt-3">
+                    <span class="badge bg-info">Resultados para: "{{ search }}"</span>
+                    <a href="{% url 'listar_funcionarios' %}" class="btn btn-sm btn-outline-secondary ms-2">
+                        <i class="fas fa-times"></i> Limpar busca
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Ações em lote -->
+        <div class="actions-section">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <span class="text-muted">
+                        <i class="fas fa-info-circle"></i> 
+                        {{ funcionarios.count }} funcionário{{ funcionarios.count|pluralize }} encontrado{{ funcionarios.count|pluralize }}
+                    </span>
+                </div>
+                <div>
+                    <a href="{% url 'listar_controle_quartos' %}" class="btn btn-outline-info btn-action">
+                        <i class="fas fa-chart-bar"></i> Ver Controles
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Funcionários -->
+        {% if funcionarios %}
+            <div class="row">
+                {% for funcionario in funcionarios %}
+                <div class="col-lg-6 col-xl-4">
+                    <div class="funcionario-card">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div class="funcionario-info flex-grow-1">
+                                <h5>{{ funcionario.nome }}</h5>
+                                <div class="cargo">{{ funcionario.cargo }}</div>
+                                {% if funcionario.ativo %}
+                                    <span class="status-badge status-ativo">
+                                        <i class="fas fa-check-circle"></i> Ativo
+                                    </span>
+                                {% else %}
+                                    <span class="status-badge status-inativo">
+                                        <i class="fas fa-times-circle"></i> Inativo
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="funcionario-meta">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar-plus"></i> 
+                                Criado em {{ funcionario.created_at|date:"d/m/Y" }}
+                            </small>
+                            {% if funcionario.updated_at != funcionario.created_at %}
+                                <br>
+                                <small class="text-muted">
+                                    <i class="fas fa-edit"></i> 
+                                    Atualizado em {{ funcionario.updated_at|date:"d/m/Y" }}
+                                </small>
+                            {% endif %}
+                        </div>
+
+                        <div class="funcionario-actions mt-3">
+                            <a href="{% url 'editar_funcionario' funcionario.id %}" 
+                               class="btn btn-sm btn-outline-primary" 
+                               title="Editar funcionário">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            
+                            <a href="{% url 'listar_controle_quartos' %}?funcionario={{ funcionario.id }}" 
+                               class="btn btn-sm btn-outline-info" 
+                               title="Ver controles deste funcionário">
+                                <i class="fas fa-chart-line"></i> Controles
+                            </a>
+                            
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-danger" 
+                                    onclick="confirmarExclusao('{{ funcionario.nome }}', '{% url 'excluir_funcionario' funcionario.id %}')"
+                                    title="Excluir funcionário">
+                                <i class="fas fa-trash"></i> Excluir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-results">
+                <i class="fas fa-users-slash fa-4x mb-3"></i>
+                <h4>Nenhum funcionário encontrado</h4>
+                {% if search %}
+                    <p>Não foi possível encontrar funcionários com os termos de busca "{{ search }}".</p>
+                    <a href="{% url 'listar_funcionarios' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-list"></i> Ver todos os funcionários
+                    </a>
+                {% else %}
+                    <p>Você ainda não cadastrou nenhum funcionário.</p>
+                    <a href="{% url 'criar_funcionario' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Cadastrar primeiro funcionário
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal de Confirmação -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                    Confirmar Exclusão
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Você tem certeza que deseja excluir o funcionário <strong id="funcionarioNome"></strong>?</p>
+                <p class="text-muted">
+                    <i class="fas fa-info-circle"></i>
+                    Esta ação não pode ser desfeita. Se o funcionário possuir registros de controle, a exclusão será impedida.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <a href="#" id="confirmDeleteBtn" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Confirmar Exclusão
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function confirmarExclusao(nome, url) {
+        document.getElementById('funcionarioNome').textContent = nome;
+        document.getElementById('confirmDeleteBtn').href = url;
+        
+        const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+        modal.show();
+    }
+
+    // Auto-focus no campo de busca
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput && !searchInput.value) {
+            searchInput.focus();
+        }
+    });
+
+    // Busca em tempo real (opcional)
+    let searchTimeout;
+    document.getElementById('searchInput').addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            if (this.value.length >= 3 || this.value.length === 0) {
+                this.form.submit();
+            }
+        }, 500);
+    });
+</script>
+{% endblock %}

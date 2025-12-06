@@ -1,0 +1,584 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if controle %}Editar{% else %}Criar{% endif %} Controle de Quartos
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/governanca/form_controle_quartos.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="main-content-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'dashboard_quartos' %}">
+                                <i class="fas fa-chart-line"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'listar_controle_quartos' %}">
+                                <i class="fas fa-clipboard-list"></i> Controles
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            {% if controle %}Editar{% else %}Criar{% endif %}
+                        </li>
+                    </ol>
+                </nav>
+
+                <div class="form-container">
+                    <div class="form-header">
+                        <h3>
+                            {% if controle %}
+                                <i class="fas fa-edit"></i> Editar Controle de Quartos
+                            {% else %}
+                                <i class="fas fa-plus"></i> Criar Novo Controle
+                            {% endif %}
+                        </h3>
+                        <div class="subtitle">
+                            {% if controle %}
+                                Atualize os dados do controle de {{ controle.funcionario.nome }} do dia {{ controle.data|date:"d/m/Y" }}
+                            {% else %}
+                                Preencha os dados de metas e realizações do dia
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if form.non_field_errors %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="post" id="controleForm" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Seção: Informações Básicas -->
+                        <div class="form-section">
+                            <h5><i class="fas fa-info-circle"></i> Informações Básicas</h5>
+                            <div class="form-row">
+                                <!-- Data -->
+                                <div class="form-group">
+                                    <label for="{{ form.data.id_for_label }}" class="form-label required-field">
+                                        {{ form.data.label }}
+                                    </label>
+                                    <div class="icon-input">
+                                        <i class="fas fa-calendar input-icon"></i>
+                                        {% if controle %}
+                                            <input type="date" name="{{ form.data.name }}" class="form-control" id="{{ form.data.id_for_label }}" value="{{ controle.data|date:'Y-m-d' }}" required>
+                                        {% else %}
+                                            {{ form.data }}
+                                        {% endif %}
+                                    </div>
+                                    {% if form.data.errors %}
+                                        {% for error in form.data.errors %}
+                                            <div class="text-danger form-help">
+                                                <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <div class="form-help">Selecione a data do controle</div>
+                                </div>
+
+                                <!-- Funcionário -->
+                                <div class="form-group">
+                                    <label for="{{ form.funcionario.id_for_label }}" class="form-label required-field">
+                                        {{ form.funcionario.label }}
+                                    </label>
+                                    {{ form.funcionario }}
+                                    {% if form.funcionario.errors %}
+                                        {% for error in form.funcionario.errors %}
+                                            <div class="text-danger form-help">
+                                                <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <div class="form-help">Selecione o funcionário responsável</div>
+                                </div>
+
+                                <!-- Motivo de Ausência -->
+                                <div class="form-group">
+                                    <label for="{{ form.motivo_ausencia.id_for_label }}" class="form-label">
+                                        {{ form.motivo_ausencia.label }}
+                                    </label>
+                                    <div class="icon-input">
+                                        <i class="fas fa-user-times input-icon"></i>
+                                        {{ form.motivo_ausencia }}
+                                    </div>
+                                    {% if form.motivo_ausencia.errors %}
+                                        {% for error in form.motivo_ausencia.errors %}
+                                            <div class="text-danger form-help">
+                                                <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <div class="form-help">
+                                        <strong>Importante:</strong> Se selecionar um motivo de ausência, todos os outros campos serão zerados automaticamente.
+                                        <br>Deixe vazio para trabalho normal.
+                                    </div>
+                                </div>
+
+                                <!-- Quartos do Dia -->
+                                <div class="form-group">
+                                    <label for="{{ form.quantidade_quartos.id_for_label }}" class="form-label required-field">
+                                        {{ form.quantidade_quartos.label }}
+                                    </label>
+                                    <div class="icon-input">
+                                        <i class="fas fa-bed input-icon"></i>
+                                        {{ form.quantidade_quartos }}
+                                    </div>
+                                    {% if form.quantidade_quartos.errors %}
+                                        {% for error in form.quantidade_quartos.errors %}
+                                            <div class="text-danger form-help">
+                                                <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <div class="form-help">Total de quartos do dia (base para 100%)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Seção: Metas do Dia -->
+                        <div class="form-section">
+                            <h5><i class="fas fa-target"></i> Metas do Dia</h5>
+                            <div class="form-row">
+                                <!-- Meta Permanece -->
+                                <div class="form-group">
+                                    <label for="{{ form.permanece_entrada.id_for_label }}" class="form-label">
+                                        {{ form.permanece_entrada.label }}
+                                    </label>
+                                    <div class="icon-input">
+                                        <i class="fas fa-sign-in-alt input-icon"></i>
+                                        {{ form.permanece_entrada }}
+                                    </div>
+                                    {% if form.permanece_entrada.errors %}
+                                        {% for error in form.permanece_entrada.errors %}
+                                            <div class="text-danger form-help">
+                                                <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <div class="form-help">Meta de quartos permanece (hóspedes que ficam)</div>
+                                </div>
+
+                                <!-- Meta de Saídas -->
+                                <div class="form-group">
+                                    <label for="{{ form.saida_entrada.id_for_label }}" class="form-label">
+                                        {{ form.saida_entrada.label }}
+                                    </label>
+                                    <div class="icon-input">
+                                        <i class="fas fa-sign-out-alt input-icon"></i>
+                                        {{ form.saida_entrada }}
+                                    </div>
+                                    {% if form.saida_entrada.errors %}
+                                        {% for error in form.saida_entrada.errors %}
+                                            <div class="text-danger form-help">
+                                                <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <div class="form-help">Meta de quartos de saída (check-out)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Seção: Realizações -->
+                        <div class="form-section">
+                            <h5><i class="fas fa-check-circle"></i> Realizações do Dia</h5>
+                            <div class="form-row">
+                                <!-- Permanece Realizadas -->
+                                <div class="form-group">
+                                    <label for="{{ form.permanece_realizadas.id_for_label }}" class="form-label">
+                                        {{ form.permanece_realizadas.label }}
+                                    </label>
+                                    <div class="icon-input">
+                                        <i class="fas fa-check input-icon"></i>
+                                        {{ form.permanece_realizadas }}
+                                    </div>
+                                    {% if form.permanece_realizadas.errors %}
+                                        {% for error in form.permanece_realizadas.errors %}
+                                            <div class="text-danger form-help">
+                                                <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <div class="form-help">Quartos permanece realizados (conta para 100%)</div>
+                                </div>
+
+                                <!-- Saídas Realizadas -->
+                                <div class="form-group">
+                                    <label for="{{ form.saidas_realizadas.id_for_label }}" class="form-label">
+                                        {{ form.saidas_realizadas.label }}
+                                    </label>
+                                    <div class="icon-input">
+                                        <i class="fas fa-check input-icon"></i>
+                                        {{ form.saidas_realizadas }}
+                                    </div>
+                                    {% if form.saidas_realizadas.errors %}
+                                        {% for error in form.saidas_realizadas.errors %}
+                                            <div class="text-danger form-help">
+                                                <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <div class="form-help">Quartos de saída realizados (conta para 100%)</div>
+                                </div>
+
+                                <!-- Reservas Realizadas -->
+                                <div class="form-group">
+                                    <label for="{{ form.reservas_realizadas.id_for_label }}" class="form-label">
+                                        {{ form.reservas_realizadas.label }}
+                                    </label>
+                                    <div class="icon-input">
+                                        <i class="fas fa-calendar-check input-icon"></i>
+                                        {{ form.reservas_realizadas }}
+                                    </div>
+                                    {% if form.reservas_realizadas.errors %}
+                                        {% for error in form.reservas_realizadas.errors %}
+                                            <div class="text-danger form-help">
+                                                <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <div class="form-help">Reservas processadas (quartos de saída do tipo reserva - já incluído no total de saídas)</div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Preview dos Cálculos -->
+                        <div class="calc-preview" id="calcPreview" style="display: none;">
+                            <h5><i class="fas fa-calculator"></i> Cálculo Automático</h5>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="calc-item">
+                                        <span>Permanece Realizadas:</span>
+                                        <span class="calc-number" id="prevEntradas">0</span>
+                                    </div>
+                                    <div class="calc-item">
+                                        <span>Saídas Realizadas:</span>
+                                        <span class="calc-number" id="prevSaidas">0</span>
+                                    </div>
+                                    <div class="calc-item">
+                                        <span>Reservas Realizadas (Informativo):</span>
+                                        <span class="calc-number" id="prevReservas">0</span>
+                                    </div>
+                                    <div class="calc-item">
+                                        <span>Total Geral (Permanece + Saídas):</span>
+                                        <span class="calc-number" id="prevTotal">0</span>
+                                    </div>
+                                    <div class="calc-item">
+                                        <span><strong>Porcentagem (Realizados ÷ Quartos do Dia):</strong></span>
+                                        <span class="calc-number" id="prevPorcentagem">0%</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="performance-preview">
+                                        <div class="performance-circle" id="perfCircle">
+                                            <span id="perfNumber">0%</span>
+                                        </div>
+                                        <div>
+                                            <strong id="perfStatus">Carregando...</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botões -->
+                        <div class="form-group mt-4">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                <div class="mb-2">
+                                    <a href="{% url 'listar_controle_quartos' %}" class="btn-cancel">
+                                        <i class="fas fa-arrow-left"></i> Cancelar
+                                    </a>
+                                    <button type="submit" class="btn btn-primary btn-submit">
+                                        <i class="fas fa-save"></i> {{ button_text|default:"Salvar Controle" }}
+                                    </button>
+                                </div>
+                                
+                                {% if controle %}
+                                    <div class="text-muted small">
+                                        <i class="fas fa-info-circle"></i>
+                                        Criado em {{ controle.created_at|date:"d/m/Y H:i" }}
+                                        {% if controle.updated_at != controle.created_at %}
+                                            <br>Atualizado em {{ controle.updated_at|date:"d/m/Y H:i" }}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('controleForm');
+        
+        // Campos para cálculo
+        const quantidadeQuartos = document.getElementById('{{ form.quantidade_quartos.id_for_label }}');
+        const metaPermanece = document.getElementById('{{ form.permanece_entrada.id_for_label }}');
+        const metaSaidas = document.getElementById('{{ form.saida_entrada.id_for_label }}');
+        const permanenceRealizadas = document.getElementById('{{ form.permanece_realizadas.id_for_label }}');
+        const saidasRealizadas = document.getElementById('{{ form.saidas_realizadas.id_for_label }}');
+        const reservasRealizadas = document.getElementById('{{ form.reservas_realizadas.id_for_label }}');
+        
+        // Elementos de preview
+        const calcPreview = document.getElementById('calcPreview');
+        const prevEntradas = document.getElementById('prevEntradas');
+        const prevSaidas = document.getElementById('prevSaidas');
+        const prevReservas = document.getElementById('prevReservas');
+        const prevTotal = document.getElementById('prevTotal');
+        const prevPorcentagem = document.getElementById('prevPorcentagem');
+        const perfCircle = document.getElementById('perfCircle');
+        const perfNumber = document.getElementById('perfNumber');
+        const perfStatus = document.getElementById('perfStatus');
+
+        function calcularPerformance() {
+            // Campo base para 100% (Quartos do Dia)
+            const quartosTotal = parseInt(quantidadeQuartos.value) || 0;
+            
+            // Campos de realizações
+            const permanece = parseInt(permanenceRealizadas.value) || 0;
+            const saidas = parseInt(saidasRealizadas.value) || 0;
+            const reservas = parseInt(reservasRealizadas.value) || 0;
+            
+            // Cálculos seguindo a nova lógica
+            const realizadosBase = permanece + saidas;     // Quartos realizados (base para porcentagem - SEM reservas)
+            const totalGeral = permanece + saidas;         // Total geral (SEM reservas)
+            
+            // Novo cálculo da porcentagem (baseado em quartos realizados ÷ quartos do dia)
+            const porcentagem = quartosTotal > 0 ? (realizadosBase / quartosTotal * 100) : 0;
+            
+            // Atualizar preview
+            prevEntradas.textContent = permanece;
+            prevSaidas.textContent = saidas;
+            prevReservas.textContent = reservas;
+            prevTotal.textContent = totalGeral;
+            prevPorcentagem.textContent = porcentagem.toFixed(1) + '%';
+            
+            // Atualizar círculo de performance
+            perfNumber.textContent = porcentagem.toFixed(1) + '%';
+            
+            // Determinar status e cor
+            let status, className;
+            if (porcentagem >= 100) {
+                status = 'Excelente';
+                className = 'performance-excelente';
+            } else if (porcentagem >= 80) {
+                status = 'Bom';
+                className = 'performance-bom';
+            } else if (porcentagem >= 60) {
+                status = 'Regular';
+                className = 'performance-regular';
+            } else {
+                status = 'Abaixo do Esperado';
+                className = 'performance-abaixo';
+            }
+            
+            perfStatus.textContent = status;
+            perfCircle.className = 'performance-circle ' + className;
+            
+            // Mostrar preview se há dados
+            if (quartosTotal > 0 || totalGeral > 0) {
+                calcPreview.style.display = 'block';
+            } else {
+                calcPreview.style.display = 'none';
+            }
+            
+            // Validação: porcentagem não pode ser maior que 100% (opcional - remover se permitir)
+            if (porcentagem > 100) {
+                document.querySelector('.calc-preview').classList.add('border-warning');
+                if (!document.querySelector('.warning-msg')) {
+                    const warning = document.createElement('div');
+                    warning.className = 'alert alert-warning warning-msg mt-2';
+                    warning.innerHTML = '<i class="fas fa-exclamation-triangle"></i> <strong>Atenção:</strong> A performance está acima de 100%!';
+                    document.querySelector('.calc-preview').appendChild(warning);
+                }
+            } else {
+                document.querySelector('.calc-preview').classList.remove('border-warning');
+                const warning = document.querySelector('.warning-msg');
+                if (warning) warning.remove();
+            }
+        }
+
+        // Event listeners para cálculo em tempo real
+        [quantidadeQuartos, metaPermanece, metaSaidas, permanenceRealizadas, saidasRealizadas, reservasRealizadas].forEach(field => {
+            if (field) {
+                field.addEventListener('input', calcularPerformance);
+                field.addEventListener('change', calcularPerformance);
+            }
+        });
+
+        // Calcular na inicialização
+        calcularPerformance();
+
+        // Função para controlar visibilidade dos campos baseado no motivo
+        function toggleCamposMotivo() {
+            const motivoSelect = document.getElementById('motivo_ausencia');
+            const motivoValue = motivoSelect.value;
+            
+            // Seções que devem ser ocultadas quando há motivo
+            const secoesPraOcultar = [
+                '.form-section h5:contains("Metas do Dia")',
+                '.form-section h5:contains("Realizações")'
+            ];
+            
+            // Campos específicos que devem ser ocultados
+            const camposPraOcultar = [
+                'permanece_entrada',
+                'saida_entrada', 
+                'permanece_realizadas',
+                'saidas_realizadas',
+                'reservas_realizadas'
+            ];
+            
+            if (motivoValue) {
+                // Tem motivo selecionado - ocultar campos desnecessários
+                camposPraOcultar.forEach(fieldName => {
+                    const field = document.getElementById(fieldName);
+                    if (field) {
+                        const formGroup = field.closest('.form-group');
+                        const formSection = field.closest('.form-section');
+                        if (formGroup) {
+                            formGroup.style.display = 'none';
+                            // Zerar o valor do campo
+                            field.value = '0';
+                        }
+                    }
+                });
+                
+                // Ocultar seções inteiras de metas e realizações
+                document.querySelectorAll('.form-section').forEach(section => {
+                    const heading = section.querySelector('h5');
+                    if (heading && (
+                        heading.textContent.includes('Metas do Dia') || 
+                        heading.textContent.includes('Realizações')
+                    )) {
+                        section.style.display = 'none';
+                    }
+                });
+                
+                // Mostrar aviso sobre ausência
+                mostrarAvisoAusencia(motivoSelect.options[motivoSelect.selectedIndex].text);
+                
+            } else {
+                // Sem motivo - mostrar todos os campos
+                camposPraOcultar.forEach(fieldName => {
+                    const field = document.getElementById(fieldName);
+                    if (field) {
+                        const formGroup = field.closest('.form-group');
+                        if (formGroup) {
+                            formGroup.style.display = 'block';
+                        }
+                    }
+                });
+                
+                // Mostrar seções
+                document.querySelectorAll('.form-section').forEach(section => {
+                    section.style.display = 'block';
+                });
+                
+                // Ocultar aviso de ausência
+                const avisoDiv = document.getElementById('aviso-ausencia');
+                if (avisoDiv) {
+                    avisoDiv.remove();
+                }
+            }
+            
+            calcularPerformance();
+        }
+        
+        function mostrarAvisoAusencia(motivoNome) {
+            // Remove aviso anterior se existir
+            const avisoAnterior = document.getElementById('aviso-ausencia');
+            if (avisoAnterior) {
+                avisoAnterior.remove();
+            }
+            
+            // Criar novo aviso
+            const avisoDiv = document.createElement('div');
+            avisoDiv.id = 'aviso-ausencia';
+            avisoDiv.className = 'alert alert-info';
+            avisoDiv.innerHTML = `
+                <h6><i class="fas fa-info-circle"></i> Ausência Registrada</h6>
+                <p><strong>Motivo:</strong> ${motivoNome}</p>
+                <p>Como este funcionário faltou, todos os valores de metas e realizações foram automaticamente zerados.</p>
+                <small class="text-muted">Apenas preencha a data, funcionário e quantidade de quartos do dia para fins de registro.</small>
+            `;
+            
+            // Inserir após a seção de informações básicas
+            const infoBasica = document.querySelector('.form-section');
+            if (infoBasica) {
+                infoBasica.insertAdjacentElement('afterend', avisoDiv);
+            }
+        }
+
+        // Configurar evento para mudança de motivo
+        const motivoSelect = document.getElementById('motivo_ausencia');
+        if (motivoSelect) {
+            motivoSelect.addEventListener('change', toggleCamposMotivo);
+            // Executar na inicialização
+            toggleCamposMotivo();
+        }
+
+        // Auto-focus no primeiro campo vazio
+        const firstEmptyField = form.querySelector('input:not([readonly]), select');
+        if (firstEmptyField && !firstEmptyField.value) {
+            firstEmptyField.focus();
+        }
+
+        // Validação em tempo real
+        form.querySelectorAll('input[type="number"]').forEach(field => {
+            field.addEventListener('blur', function() {
+                const value = parseInt(this.value);
+                if (isNaN(value) || value < 0) {
+                    this.classList.add('is-invalid');
+                } else {
+                    this.classList.remove('is-invalid');
+                    this.classList.add('is-valid');
+                }
+            });
+        });
+
+        // Validação antes do submit
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+            
+            // Validar campos obrigatórios
+            const requiredFields = form.querySelectorAll('[required]');
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+            
+            if (!isValid) {
+                e.preventDefault();
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return false;
+            }
+        });
+    });
+</script>
+{% endblock %}

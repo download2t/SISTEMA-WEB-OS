@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Controle de Quartos</title>
+    <link rel="stylesheet" href="{% static 'css/governanca/relatorio_imprimir.css' %}">
+</head>
+<body>
+    <div class="container">
+    
+    <!-- Cabeçalho -->
+    <div class="header">
+        <h1>RELATÓRIO DE CONTROLE DE QUARTOS</h1>
+        <div class="date">Gerado em {{ data_relatorio|date:"d/m/Y" }} às {{ data_relatorio|time:"H:i" }}</div>
+    </div>
+    
+    <!-- Filtros aplicados -->
+    {% if filtros_aplicados %}
+    <div class="filters">
+        <h3>Filtros Aplicados:</h3>
+        <ul>
+            {% for filtro in filtros_aplicados %}
+                <li>{{ filtro }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    
+    <!-- Estatísticas -->
+    <div class="stats">
+        <h3>Resumo Estatístico:</h3>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-number">{{ stats.total_registros|default:0 }}</span>
+                <div class="stat-label">Total de Registros</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">{{ stats.media_porcentagem|floatformat:1|default:0 }}%</span>
+                <div class="stat-label">Média de Performance</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">{{ stats.total_quartos|default:0 }}</span>
+                <div class="stat-label">Total de Quartos</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">{{ stats.total_realizados|default:0 }}</span>
+                <div class="stat-label">Total Realizados</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dados detalhados -->
+    {% if controles %}
+    <div class="table-container">
+        <h3>Registros Detalhados:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Funcionário</th>
+                    <th>Motivo</th>
+                    <th>Meta<br>Permanece</th>
+                    <th>Meta<br>Saídas</th>
+                    <th>Meta<br>Total</th>
+                    <th>Permanece<br>Realizadas</th>
+                    <th>Saídas<br>Realizadas</th>
+                    <th>Reservas<br>(Extra)</th>
+                    <th>Total<br>Geral</th>
+                    <th>Performance<br>(%)</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for controle in controles %}
+                <tr>
+                    <td>{{ controle.data|date:"d/m/Y" }}</td>
+                    <td style="text-align: left;">{{ controle.funcionario.nome }}</td>
+                    <td style="text-align: left; {% if controle.motivo_ausencia %}background: {{ controle.motivo_ausencia.cor }}; color: white; font-weight: bold;{% endif %}">
+                        {% if controle.motivo_ausencia %}{{ controle.motivo_ausencia.nome }}{% else %}Trabalho Normal{% endif %}
+                    </td>
+                    <td>{{ controle.permanece_entrada }}</td>
+                    <td>{{ controle.saida_entrada }}</td>
+                    <td><strong>{{ controle.meta_total }}</strong></td>
+                    <td>{{ controle.permanece_realizadas }}</td>
+                    <td>{{ controle.saidas_realizadas }}</td>
+                    <td style="background: #e7f3ff;">{{ controle.reservas_realizadas }}</td>
+                    <td><strong>{{ controle.realizados }}</strong></td>
+                    <td class="performance-cell 
+                        {% if controle.porcentagem >= 100 %}status-excelente
+                        {% elif controle.porcentagem >= 80 %}status-bom
+                        {% elif controle.porcentagem >= 60 %}status-regular
+                        {% else %}status-abaixo{% endif %}">
+                        {{ controle.porcentagem|floatformat:1 }}%
+                    </td>
+                    <td class="
+                        {% if controle.porcentagem >= 100 %}status-excelente
+                        {% elif controle.porcentagem >= 80 %}status-bom
+                        {% elif controle.porcentagem >= 60 %}status-regular
+                        {% else %}status-abaixo{% endif %}">
+                        {{ controle.status_desempenho }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="no-data">
+        <strong>Nenhum registro encontrado com os filtros aplicados.</strong>
+    </div>
+    {% endif %}
+    
+    <!-- Rodapé -->
+    <div class="footer">
+        <p>Sistema de Controle de Quartos - {{ data_relatorio|date:"Y" }}</p>
+        <p>Relatório gerado automaticamente em {{ data_relatorio|date:"d/m/Y" }} às {{ data_relatorio|time:"H:i" }}</p>
+    </div>
+    
+    </div> <!-- Fechamento da div container -->
+</body>
+</html>

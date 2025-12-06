@@ -1,0 +1,235 @@
+/* ===== ESTILOS PARA RELATÓRIO DE IMPRESSÃO ===== */
+
+@page {
+    size: A4 landscape;
+    margin: 1.5cm;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.4;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fff;
+}
+
+.container {
+    padding: 20px;
+    margin: 0 auto;
+}
+
+/* Cabeçalho */
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+}
+
+.header h1 {
+    margin: 0;
+    color: #333;
+    font-size: 18px;
+}
+
+.header .date {
+    color: #666;
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+/* Filtros */
+.filters {
+    margin-bottom: 15px;
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.filters h3 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.filters ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.filters li {
+    margin-bottom: 3px;
+}
+
+/* Estatísticas */
+.stats {
+    margin-bottom: 20px;
+}
+
+.stats h3 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.stat-card {
+    background: #f8f9fa;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.stat-number {
+    font-size: 16px;
+    font-weight: bold;
+    color: #007bff;
+    display: block;
+}
+
+.stat-label {
+    font-size: 10px;
+    color: #666;
+    margin-top: 3px;
+}
+
+/* Tabela */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 10px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 6px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    font-size: 10px;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Status de performance */
+.status-excelente { background-color: #d4edda; color: #155724; }
+.status-bom { background-color: #cce5ff; color: #004085; }
+.status-regular { background-color: #fff3cd; color: #856404; }
+.status-abaixo { background-color: #f8d7da; color: #721c24; }
+
+.performance-cell {
+    font-weight: bold;
+}
+
+/* Estado sem dados */
+.no-data {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-style: italic;
+}
+
+/* Rodapé */
+.footer {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 10px;
+    color: #666;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+/* Estilos para impressão */
+@media print {
+    body {
+        font-size: 11px;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .container {
+        padding: 0;
+    }
+    
+    .no-print {
+        display: none !important;
+    }
+    
+    .page-break {
+        page-break-before: always;
+    }
+    
+    table {
+        font-size: 9px;
+    }
+    
+    th, td {
+        padding: 4px;
+    }
+    
+    .header h1 {
+        font-size: 16px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Responsividade para tela */
+@media screen and (max-width: 1200px) {
+    body {
+        max-width: 100%;
+        padding: 15px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    table {
+        font-size: 9px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    th, td {
+        padding: 4px;
+        font-size: 8px;
+    }
+}

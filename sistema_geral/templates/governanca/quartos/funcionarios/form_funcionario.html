@@ -1,0 +1,287 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if funcionario %}Editar{% else %}Criar{% endif %} Funcionário - Controle de Quartos
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/governanca/form_funcionarios.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="main-content-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'dashboard_quartos' %}">
+                                <i class="fas fa-chart-line"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'listar_funcionarios' %}">
+                                <i class="fas fa-users"></i> Funcionários
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            {% if funcionario %}Editar{% else %}Criar{% endif %}
+                        </li>
+                    </ol>
+                </nav>
+
+                <div class="form-container">
+                    <div class="form-header">
+                        <h3>
+                            {% if funcionario %}
+                                <i class="fas fa-user-edit"></i> Editar Funcionário
+                            {% else %}
+                                <i class="fas fa-user-plus"></i> Criar Novo Funcionário
+                            {% endif %}
+                        </h3>
+                        <div class="subtitle">
+                            {% if funcionario %}
+                                Atualize as informações do funcionário {{ funcionario.nome }}
+                            {% else %}
+                                Preencha os dados do novo funcionário para o controle de quartos
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if form.non_field_errors %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Nome -->
+                        <div class="form-group">
+                            <label for="{{ form.nome.id_for_label }}" class="form-label required-field">
+                                {{ form.nome.label }}
+                            </label>
+                            <div class="icon-input-group">
+                                <i class="fas fa-user input-icon"></i>
+                                {{ form.nome }}
+                            </div>
+                            {% if form.nome.errors %}
+                                {% for error in form.nome.errors %}
+                                    <div class="text-danger form-help">
+                                        <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            <div class="form-help">
+                                Digite o nome completo do funcionário
+                            </div>
+                        </div>
+
+                        <!-- Cargo -->
+                        <div class="form-group">
+                            <label for="{{ form.cargo.id_for_label }}" class="form-label required-field">
+                                {{ form.cargo.label }}
+                            </label>
+                            <div class="icon-input-group">
+                                <i class="fas fa-briefcase input-icon"></i>
+                                {{ form.cargo }}
+                            </div>
+                            {% if form.cargo.errors %}
+                                {% for error in form.cargo.errors %}
+                                    <div class="text-danger form-help">
+                                        <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            <div class="form-help">
+                                Ex: Camareira, Governanta, Auxiliar de Limpeza, etc.
+                            </div>
+                        </div>
+
+                        <!-- Ativo -->
+                        <div class="form-group">
+                            <label class="form-label">Status do Funcionário</label>
+                            <div class="form-check">
+                                {{ form.ativo }}
+                                <label class="form-check-label" for="{{ form.ativo.id_for_label }}">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                    {{ form.ativo.label }}
+                                </label>
+                                {% if form.ativo.errors %}
+                                    {% for error in form.ativo.errors %}
+                                        <div class="text-danger form-help">
+                                            <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                                <div class="form-help mt-2">
+                                    Funcionários inativos não aparecerão nas opções de novo controle
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botões -->
+                        <div class="form-group mt-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <a href="{% url 'listar_funcionarios' %}" class="btn-cancel">
+                                        <i class="fas fa-arrow-left"></i> Cancelar
+                                    </a>
+                                    <button type="submit" class="btn btn-primary btn-submit">
+                                        <i class="fas fa-save"></i> {{ button_text|default:"Salvar Funcionário" }}
+                                    </button>
+                                </div>
+                                
+                                {% if funcionario %}
+                                    <div>
+                                        <small class="text-muted">
+                                            <i class="fas fa-info-circle"></i>
+                                            Criado em {{ funcionario.created_at|date:"d/m/Y H:i" }}
+                                            {% if funcionario.updated_at != funcionario.created_at %}
+                                                <br>Atualizado em {{ funcionario.updated_at|date:"d/m/Y H:i" }}
+                                            {% endif %}
+                                        </small>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Informações Adicionais -->
+                {% if funcionario %}
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-chart-bar"></i> Ações Rápidas
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <a href="{% url 'listar_controle_quartos' %}?funcionario={{ funcionario.id }}" 
+                                   class="btn btn-outline-info btn-sm d-block mb-2">
+                                    <i class="fas fa-list"></i> Ver Controles deste Funcionário
+                                </a>
+                                <a href="{% url 'criar_controle_quartos' %}?funcionario={{ funcionario.id }}" 
+                                   class="btn btn-outline-success btn-sm d-block">
+                                    <i class="fas fa-plus"></i> Criar Novo Controle
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-exclamation-triangle"></i> Zona de Perigo
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text text-muted small">
+                                    Excluir este funcionário removerá permanentemente todos os seus dados.
+                                    Esta ação não pode ser desfeita.
+                                </p>
+                                <button type="button" 
+                                        class="btn btn-outline-danger btn-sm"
+                                        onclick="confirmarExclusao('{{ funcionario.nome }}', '{% url 'excluir_funcionario' funcionario.id %}')">
+                                    <i class="fas fa-trash"></i> Excluir Funcionário
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal de Confirmação -->
+                <div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                                    Confirmar Exclusão
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Você tem certeza que deseja excluir o funcionário <strong id="funcionarioNome"></strong>?</p>
+                                <p class="text-muted">
+                                    <i class="fas fa-info-circle"></i>
+                                    Esta ação não pode ser desfeita. Se o funcionário possuir registros de controle, a exclusão será impedida.
+                                </p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fas fa-times"></i> Cancelar
+                                </button>
+                                <a href="#" id="confirmDeleteBtn" class="btn btn-danger">
+                                    <i class="fas fa-trash"></i> Confirmar Exclusão
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    {% if funcionario %}
+    function confirmarExclusao(nome, url) {
+        document.getElementById('funcionarioNome').textContent = nome;
+        document.getElementById('confirmDeleteBtn').href = url;
+        
+        const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+        modal.show();
+    }
+    {% endif %}
+
+    // Validação em tempo real
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const nomeInput = document.getElementById('{{ form.nome.id_for_label }}');
+        const cargoInput = document.getElementById('{{ form.cargo.id_for_label }}');
+
+        // Auto-focus no primeiro campo
+        if (nomeInput) {
+            nomeInput.focus();
+        }
+
+        // Validação do nome
+        if (nomeInput) {
+            nomeInput.addEventListener('blur', function() {
+                if (this.value.trim().length < 2) {
+                    this.classList.add('is-invalid');
+                } else {
+                    this.classList.remove('is-invalid');
+                    this.classList.add('is-valid');
+                }
+            });
+        }
+
+        // Validação do cargo
+        if (cargoInput) {
+            cargoInput.addEventListener('blur', function() {
+                if (this.value.trim().length < 2) {
+                    this.classList.add('is-invalid');
+                } else {
+                    this.classList.remove('is-invalid');
+                    this.classList.add('is-valid');
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

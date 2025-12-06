@@ -1,0 +1,221 @@
+/* ===== ESTILOS PARA FORMULÁRIOS DE FUNCIONÁRIOS ===== */
+
+/* Container do Formulário */
+.form-container {
+    background: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+/* Cabeçalho do Formulário */
+.form-header {
+    border-bottom: 2px solid #007bff;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+}
+
+.form-header h3 {
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.form-header .subtitle {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+/* Grupos de Formulário */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+/* Campos do Formulário */
+.form-control, 
+.form-select {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, 
+.form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    transform: translateY(-1px);
+}
+
+/* Checkboxes */
+.form-check {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+}
+
+.form-check-input:checked {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+/* Botões */
+.btn-submit {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    border: none;
+    padding: 12px 30px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,123,255,0.4);
+}
+
+.btn-cancel {
+    background: #6c757d;
+    border: none;
+    padding: 12px 30px;
+    font-weight: 600;
+    border-radius: 8px;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+    background: #5a6268;
+    transform: translateY(-1px);
+    color: white;
+    text-decoration: none;
+}
+
+/* Campos Obrigatórios */
+.required-field::after {
+    content: " *";
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Texto de Ajuda */
+.form-help {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+/* Alertas */
+.alert {
+    border-radius: 8px;
+    border: none;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+}
+
+/* Grupos de Input com Ícones */
+.icon-input-group {
+    position: relative;
+}
+
+.icon-input-group .form-control {
+    padding-left: 45px;
+}
+
+.icon-input-group .input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    z-index: 5;
+}
+
+/* Validação */
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+.form-control.is-valid {
+    border-color: #28a745;
+}
+
+/* Cards de Ações */
+.card {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    border-radius: 8px 8px 0 0;
+}
+
+.card-body {
+    padding: 1rem;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .form-container {
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .form-header {
+        margin-bottom: 20px;
+    }
+    
+    .btn-submit,
+    .btn-cancel {
+        width: 100%;
+        margin-bottom: 10px;
+        margin-right: 0;
+    }
+    
+    .icon-input-group .form-control {
+        padding-left: 40px;
+    }
+    
+    .icon-input-group .input-icon {
+        left: 12px;
+    }
+}
+
+/* Hover effects */
+.card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+/* Status badges */
+.badge {
+    font-size: 0.75em;
+    padding: 0.5em 0.75em;
+}
+
+/* Modal customizations */
+.modal-content {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    border-bottom: 2px solid #dee2e6;
+}
+
+.modal-footer {
+    border-top: 2px solid #dee2e6;
+}

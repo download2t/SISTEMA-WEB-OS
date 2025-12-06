@@ -1,0 +1,272 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if motivo %}Editar{% else %}Criar{% endif %} Motivo de Ausência
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/governanca/form_controle_quartos.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="main-content-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'dashboard_quartos' %}">
+                                <i class="fas fa-chart-line"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'listar_motivos_ausencia' %}">
+                                <i class="fas fa-calendar-times"></i> Motivos
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            {% if motivo %}Editar{% else %}Criar{% endif %}
+                        </li>
+                    </ol>
+                </nav>
+
+                <div class="form-container">
+                    <div class="form-header">
+                        <h3>
+                            {% if motivo %}
+                                <i class="fas fa-edit"></i> Editar Motivo de Ausência
+                            {% else %}
+                                <i class="fas fa-plus"></i> Criar Novo Motivo
+                            {% endif %}
+                        </h3>
+                        <div class="subtitle">
+                            {% if motivo %}
+                                Atualize os dados do motivo "{{ motivo.nome }}"
+                            {% else %}
+                                Preencha os dados do novo motivo de ausência
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <form method="post" id="motivoForm">
+                        {% csrf_token %}
+                        
+                        <!-- Seção: Informações do Motivo -->
+                        <div class="form-section">
+                            <h5><i class="fas fa-info-circle"></i> Informações do Motivo</h5>
+                            <div class="form-row">
+                                <!-- Nome -->
+                                <div class="form-group">
+                                    <label for="nome" class="form-label required-field">
+                                        Nome do Motivo
+                                    </label>
+                                    <div class="icon-input">
+                                        <i class="fas fa-tag input-icon"></i>
+                                        <input type="text" 
+                                               id="nome" 
+                                               name="nome" 
+                                               class="form-control" 
+                                               value="{{ motivo.nome|default:'' }}"
+                                               placeholder="Ex: Férias, Atestado, Folga..."
+                                               required>
+                                    </div>
+                                    <div class="form-help">Nome que identificará este motivo de ausência</div>
+                                </div>
+
+                                <!-- Descrição -->
+                                <div class="form-group">
+                                    <label for="descricao" class="form-label">
+                                        Descrição (Opcional)
+                                    </label>
+                                    <textarea id="descricao" 
+                                              name="descricao" 
+                                              class="form-control" 
+                                              rows="3"
+                                              placeholder="Descrição detalhada do motivo (opcional)">{{ motivo.descricao|default:'' }}</textarea>
+                                    <div class="form-help">Descrição mais detalhada sobre quando usar este motivo</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Seção: Aparência -->
+                        <div class="form-section">
+                            <h5><i class="fas fa-palette"></i> Aparência</h5>
+                            <div class="form-row">
+                                <!-- Cor -->
+                                <div class="form-group">
+                                    <label for="cor" class="form-label">
+                                        Cor de Identificação
+                                    </label>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <input type="color" 
+                                               id="cor" 
+                                               name="cor" 
+                                               class="form-control form-control-color"
+                                               style="width: 50px; height: 40px;"
+                                               value="{{ motivo.cor|default:'#dc3545' }}">
+                                        <div>
+                                            <div class="form-help mb-1">Cor utilizada para destacar este motivo nos relatórios</div>
+                                            <small class="text-muted">Valor atual: <span id="corTexto">{{ motivo.cor|default:'#dc3545' }}</span></small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Ativo -->
+                                {% if motivo %}
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input type="checkbox" 
+                                               id="ativo" 
+                                               name="ativo" 
+                                               class="form-check-input"
+                                               {% if motivo.ativo %}checked{% endif %}>
+                                        <label for="ativo" class="form-check-label">
+                                            Motivo Ativo
+                                        </label>
+                                    </div>
+                                    <div class="form-help">Desmarque para desativar este motivo (não aparecerá nas listas)</div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Seção: Configurações Avançadas -->
+                        <div class="form-section">
+                            <h5><i class="fas fa-cogs"></i> Configurações Avançadas</h5>
+                            <div class="form-row">
+                                <!-- Afeta Média -->
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input type="checkbox" 
+                                               id="afeta_media" 
+                                               name="afeta_media" 
+                                               class="form-check-input"
+                                               {% if motivo and motivo.afeta_media %}checked{% endif %}
+                                               {% if motivo and motivo.sistema %}disabled{% endif %}>
+                                        <label for="afeta_media" class="form-check-label">
+                                            Afeta Média de Performance
+                                            {% if motivo and motivo.sistema %}<i class="fas fa-lock text-muted ms-1"></i>{% endif %}
+                                        </label>
+                                    </div>
+                                    <div class="form-help">
+                                        {% if motivo and motivo.sistema %}
+                                            🔒 Este campo não pode ser alterado para motivos do sistema
+                                        {% else %}
+                                            Marque se este motivo deve impactar negativamente nas estatísticas (ex: falta não justificada)
+                                        {% endif %}
+                                    </div>
+                                    <div class="alert alert-info mt-2">
+                                        <small>
+                                            <strong>Importante:</strong><br>
+                                            • <strong>Marcado:</strong> Dias com este motivo contam como performance 0% nas médias<br>
+                                            • <strong>Desmarcado:</strong> Dias com este motivo são excluídos dos cálculos de média
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Preview do Motivo -->
+                        <div class="form-section">
+                            <h5><i class="fas fa-eye"></i> Prévia do Motivo</h5>
+                            <div class="card" style="max-width: 300px;">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="fw-bold" id="previewNome">{{ motivo.nome|default:'Nome do Motivo' }}</span>
+                                        <div class="rounded-circle" 
+                                             id="previewCor"
+                                             style="width: 20px; height: 20px; background-color: {{ motivo.cor|default:'#dc3545' }}; border: 1px solid #ddd;"></div>
+                                    </div>
+                                    <small class="text-muted" id="previewDescricao">
+                                        {{ motivo.descricao|default:'Descrição do motivo aparecerá aqui...' }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botões -->
+                        <div class="form-group mt-4">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                <div class="mb-2">
+                                    <a href="{% url 'listar_motivos_ausencia' %}" class="btn-cancel">
+                                        <i class="fas fa-arrow-left"></i> Cancelar
+                                    </a>
+                                    <button type="submit" class="btn btn-primary btn-submit">
+                                        <i class="fas fa-save"></i> 
+                                        {% if motivo %}Atualizar{% else %}Criar{% endif %} Motivo
+                                    </button>
+                                </div>
+                                
+                                {% if motivo %}
+                                    <div class="text-muted small">
+                                        <i class="fas fa-info-circle"></i>
+                                        Criado em {{ motivo.created_at|date:"d/m/Y H:i" }}
+                                        {% if motivo.updated_at != motivo.created_at %}
+                                            <br>Atualizado em {{ motivo.updated_at|date:"d/m/Y H:i" }}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const nomeInput = document.getElementById('nome');
+        const descricaoInput = document.getElementById('descricao');
+        const corInput = document.getElementById('cor');
+        
+        const previewNome = document.getElementById('previewNome');
+        const previewDescricao = document.getElementById('previewDescricao');
+        const previewCor = document.getElementById('previewCor');
+        const corTexto = document.getElementById('corTexto');
+        
+        // Atualizar preview em tempo real
+        function atualizarPreview() {
+            previewNome.textContent = nomeInput.value || 'Nome do Motivo';
+            previewDescricao.textContent = descricaoInput.value || 'Descrição do motivo aparecerá aqui...';
+            previewCor.style.backgroundColor = corInput.value;
+            corTexto.textContent = corInput.value;
+        }
+        
+        // Event listeners
+        nomeInput.addEventListener('input', atualizarPreview);
+        descricaoInput.addEventListener('input', atualizarPreview);
+        corInput.addEventListener('input', atualizarPreview);
+        
+        // Auto-focus no nome se estiver vazio
+        if (!nomeInput.value) {
+            nomeInput.focus();
+        }
+        
+        // Validação antes do submit
+        document.getElementById('motivoForm').addEventListener('submit', function(e) {
+            const nome = nomeInput.value.trim();
+            
+            if (!nome) {
+                e.preventDefault();
+                alert('O nome do motivo é obrigatório!');
+                nomeInput.focus();
+                return false;
+            }
+            
+            if (nome.length < 2) {
+                e.preventDefault();
+                alert('O nome do motivo deve ter pelo menos 2 caracteres!');
+                nomeInput.focus();
+                return false;
+            }
+        });
+    });
+</script>
+{% endblock %}

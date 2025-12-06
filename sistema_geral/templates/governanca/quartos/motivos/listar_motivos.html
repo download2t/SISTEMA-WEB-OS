@@ -1,0 +1,230 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Motivos de Ausência{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/governanca/controle_quartos.css' %}">
+<style>
+.motivo-card {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.motivo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.motivo-nome {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.motivo-cor {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #ccc;
+}
+
+.motivo-status {
+    font-size: 0.85rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.motivo-status.ativo {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.motivo-status.inativo {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.motivo-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.new-motivo-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid #007bff;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main-content-wrapper">
+    <div class="container-fluid">
+        <!-- Cabeçalho -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="display-4">
+                    <i class="fas fa-calendar-times"></i> Motivos de Ausência
+                </h2>
+                <p class="text-muted">Gerencie os motivos de ausência para controle de quartos</p>
+            </div>
+            <div>
+                <a href="{% url 'dashboard_quartos' %}" class="btn btn-outline-secondary me-2">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+                <a href="{% url 'criar_motivo_ausencia' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Novo Motivo
+                </a>
+            </div>
+        </div>
+
+        <!-- Informação sobre Motivos -->
+        <div class="new-motivo-section">
+            <h5><i class="fas fa-info-circle"></i> Como funciona</h5>
+            <p class="mb-2">Os motivos de ausência permitem registrar quando um funcionário não trabalhou por razões específicas:</p>
+            <ul class="mb-0">
+                <li><strong>Férias:</strong> Período de descanso remunerado</li>
+                <li><strong>Atestado médico:</strong> Ausência por motivos de saúde</li>
+                <li><strong>Folga:</strong> Dia de descanso semanal</li>
+                <li><strong>Outros:</strong> Licenças, faltas justificadas, etc.</li>
+            </ul>
+            <small class="text-muted mt-2 d-block">
+                <i class="fas fa-lightbulb"></i>
+                <strong>Importante:</strong> Quando um motivo é selecionado, os valores de metas e realizações são zerados automaticamente e o dia não conta para as estatísticas de performance.
+            </small>
+        </div>
+
+        <!-- Lista de Motivos -->
+        {% if motivos %}
+            <div class="row">
+                {% for motivo in motivos %}
+                <div class="col-lg-6 col-xl-4">
+                    <div class="motivo-card">
+                        <div class="motivo-header">
+                            <div class="motivo-nome">{{ motivo.nome }}</div>
+                            <div class="motivo-cor" style="background-color: {{ motivo.cor }};"></div>
+                        </div>
+                        
+                        {% if motivo.descricao %}
+                        <div class="mb-3">
+                            <small class="text-muted">{{ motivo.descricao }}</small>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="d-flex gap-2">
+                                <span class="motivo-status {% if motivo.ativo %}ativo{% else %}inativo{% endif %}">
+                                    {% if motivo.ativo %}
+                                        <i class="fas fa-check-circle"></i> Ativo
+                                    {% else %}
+                                        <i class="fas fa-times-circle"></i> Inativo
+                                    {% endif %}
+                                </span>
+                                {% if motivo.afeta_media %}
+                                    <span class="badge bg-danger">
+                                        <i class="fas fa-exclamation-triangle"></i> Afeta Média
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-shield-alt"></i> Não Afeta
+                                    </span>
+                                {% endif %}
+                                {% if motivo.sistema %}
+                                    <span class="badge bg-dark">
+                                        <i class="fas fa-lock"></i> Sistema
+                                    </span>
+                                {% endif %}
+                            </div>
+                            <small class="text-muted">
+                                Criado em {{ motivo.created_at|date:"d/m/Y" }}
+                            </small>
+                        </div>
+
+                        <div class="motivo-actions">
+                            <a href="{% url 'editar_motivo_ausencia' motivo.id %}" 
+                               class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-edit"></i> {% if motivo.sistema %}Ver{% else %}Editar{% endif %}
+                            </a>
+                            {% if not motivo.sistema %}
+                            <button type="button" 
+                                    class="btn btn-outline-danger btn-sm"
+                                    onclick="confirmarExclusao('{{ motivo.nome }}', '{% url 'excluir_motivo_ausencia' motivo.id %}')">
+                                <i class="fas fa-trash"></i> Excluir
+                            </button>
+                            {% else %}
+                            <button type="button" class="btn btn-outline-secondary btn-sm" disabled>
+                                <i class="fas fa-lock"></i> Protegido
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+                <h4>Nenhum motivo cadastrado</h4>
+                <p class="text-muted mb-4">Crie o primeiro motivo de ausência para começar a usar o sistema.</p>
+                <a href="{% url 'criar_motivo_ausencia' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Criar primeiro motivo
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal de Confirmação -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                    Confirmar Exclusão
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Você tem certeza que deseja excluir o motivo:</p>
+                <p><strong>Motivo:</strong> <span id="motivoNome"></span></p>
+                <p class="text-muted">
+                    <i class="fas fa-info-circle"></i>
+                    Esta ação não pode ser desfeita.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <a href="#" id="confirmDeleteBtn" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Confirmar Exclusão
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function confirmarExclusao(motivo, url) {
+        document.getElementById('motivoNome').textContent = motivo;
+        document.getElementById('confirmDeleteBtn').href = url;
+        
+        const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+        modal.show();
+    }
+</script>
+{% endblock %}
