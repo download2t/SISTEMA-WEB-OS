@@ -1,14 +1,95 @@
-# views.py
-from django.shortcuts import render, get_object_or_404, redirect
+from .models import InstrucoesPDF
+from .forms_instrucoes import InstrucoesPDFForm
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .models import Ramal
-from django.contrib import messages
+
+# Restrição: membros do grupo LIDERANÇA, staff ou superusuário
+def is_lideranca(user):
+    return user.is_authenticated and (
+        user.is_superuser or
+        user.is_staff or
+        user.groups.filter(name='LIDERANÇA').exists()
+    )
+
+@login_required
+@user_passes_test(is_lideranca, login_url='403')
+def cadastrar_instrucoes_pdf(request):
+    obj, _ = InstrucoesPDF.objects.get_or_create(pk=1)
+    if request.method == 'POST':
+        form = InstrucoesPDFForm(request.POST)
+        if form.is_valid():
+            obj.texto = form.cleaned_data['instrucoes']
+            obj.save()
+            return redirect('listar_ramais')
+    else:
+        form = InstrucoesPDFForm(initial={'instrucoes': obj.texto})
+    return render(request, 'ramais/cadastrar_instrucoes_pdf.html', {'form': form})
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+import io
+from xhtml2pdf import pisa
 from .models import Ramal, Group
-from .forms import RamalForm  
+from .forms import RamalForm
 from core.views import has_permission
+from django.contrib import messages
 from django.db.models import Q
 
-from django.db.models import Q
+
+# View para exportar PDF dos ramais (listão, sem agrupamento, respeitando filtro)
+@login_required
+def baixar_pdf_ramais(request):
+    status = request.GET.get('status', 'todos')
+    search = request.GET.get('search', '')
+
+    # 1. Filtros
+    ramais = Ramal.objects.all()
+    if status != 'todos':
+        if status == 'ativos':
+            ramais = ramais.filter(ativo=True)
+        elif status == 'inativos':
+            ramais = ramais.filter(ativo=False)
+    
+    if search:
+        ramais = ramais.filter(
+            Q(numero_ramal__icontains=search)
+            | Q(atendente__icontains=search)
+            | Q(grupo__name__icontains=search)
+            | Q(linha_completa__icontains=search)
+            | Q(instrucoes_pdf__icontains=search)
+        )
+    
+    # Ordenação (importante para as colunas fazerem sentido)
+    ramais = ramais.order_by('numero_ramal')
+
+    # Divide a lista de ramais em duas colunas
+    meio = (len(ramais) + 1) // 2
+    ramais_col1 = ramais[:meio]
+    ramais_col2 = ramais[meio:]
+
+    # Busca instruções do modelo único
+    from .models import InstrucoesPDF
+    instrucoes_obj = InstrucoesPDF.objects.first()
+    instrucoes = instrucoes_obj.texto if instrucoes_obj else ''
+
+    # 3. Renderização do HTML
+    context = {
+        'ramais_col1': ramais_col1,
+        'ramais_col2': ramais_col2,
+        'instrucoes': instrucoes,
+    }
+    html = render_to_string('ramais/pdf_ramais.html', context)
+
+    # 4. Geração do PDF
+    result = io.BytesIO()
+    pdf = pisa.pisaDocument(io.BytesIO(html.encode("UTF-8")), result)
+
+    if not pdf.err:
+        response = HttpResponse(result.getvalue(), content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="lista_ramais.pdf"'
+        return response
+    
+    return HttpResponse("Erro ao gerar PDF", status=400)
 
 @login_required
 def listar_ramais(request):
@@ -25,7 +106,11 @@ def listar_ramais(request):
 
     if search:
         ramais = ramais.filter(
-            Q(numero_ramal__icontains=search) | Q(atendente__icontains=search)
+            Q(numero_ramal__icontains=search)
+            | Q(atendente__icontains=search)
+            | Q(grupo__name__icontains=search)
+            | Q(linha_completa__icontains=search)
+            | Q(instrucoes_pdf__icontains=search)
         )
 
     ramais = ramais.order_by('numero_ramal')

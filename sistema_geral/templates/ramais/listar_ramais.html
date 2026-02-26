@@ -29,7 +29,13 @@
         </div>
 
         <!-- Botão de Criar Novo Ramal alinhado à direita -->
-        <div class="ms-auto">
+        <div class="ms-auto d-flex gap-2">
+            <a href="{% url 'baixar_pdf_ramais' %}" class="btn btn-outline-danger">
+                <i class="fas fa-file-pdf me-1"></i> Baixar PDF
+            </a>
+            <a href="{% url 'cadastrar_instrucoes_pdf' %}" class="btn btn-warning">
+                <i class="fas fa-pen me-1"></i> Instruções do Rodapé
+            </a>
             <a href="{% url 'adicionar_ramal' %}" class="btn btn-success">
                 <i class="fas fa-phone-alt me-1"></i> Novo Ramal
             </a>

@@ -76,6 +76,17 @@
                     <input class="form-check-input" type="checkbox" id="ativo" name="ativo" {% if ramal.ativo %}checked{% endif %}>
                 </div>
 
+                <div class="mb-3">
+                    <label for="instrucoes_pdf" class="form-label">Instruções para rodapé do PDF:</label>
+                    <textarea id="instrucoes_pdf" name="instrucoes_pdf" class="form-control" rows="3" placeholder="Ex: Como fazer ligação, puxar ligação, etc.">{{ ramal.instrucoes_pdf }}</textarea>
+                    <small class="form-text text-muted">Essas instruções aparecerão no rodapé do PDF de ramais.</small>
+                    {% if form.instrucoes_pdf.errors %}
+                        <div class="alert alert-danger mt-2">
+                            {{ form.instrucoes_pdf.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+
                 <div class="text-center">
                     <button type="submit" class="btn2 btn2-primary w-100">
                         <i class="fas fa-phone-alt me-2"></i> Cadastrar

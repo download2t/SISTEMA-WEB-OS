@@ -7,4 +7,6 @@ urlpatterns = [
     path('adicionar/', views.adicionar_ramal, name='adicionar_ramal'),
     path('editar/<int:pk>/', views.editar_ramal, name='editar_ramal'),
     path('excluir/<int:pk>/', views.excluir_ramal, name='excluir_ramal'),
+    path('baixar-pdf/', views.baixar_pdf_ramais, name='baixar_pdf_ramais'),
+    path('instrucoes-pdf/', views.cadastrar_instrucoes_pdf, name='cadastrar_instrucoes_pdf'),
 ]

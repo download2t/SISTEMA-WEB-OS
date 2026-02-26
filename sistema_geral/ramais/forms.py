@@ -2,10 +2,11 @@ from django import forms
 from .models import Ramal
 from django.contrib.auth.models import Group
 
+
 class RamalForm(forms.ModelForm):
     class Meta:
         model = Ramal
-        fields = ['numero_ramal', 'atendente', 'linha_completa', 'grupo', 'ativo']
+        fields = ['numero_ramal', 'atendente', 'linha_completa', 'grupo', 'ativo', 'instrucoes_pdf']
 
     def clean_numero_ramal(self):
         numero_ramal = self.cleaned_data['numero_ramal']
